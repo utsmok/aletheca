@@ -12,6 +12,7 @@ from __future__ import annotations
 import dataclasses
 from dataclasses import dataclass, field
 from typing import Literal, TypedDict
+from dacite import from_dict
 
 # ----------------------------------------------------------------------------------------------------------------
 # Type aliases
@@ -96,6 +97,7 @@ InstitutionType = Literal[
     "government",
     "facility",
     "other",
+    "funder", # NOTE: NOT documented in OpenAlex docs, but appears in data
 ]
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -113,6 +115,10 @@ class BaseOpenAlex:
     id: str  # openalex id
     display_name: str
 
+    @classmethod
+    def from_dict(cls, data: dict) -> BaseOpenAlex:
+        return from_dict(data_class=cls, data=data)
+
 
 # ----------------------------------------------------------------------------------------------------------------
 #  Nested fields
@@ -123,7 +129,7 @@ class BaseOpenAlex:
 class WorkIds:
     openalex: str
     doi: str | None = None
-    mag: int | None = None
+    mag: int | str | None = None
     pmid: str | None = None
     pmcid: str | None = None
 
@@ -141,9 +147,9 @@ class AuthorIds:
 class SourceIds:
     openalex: str
     fatcat: str | None = None
-    issn: list[str | None] = field(default_factory=list)
+    issn: list[str | None] | None = None
     issn_l: str | None = None
-    mag: int | None = None
+    mag: int | str | None = None
     wikidata: str | None = None
 
 
@@ -152,7 +158,7 @@ class InstitutionIds:
     openalex: str
     ror: str | None = None
     grid: str | None = None
-    mag: int | None = None
+    mag: int | str | None = None
     wikidata: str | None = None
     wikipedia: str | None = None
 
@@ -182,7 +188,7 @@ class FunderIds:
 @dataclass
 class ConceptIds:
     openalex: str
-    mag: int | None = None
+    mag: int | str | None = None
     umls_cui: list[str] | None = None
     umls_aui: list[str] | None = None
     wikidata: str | None = None
@@ -210,11 +216,12 @@ class DehydratedInstitution(BaseOpenAlex):
 
 @dataclass
 class RelatedInstitution(DehydratedInstitution):
-    relationship: Literal["parent", "child", "related"] | None = None
+    relationship: Literal["parent", "child", "related", "successor"] | None = None # undocumented: "successor"
 
 
 @dataclass
-class DehydratedInstitutionWithYear(DehydratedInstitution):
+class DehydratedInstitutionWithYear():
+    institution: DehydratedInstitution
     years: list[int | None] = field(default_factory=list)
 
 
@@ -238,12 +245,15 @@ class Repository(BaseOpenAlex):
     host_organization_lineage: list[str | None] = field(default_factory=list)
     host_organization_name: str | None = None
 
+@dataclass
+class SimpleDehydratedConcept(BaseOpenAlex):
+    level: int  # min 0 max 5
+    wikidata: str | None
 
 @dataclass
-class DehydratedConcept(BaseOpenAlex):
+class DehydratedConcept(SimpleDehydratedConcept):
     score: float
-    level: int  # min 0 max 5
-    wikidata: str
+
 
 
 @dataclass
@@ -284,14 +294,14 @@ class Biblio:
 class Mesh:
     descriptor_ui: str
     descriptor_name: str
-    qualifier_ui: str
-    qualifier_name: str
     is_major_topic: bool
+    qualifier_ui: str | None = None
+    qualifier_name: str | None = None
 
 
 @dataclass
 class Location:
-    is_accepted: bool
+    is_accepted: bool | None # should not be None, but data from Datacite API does not have this field apparently
     is_oa: bool
     is_published: bool
     landing_page_url: str | None = None
@@ -368,25 +378,25 @@ class DehydratedKeyword(BaseOpenAlex):
     display_name: str
     score: float
 
-
-class CitationNormalizedPercentile(TypedDict):
+@dataclass
+class CitationNormalizedPercentile:
     value: float
     is_in_top_1_percent: bool
     is_in_top_10_percent: bool
 
-
-class YearCountBasic(TypedDict):
+@dataclass
+class YearCountBasic:
     year: int
     cited_by_count: int
 
-
-class YearCount(TypedDict):
+@dataclass
+class YearCount:
     year: int
     cited_by_count: int
     works_count: int
 
-
-class SummaryStats(TypedDict):
+@dataclass
+class SummaryStats:
     two_yr_mean_citedness: float  # note: fieldname in OpenAlex is "2yr_mean_citedness" but cannot use that in Python!
     h_index: int
     i10_index: int
@@ -409,7 +419,8 @@ class Geo:
     longitude: float | None = None
 
 
-class Role(TypedDict):
+@dataclass
+class Role:
     role: Literal["funder", "publisher", "institution"]
     id: str
     works_count: int
@@ -492,8 +503,8 @@ class Source(BaseOpenAlex):
     type: SourceType
 
     abbreviated_title: str | None = None
-    alternate_titles: list[str | None] = field(default_factory=list)
-    apc_prices: list[APCEntry | None] = field(default_factory=list)
+    alternate_titles: list[str | None] | None = field(default_factory=list)
+    apc_prices: list[APCEntry | None] | None = field(default_factory=list)
     apc_usd: int | None = None
     country_code: str | None = None  # ISO 3166-1 alpha-2 country code
     counts_by_year: list[YearCount | None] = field(default_factory=list)
@@ -501,9 +512,9 @@ class Source(BaseOpenAlex):
     host_organization: str | None = None
     host_organization_lineage: list[str | None] = field(default_factory=list)
     host_organization_name: str | None = None
-    issn: list[str | None] = field(default_factory=list)
+    issn: list[str | None] | None = None
     issn_l: str | None = None
-    societies: list[Society | None] = field(default_factory=list)
+    societies: list[Society | None] | None = field(default_factory=list)
     x_concepts: list[DehydratedConcept | None] = field(default_factory=list)
 
     # UNDOCUMENTED FIELDS
@@ -537,9 +548,9 @@ class Institution(BaseOpenAlex):
     homepage_url: str | None = None
     image_thumbnail_url: str | None = None
     image_url: str | None = None
-    international: dict[Literal["display_name"], dict[str, str] | None] = field(
+    international: dict[Literal["display_name","description"], dict[str, str] | None] = field(
         default_factory=dict
-    )
+    ) # 'description' key is undocumented!
     lineage: list[str | None] = field(default_factory=list)
     repositories: list[Repository | None] = field(default_factory=list)
     roles: list[Role | None] = field(default_factory=list)
@@ -557,7 +568,7 @@ class Publisher(BaseOpenAlex):
     cited_by_count: int
     created_date: str  # ISO 8601 date string
     updated_date: str  # ISO 8601 date string
-    hierarchy_level: int
+    hierarchy_level: int | None # !! found 'None' value in api data, e.g. https://openalex.org/P4404660908
     ids: PublisherIds
     sources_api_url: str
     summary_stats: dict[
@@ -573,7 +584,7 @@ class Publisher(BaseOpenAlex):
     image_thumbnail_url: str | None = None
     image_url: str | None = None
     lineage: list[str | None] = field(default_factory=list)
-    parent_publisher: str | None = None
+    parent_publisher: BaseOpenAlex | None = None # !! undocumented: not just the id/name -- but both!
     roles: list[Role | None] = field(default_factory=list)
 
     # UNDOCUMENTED FIELDS
@@ -616,15 +627,16 @@ class Concept(BaseOpenAlex):
     counts_by_year: list[YearCount | None] = field(default_factory=list)
     description: str | None = None
 
-    international: dict[Literal["display_name"], dict[str, str] | None] = field(
+    international: dict[Literal["display_name","description"], dict[str, str] | None] = field(
         default_factory=dict
-    )
-    related_concepts: list[DehydratedConcept | None] = field(default_factory=list)
+    ) # 'description' key is undocumented!
+
+    related_concepts: list[DehydratedConcept | None] = field(default_factory=list) # !! Related concepts have 'wikidata' == None, shouldn't happen!
 
     # UNDOCUMENTED FIELDS
     image_url: str | None = None
     image_thumbnail_url: str | None = None
-    ancestors: list[DehydratedConcept | None] = field(default_factory=list)
+    ancestors: list[SimpleDehydratedConcept | None] = field(default_factory=list)
 
 
 @dataclass
@@ -660,7 +672,7 @@ class Work(BaseOpenAlex):
     versions: list[str | None] = field(default_factory=list)  # ?
     referenced_works_count: int | None = None
     # nested fields
-    abstract_inverted_index: dict[str, int] | None = None
+    abstract_inverted_index: dict[str, list[int]] | None = None
     authorships: list[Authorship | None] = field(default_factory=list)
     apc_list: APCData | None = None
     apc_paid: APCData | None = None
@@ -675,9 +687,9 @@ class Work(BaseOpenAlex):
     fulltext_origin: Literal["pdf", "ngrams"] | None = None
     fwci: float | None = None
     grants: list[Grant | None] = field(default_factory=list)
-    indexed_in: list[Literal["arxiv", "crossref", "doaj", "pubmed"] | None] = field(
+    indexed_in: list[Literal["arxiv", "crossref", "doaj", "pubmed", "datacite"] | None] = field(
         default_factory=list
-    )
+    ) # !! datacite is undocumented!
     keywords: list[DehydratedKeyword | None] = field(default_factory=list)
     language: str | None = None  # ISO 639-1 format
     license: str | None = None
@@ -705,8 +717,15 @@ class Meta:
     per_page: int
     groups_count: int | None = None
 
+    @classmethod
+    def from_dict(cls, data: dict) -> Meta:
+        return from_dict(data_class=cls, data=data)
 
 @dataclass
-class PagedResponse:
+class Response:
     meta: Meta
     results: list[BaseOpenAlex | None] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> Response:
+        return from_dict(data_class=cls, data=data)
