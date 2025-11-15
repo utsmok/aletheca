@@ -28,20 +28,23 @@
       },
       {
         "position": [
-          8,
-          4,
-          6,
-          4
-        ]
-      },
-      {
-        "position": [
           0,
           8,
           24,
           39
         ],
         "scrollable": true
+      },
+      {
+        "position": [
+          0,
+          47,
+          24,
+          22
+        ]
+      },
+      {
+        "position": null
       },
       {
         "position": null

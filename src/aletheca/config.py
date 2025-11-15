@@ -6,6 +6,10 @@ configuration classes and settings for the Aletheca library, defining default pa
 
 from dataclasses import dataclass
 
+# TODO set up loguru here in the config module
+# from loguru import logger
+# ...
+
 
 class OpenAlexAPISettings:
     """Configure API-based settings, like enabling xpac, data-v1, etc."""
