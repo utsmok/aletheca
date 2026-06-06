@@ -147,7 +147,7 @@ async with SynthecaSession() as session:
 |-------|------|-------------|
 | `display_name` | `str \| None` | Publisher display name |
 | `hierarchy_level` | `int \| None` | Level in hierarchy (0 = top-level) |
-| `parent_publisher` | `dict \| None` | Immediate parent publisher |
+| `parent_publisher` | `ParentPublisher \| None` | Immediate parent publisher as `{id, display_name}` object (not a string) |
 | `lineage` | `list[str]` | Full hierarchy chain (OpenAlex IDs, root to current) |
 | `country_codes` | `list[str]` | ISO country codes |
 | `alternate_titles` | `list[str]` | Alternative publisher names |

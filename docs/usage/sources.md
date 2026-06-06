@@ -190,6 +190,13 @@ async with SynthecaSession() as session:
 | `homepage_url` | `str \| None` | Source homepage |
 | `societies` | `list[Society]` | Associated academic societies |
 | `counts_by_year` | `list[YearCount]` | Annual works/citations breakdown |
+| `is_in_jstage` | `bool \| None` | Whether the source is indexed in J-Stage |
+| `is_in_jstage_since_year` | `int \| None` | Year since which the source has been in J-Stage |
+
+## Live API Notes
+
+- Source IDs (`ids` field) no longer include a `fatcat` key. The live API returns `openalex`, `issn_l`, `issn`, `mag`, and `wikidata` only. The `fatcat` field was removed without documentation.
+- The OpenAlex spec lists only 21 of the 37 fields that the live API returns. Syntheca models all live fields.
 
 ## Notes
 

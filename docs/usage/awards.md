@@ -73,7 +73,7 @@ The `Award` model includes the following fields (used when awards are returned f
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `institution_awarded` | `dict \| None` | Institution receiving the award |
+| `institution_awarded` | `list[dict]` | Institutions receiving the award — always a list (even when empty), not a single dict |
 | `funded_outputs` | `list[str]` | OpenAlex IDs of funded works |
 | `funded_outputs_count` | `int \| None` | Number of funded works |
 | `landing_page_url` | `str \| None` | Award landing page |

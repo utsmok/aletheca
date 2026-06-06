@@ -134,6 +134,11 @@ async with SynthecaSession() as session:
 | `counts_by_year` | `list[YearCount]` | Annual works/citations breakdown |
 | `summary_stats` | `SummaryStats \| None` | 2yr mean citedness, h-index, i10-index |
 
+## Live API Notes
+
+- The OpenAPI spec lists `grants_count` and `works_api_url` on Funder objects, but the live API returns `awards_count` instead and does not include `works_api_url`. Syntheca follows the live API.
+- The `awards_count` field reflects the transition from "grants" to "awards" terminology in OpenAlex.
+
 ## Notes
 
 - OpenAlex IDs for funders start with `F` (e.g. `F4320332161`).

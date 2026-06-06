@@ -288,7 +288,12 @@ async with SynthecaSession() as session:
 | `referenced_works` | `list[str]` | OpenAlex IDs of cited works |
 | `topics` | `list[DehydratedTopic]` | Associated topics |
 | `keywords` | `list[DehydratedKeyword]` | Associated keywords |
+| `content_urls` | `ContentUrls \| None` | Content URLs as a dict with `pdf` and `grobid_xml` keys (not `content_url` as in the spec) |
 | `abstract_inverted_index` | `dict \| None` | Inverted index for abstract reconstruction |
+
+## Live API Notes
+
+The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string`), but the live API returns `content_urls` (plural, type `object` with `pdf` and `grobid_xml` keys). Syntheca follows the live API. Additionally, the spec lists `works_api_url` on Work objects, but the live API does not return this field on works.
 
 ## Notes
 

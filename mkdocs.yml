@@ -45,8 +45,10 @@ nav:
       - Keywords: endpoints/keywords.md
       - Publishers: endpoints/publishers.md
       - Funders: endpoints/funders.md
+      - Awards: endpoints/awards.md
   - Advanced:
       - Configuration: advanced/configuration.md
+      - API Verification: advanced/api_verification.md
       - Caching: advanced/caching.md
       - Rate Limiting: advanced/rate_limiting.md
       - Request Hooks: advanced/hooks.md
