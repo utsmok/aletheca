@@ -1,31 +1,119 @@
 [project]
-name = "aletheca"
+name = "syntheca"
 version = "0.1.0"
-description = "A library to elegantly and efficiently retrieve data from the OpenAlex API."
-readme = "README.md"
+description = "Python interface for the OpenAlex API, built on top of the bibliofabric framework."
 authors = [
-    { name = "s.mok", email = "s.mok@utwente.nl" }
+    {name = "Samuel Mok", email = "s.mok@utwente.nl"}
 ]
+readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.12"
 dependencies = [
-    "dacite>=1.9.2",
-    "httpx>=0.28.1",
-    "loguru>=0.7.3",
-    "polars>=1.35.2",
-    "pydantic>=2.12.4",
+    "bibliofabric>=0.4.0,<0.5.0",
 ]
 
-[build-system]
-requires = ["uv_build>=0.9.0,<0.10.0"]
-build-backend = "uv_build"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: AsyncIO",
+    "Typing :: Typed",
+]
 
 [dependency-groups]
 dev = [
-    "marimo>=0.17.8",
-    "rich>=14.2.0",
-    "ruff>=0.14.5",
-    "ty>=0.0.1a26",
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.26.0",
+    "pytest-cov>=6.1.1",
+    "pytest-httpx>=0.35.0",
+    "python-dotenv>=1.0.0",
 ]
-test = [
-    "pytest>=9.0.1",
+docs = [
+    "mkdocs~=1.6.0",
+    "mkdocs-material~=9.5.0",
+    "mkdocstrings[python]",
 ]
+lint = ["ruff>=0.8.0"]
+test = ["pytest", "pytest-randomly"]
+
+[project.optional-dependencies]
+analysis = [
+    "polars",
+    "duckdb>=1.3.0",
+    "matplotlib>=3.8.0",
+    "rich>=13.0.0",
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "pyarrow>=14.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/utsmok/syntheca"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/syntheca"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv.pip]
+generate-hashes = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 60
+
+[tool.ruff.lint]
+select = [
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I", # isort
+    "B", # bugbear -- flake8 bugfinder
+    "Q", # correct quotes usage
+    "PTH",  # Replace os functions with pathlib functions
+    "SIM", # Simplify statements
+    "RET", # Return value related rules
+    "PIE", # misc flake8 rules
+    "FBT", # boolean traps
+    "PERF", # performance optimization
+    "PL", # pylint
+    "UP", # check for deprecated ways of coding
+    "FURB",
+]
+ignore = ["PLR2004"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"syntheca/client.py" = ["PLR0913", "PLR0912", "PLR0915"]
+
+[tool.ruff.lint.pylint]
+max-args = 10
+max-branches = 25
+max-statements = 75
+max-returns = 10
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "live_api: marks tests that hit the live OpenAlex API (requires API key, skipped in CI)",
+]
+addopts = "-m 'not live_api'"
