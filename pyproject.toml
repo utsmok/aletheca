@@ -96,7 +96,10 @@ combine-as-imports = true
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
-"syntheca/client.py" = ["PLR0913", "PLR0912", "PLR0915"]
+"**/client.py" = ["PLR0913", "PLR0912", "PLR0915", "PLC0415"]
+"**/session.py" = ["PLC0415"]
+"**/queries.py" = ["PLC0415"]
+"**/entities.py" = ["UP046", "UP037"]
 
 [tool.ruff.lint.pylint]
 max-args = 10

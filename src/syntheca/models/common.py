@@ -1,13 +1,12 @@
 """Shared Pydantic models for common nested types across OpenAlex entities."""
 
-from typing import Annotated, Literal
+from typing import Literal
 
-from pydantic import BaseModel, BeforeValidator, Field
+from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .safe_types import SafeList, SafeStr
-
 
 # --- APC (Article Processing Charge) ---
 

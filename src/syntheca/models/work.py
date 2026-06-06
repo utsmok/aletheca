@@ -5,6 +5,7 @@ from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import (
+    SDG,
     APCData,
     Biblio,
     CitationNormalizedPercentile,
@@ -16,7 +17,6 @@ from .common import (
     Location,
     Mesh,
     OpenAccess,
-    SDG,
     YearCountBasic,
 )
 from .ids import WorkIds

@@ -803,7 +803,7 @@ class Response(Generic[T]):
     results: list[T | None]
 
     @classmethod
-    def from_dict(cls, data: dict, result_type: type[T] | None) -> "Response[T]":
+    def from_dict(cls, data: dict, result_type: type[T] | None) -> Response[T]:
         raw_meta = data.get("meta")
         if raw_meta is None:
             raise ValueError("Missing 'meta' field in response data")

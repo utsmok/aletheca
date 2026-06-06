@@ -9,7 +9,6 @@ for OpenAlex-specific conventions:
 
 from typing import Any
 
-from pydantic import BaseModel
 from bibliofabric.exceptions import BibliofabricError
 from bibliofabric.log_config import logger
 from bibliofabric.resources import (
@@ -18,6 +17,7 @@ from bibliofabric.resources import (
     GettableMixin,
     SearchableMixin,
 )
+from pydantic import BaseModel
 
 
 class SynthecaResourceClient(BaseResourceClient):

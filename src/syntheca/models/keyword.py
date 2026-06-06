@@ -1,10 +1,8 @@
 """Pydantic models for the Keyword entity."""
 
-from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
-from .safe_types import SafeStr
 
 
 class Keyword(BaseEntity):

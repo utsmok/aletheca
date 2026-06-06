@@ -5,7 +5,6 @@ from typing import TypeVar
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
-
 EntityType = TypeVar("EntityType", bound="BaseEntity")
 
 

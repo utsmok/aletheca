@@ -1,6 +1,5 @@
 """Pydantic models for the Award entity."""
 
-from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity

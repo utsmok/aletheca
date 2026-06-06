@@ -1,10 +1,13 @@
 """Pydantic models for OpenAlex entities."""
 
+from .author import Author
+from .award import Award
 from .base import ApiResponse, BaseEntity, EntityType, Meta
 from .common import (
+    SDG,
+    Affiliation,
     APCData,
     APCEntry,
-    Affiliation,
     Biblio,
     CitationNormalizedPercentile,
     DehydratedFunder,
@@ -20,7 +23,6 @@ from .common import (
     Mesh,
     OpenAccess,
     Role,
-    SDG,
     Society,
     Subfield,
     SummaryStats,
@@ -38,6 +40,7 @@ from .dehydrated import (
     RelatedInstitution,
     SimpleDehydratedConcept,
 )
+from .funder import Funder
 from .ids import (
     AuthorIds,
     ConceptIds,
@@ -48,9 +51,6 @@ from .ids import (
     TopicIds,
     WorkIds,
 )
-from .author import Author
-from .award import Award
-from .funder import Funder
 from .institution import Institution
 from .keyword import Keyword
 from .publisher import Publisher
