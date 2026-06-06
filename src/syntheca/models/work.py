@@ -120,3 +120,10 @@ class Work(BaseEntity):
     awards: SafeList[dict] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")
+
+    @property
+    def reconstructed_abstract(self) -> str | None:
+        """Reconstruct the full abstract text from the inverted index."""
+        from .._helpers import reconstruct_abstract  # noqa: PLC0415
+
+        return reconstruct_abstract(self.abstract_inverted_index)
