@@ -37,7 +37,7 @@ class Award(BaseEntity):
     investigators: SafeList[dict] = Field(default_factory=list)
 
     # Outputs
-    institution_awarded: dict | None = None
+    institution_awarded: dict | list | None = None
     funded_outputs: SafeList[str] = Field(default_factory=list)
     funded_outputs_count: int | None = None
     landing_page_url: SafeStr | None = None
@@ -47,7 +47,7 @@ class Award(BaseEntity):
     topics: SafeList[DehydratedTopic] = Field(default_factory=list)
 
     # Provenance
-    provenance: dict | None = None
+    provenance: SafeStr | None = None
 
     # Common fields
     created_date: str | None = None

@@ -88,7 +88,7 @@ from syntheca.endpoints import WorksFilters
 async with SynthecaSession() as session:
     filters = WorksFilters(
         authorships_institutions_id="I31371856",  # Stanford University
-        publication_year_range="2020-2024",
+        from_publication_date="2020-01-01",
     )
     results = await session.works.search(filters=filters, page_size=50)
 ```
@@ -104,7 +104,7 @@ async with SynthecaSession() as session:
     filters = WorksFilters(publication_year=2024)
 
     # Year range
-    filters = WorksFilters(publication_year_range="2020-2024")
+    filters = WorksFilters(publication_year=2024)  # Use from_publication_date/to_publication_date for ranges
 
     # Date range (YYYY-MM-DD)
     filters = WorksFilters(
@@ -155,7 +155,7 @@ from syntheca.endpoints import WorksFilters
 async with SynthecaSession() as session:
     filters = WorksFilters(
         authorships_author_id="A5023888391",
-        publication_year_range="2020-2024",
+        from_publication_date="2020-01-01",
     )
     async for work in session.works.iterate(
         filters=filters,
@@ -220,6 +220,7 @@ OpenAlex stores abstracts as an inverted index to comply with publisher agreemen
 
 ```python
 from syntheca import SynthecaSession
+# Note: _helpers is a private module; it may be relocated in a future release.
 from syntheca._helpers import reconstruct_abstract
 
 async with SynthecaSession() as session:
@@ -279,7 +280,7 @@ async with SynthecaSession() as session:
 | `publication_date` | `str \| None` | Full date (YYYY-MM-DD) |
 | `doi` | `str \| None` | DOI identifier |
 | `type` | `str \| None` | Work type (article, book, dataset, etc.) |
-| `is_oa` | `bool \| None` | Whether the work is open access |
+| `open_access.is_oa` | `bool \| None` | Whether the work is open access (nested in `open_access`) |
 | `cited_by_count` | `int` | Number of citations |
 | `authorships` | `list[Authorship]` | Author and affiliation data |
 | `locations` | `list[Location]` | Places the work can be found |
@@ -287,7 +288,6 @@ async with SynthecaSession() as session:
 | `referenced_works` | `list[str]` | OpenAlex IDs of cited works |
 | `topics` | `list[DehydratedTopic]` | Associated topics |
 | `keywords` | `list[DehydratedKeyword]` | Associated keywords |
-| `grants` | `list[Grant]` | Grant/funding information |
 | `abstract_inverted_index` | `dict \| None` | Inverted index for abstract reconstruction |
 
 ## Notes

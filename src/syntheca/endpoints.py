@@ -21,7 +21,6 @@ class WorksFilters(BaseModel):
     """
 
     publication_year: int | None = None
-    publication_year_range: str | None = None
     publication_date: str | None = None
     from_publication_date: str | None = Field(None, alias="from_publication_date")
     to_publication_date: str | None = Field(None, alias="to_publication_date")
@@ -93,6 +92,14 @@ class WorksFilters(BaseModel):
     authors_count: int | None = Field(None, alias="authors_count")
     best_oa_version: str | None = Field(None, alias="best_oa_version")
     version: str | None = Field(None, alias="version")
+    # Additional common filters
+    cited_by_count: str | None = None
+    oa_status: str | None = None
+    is_retracted: bool | None = Field(None, alias="is_retracted")
+    is_paratext: bool | None = Field(None, alias="is_paratext")
+    is_xpac: bool | None = Field(None, alias="is_xpac")
+    referenced_works: str | None = Field(None, alias="referenced_works")
+    locations_source_has_issn: bool | None = Field(None, alias="locations.source.has_issn")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -148,11 +155,11 @@ class AuthorsFilters(BaseModel):
     last_known_institutions_type: str | None = Field(
         None, alias="last_known_institutions.type"
     )
-    last_known_institution_continent: str | None = Field(
-        None, alias="last_known_institution.continent"
+    last_known_institutions_continent: str | None = Field(
+        None, alias="last_known_institutions.continent"
     )
-    last_known_institution_is_global_south: bool | None = Field(
-        None, alias="last_known_institution.is_global_south"
+    last_known_institutions_is_global_south: bool | None = Field(
+        None, alias="last_known_institutions.is_global_south"
     )
 
     # ID and summary stats filters
@@ -162,6 +169,11 @@ class AuthorsFilters(BaseModel):
     )
     summary_stats_h_index: int | None = Field(None, alias="summary_stats.h_index")
     summary_stats_i10_index: int | None = Field(None, alias="summary_stats.i10_index")
+    # Additional filters
+    block_key: str | None = Field(None, alias="block_key")
+    from_created_date: str | None = Field(None, alias="from_created_date")
+    to_updated_date: str | None = Field(None, alias="to_updated_date")
+    openalex: str | None = Field(None, alias="openalex")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -209,6 +221,8 @@ class InstitutionsFilters(BaseModel):
     default_search: str | None = Field(None, alias="default.search")
     continent: str | None = Field(None, alias="continent")
     is_global_south: bool | None = Field(None, alias="is_global_south")
+    has_ror: bool | None = Field(None, alias="has_ror")
+    is_super_system: bool | None = Field(None, alias="is_super_system")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -226,7 +240,7 @@ class TopicsFilters(BaseModel):
 
     # Nested filter fields (dot notation via alias)
     display_name_search: str | None = Field(None, alias="display_name.search")
-    keywords_keyword: str | None = Field(None, alias="keywords.keyword")
+    keywords_search: str | None = Field(None, alias="keywords.search")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -257,6 +271,9 @@ class PublishersFilters(BaseModel):
     # Search filters
     display_name_search: str | None = Field(None, alias="display_name.search")
     default_search: str | None = Field(None, alias="default.search")
+    continent: str | None = Field(None, alias="continent")
+    lineage: str | None = Field(None, alias="lineage")
+    ror: str | None = Field(None, alias="ror")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -276,5 +293,7 @@ class FundersFilters(BaseModel):
 
     # Use awards_count (not grants_count)
     awards_count: int | None = Field(None, alias="awards_count")
+    continent: str | None = Field(None, alias="continent")
+    is_global_south: bool | None = Field(None, alias="is_global_south")
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)

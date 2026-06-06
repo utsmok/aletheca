@@ -29,7 +29,6 @@ class Publisher(BaseEntity):
     # Common fields
     created_date: str | None = None
     updated_date: str | None = None
-    works_api_url: str | None = None
     summary_stats: SummaryStats | None = None
 
     # Undocumented

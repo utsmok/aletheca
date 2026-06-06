@@ -37,7 +37,6 @@ Range filters accept a format like `2020-2024`.
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
 | `publication_year` | `publication_year` | `int` | Exact publication year (e.g., `2024`) |
-| `publication_year_range` | `publication_year` | `str` | Year range (e.g., `"2020-2024"`) |
 | `publication_date` | `publication_date` | `str` | Exact date (ISO format, e.g., `"2024-01-15"`) |
 | `from_publication_date` | `from_publication_date` | `str` | Lower bound date (inclusive) |
 | `to_publication_date` | `to_publication_date` | `str` | Upper bound date (inclusive) |
@@ -166,7 +165,7 @@ async with SynthecaSession() as session:
 ```python
 async with SynthecaSession() as session:
     filters = WorksFilters(
-        publication_year_range="2020-2024",
+        publication_year=2024,
         has_doi=True,
         has_abstract=True,
         is_oa=True,

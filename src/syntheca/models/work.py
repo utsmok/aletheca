@@ -12,7 +12,6 @@ from .common import (
     DehydratedFunder,
     DehydratedKeyword,
     DehydratedTopic,
-    Grant,
     HasContent,
     Location,
     Mesh,
@@ -81,18 +80,14 @@ class Work(BaseEntity):
     best_oa_location: Location | None = None
     biblio: Biblio | None = None
     citation_normalized_percentile: CitationNormalizedPercentile | None = None
-    cited_by_api_url: SafeStr | None = None
     concepts: SafeList[dict] = Field(default_factory=list)
     corresponding_author_ids: SafeList[str] = Field(default_factory=list)
     corresponding_institution_ids: SafeList[str] = Field(default_factory=list)
     counts_by_year: SafeList[YearCountBasic] = Field(default_factory=list)
-    fulltext_origin: str | None = None
     fwci: float | None = None
-    grants: SafeList[Grant] = Field(default_factory=list)
     indexed_in: SafeList[str] = Field(default_factory=list)
     keywords: SafeList[DehydratedKeyword] = Field(default_factory=list)
     language: SafeStr | None = None
-    license: SafeStr | None = None
     locations: SafeList[Location] = Field(default_factory=list)
     mesh: SafeList[Mesh] = Field(default_factory=list)
     primary_location: Location | None = None
@@ -101,11 +96,8 @@ class Work(BaseEntity):
     related_works: SafeList[str] = Field(default_factory=list)
     sustainable_development_goals: SafeList[SDG] = Field(default_factory=list)
     topics: SafeList[DehydratedTopic] = Field(default_factory=list)
-    type_crossref: str | None = None
     has_content: HasContent | None = None
     cited_by_percentile_year: dict[str, int] | None = None
-    datasets: list | None = None
-    versions: SafeList[str] = Field(default_factory=list)
     referenced_works_count: int | None = None
     content_urls: dict | None = None
     # Common fields
@@ -114,10 +106,9 @@ class Work(BaseEntity):
     works_api_url: str | None = None
 
     # Undocumented
-    institution_assertions: SafeList[str] = Field(default_factory=list)
     funders: SafeList[DehydratedFunder] = Field(default_factory=list)
     institutions: SafeList[dict] = Field(default_factory=list)
     is_xpac: bool | None = None
-    awards: SafeList[str] = Field(default_factory=list)
+    awards: SafeList[dict] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")

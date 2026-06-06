@@ -96,17 +96,7 @@ class OpenAccess(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
-# --- Grant / Funder (nested) ---
-
-
-class Grant(BaseModel):
-    """Grant information attached to a work."""
-
-    funder: SafeStr | None = None
-    funder_display_name: SafeStr | None = None
-    award_id: SafeStr | None = None
-
-    model_config = ConfigDict(extra="allow")
+# --- Funder (nested) ---
 
 
 class DehydratedFunder(BaseModel):
@@ -242,11 +232,11 @@ class SummaryStats(BaseModel):
     ``two_yr_mean_citedness`` for Python compatibility.
     """
 
-    two_yr_mean_citedness: float = Field(
-        default=0.0, alias="2yr_mean_citedness"
+    two_yr_mean_citedness: float | None = Field(
+        default=None, alias="2yr_mean_citedness"
     )
-    h_index: int = 0
-    i10_index: int = 0
+    h_index: int | None = None
+    i10_index: int | None = None
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
