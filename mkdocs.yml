@@ -53,8 +53,10 @@ nav:
       - Rate Limiting: advanced/rate_limiting.md
       - Request Hooks: advanced/hooks.md
       - Error Handling: advanced/error_handling.md
+  - Features & Ergonomics: ergonomics.md
   - API Reference: api_reference.md
   - Authentication: authentication.md
   - Contributing: contributing.md
+  - Changelog: changelog.md
 watch:
   - src/syntheca

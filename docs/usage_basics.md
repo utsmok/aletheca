@@ -195,3 +195,8 @@ async with SynthecaSession() as session:
     citing = await session.queries.citing_works("W2741809807", limit=100)
     refs = await session.queries.referenced_works("W2741809807", limit=100)
 ```
+
+
+## Interactive Example
+
+<iframe src="https://marimo.app/github/utsmok/aletheca/blob/main/examples/simple_example.py/wasm?embed=true&mode=read" sandbox="allow-scripts allow-same-origin allow-downloads allow-popups allow-forms" style="width:100%;height:500px;border:none;border-radius:8px;"></iframe>
