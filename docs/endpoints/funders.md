@@ -7,10 +7,10 @@ foundations, government agencies, and other entities that fund scholarly researc
 **Client access:** `session.funders`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for funder in session.funders.iterate(
         filters=FundersFilters(country_code="US"),
     ):
@@ -50,10 +50,10 @@ async with SynthecaSession() as session:
 ### Find funders by country
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = FundersFilters(country_code="DE")
     async for funder in session.funders.iterate(filters=filters):
         print(f"{funder.display_name} — {funder.awards_count} awards")
@@ -62,7 +62,7 @@ async with SynthecaSession() as session:
 ### Search for a funder by name
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = FundersFilters(display_name_search="National Science Foundation")
     async for funder in session.funders.iterate(filters=filters):
         print(f"{funder.display_name} ({funder.country_code})")
@@ -71,7 +71,7 @@ async with SynthecaSession() as session:
 ### Find major funders by ROR
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     funder = await session.funders.get("https://ror.org/012tx4f57")
     print(f"{funder.display_name}: {funder.works_count} works, {funder.awards_count} awards")
 ```

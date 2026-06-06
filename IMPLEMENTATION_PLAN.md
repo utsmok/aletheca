@@ -1,10 +1,10 @@
-# Syntheca (OpenAlex) Implementation Plan
+# Aletheca (OpenAlex) Implementation Plan
 
-> **Goal**: Bring syntheca up to the quality and completeness of AIREloom, using bibliofabric as the shared base.
+> **Goal**: Bring aletheca up to the quality and completeness of AIREloom, using bibliofabric as the shared base.
 
 ## Executive Summary
 
-Syntheca (currently `aletheca`) is a stub: only `entities.py` has substance (~823 lines of dacite dataclasses). Everything else is a docstring stub. The plan is to:
+Aletheca (currently `aletheca`) is a stub: only `entities.py` has substance (~823 lines of dacite dataclasses). Everything else is a docstring stub. The plan is to:
 
 1. **Delete dead code** and restructure as a bibliofabric downstream library
 2. **Migrate entities from dacite dataclasses → Pydantic v2 models** (matching bibliofabric/AIREloom)
@@ -17,8 +17,8 @@ Syntheca (currently `aletheca`) is a stub: only `entities.py` has substance (~82
 
 ## Phase 0: Repository Restructure & Cleanup
 
-### 0.1 Rename package from `aletheca` to `syntheca`
-- Rename `src/aletheca/` → `src/syntheca/`
+### 0.1 Rename package from `aletheca` to `aletheca`
+- Rename `src/aletheca/` → `src/aletheca/`
 - Update `pyproject.toml` name, build targets, all imports
 - Update all references in README, copilot-instructions, marimo checks
 
@@ -52,7 +52,7 @@ Syntheca (currently `aletheca`) is a stub: only `entities.py` has substance (~82
 
 ## Phase 1: Bibliofabric Integration Layer
 
-### 1.1 Constants module (`src/syntheca/constants.py`)
+### 1.1 Constants module (`src/aletheca/constants.py`)
 Mirror AIREloom's pattern:
 ```python
 OPENALEX_API_BASE_URL = "https://api.openalex.org"
@@ -61,15 +61,15 @@ DEFAULT_TIMEOUT = 30
 DEFAULT_RETRIES = 3
 DEFAULT_PAGE_SIZE = 25       # OpenAlex default
 ITERATE_PAGE_SIZE = 100      # Max for efficient cursor iteration
-DEFAULT_USER_AGENT = f"syntheca/{__version__}"
+DEFAULT_USER_AGENT = f"aletheca/{__version__}"
 ```
 - Version via `importlib.metadata` (same as AIREloom)
 
-### 1.2 Config module (`src/syntheca/config.py`)
+### 1.2 Config module (`src/aletheca/config.py`)
 ```python
-class SynthecaSettings(BaseApiSettings):
+class AlethecaSettings(BaseApiSettings):
     model_config = SettingsConfigDict(
-        env_prefix="SYNTHECA_",
+        env_prefix="ALETHECA_",
         env_file=(".env", "secrets.env"),
         case_sensitive=False,
         extra="ignore",
@@ -92,7 +92,7 @@ auth = QueryParameterAuth(key_name="api_key", key_value=settings.openalex_api_ke
 
 No workarounds or pre-request hooks needed.
 
-### 1.4 Response Unwrapper (`src/syntheca/unwrapper.py`)
+### 1.4 Response Unwrapper (`src/aletheca/unwrapper.py`)
 ```python
 class OpenAlexUnwrapper(ResponseUnwrapper):
     def unwrap_results(self, response_json: dict) -> list[dict]:
@@ -108,21 +108,20 @@ class OpenAlexUnwrapper(ResponseUnwrapper):
         return response_json.get("meta", {}).get("count")
 ```
 
-### 1.5 Client (`src/syntheca/client.py`)
+### 1.5 Client (`src/aletheca/client.py`)
 ```python
-class SynthecaClient(BaseApiClient):
+class AlethecaClient(BaseApiClient):
     """Async client for the OpenAlex API."""
-    
+
     def __init__(self, settings=None, api_key=None, ...):
         # Resolve auth using QueryParameterAuth
         # Initialize all resource clients as properties
-```
 - Properties for each resource: `works`, `authors`, `sources`, `institutions`, `topics`, `keywords`, `publishers`, `funders`, `awards`, `domains`, `fields`, `subfields`, `sdgs`, `countries`
 
-### 1.6 Session (`src/syntheca/session.py`)
-Thin async context manager wrapping `SynthecaClient`, same pattern as `AireloomSession`:
+### 1.6 Session (`src/aletheca/session.py`)
+Thin async context manager wrapping `AlethecaClient`, same pattern as `AireloomSession`:
 ```python
-class SynthecaSession:
+class AlethecaSession:
     async def __aenter__(self): ...
     async def __aexit__(self): ...
     def __getattr__(self, name): ...  # delegate to client
@@ -136,7 +135,7 @@ class SynthecaSession:
 
 This is the largest phase. Migrate all ~50 dataclasses from `entities.py` to Pydantic v2 models, organized by entity type.
 
-### 2.1 Module structure (`src/syntheca/models/`)
+### 2.1 Module structure (`src/aletheca/models/`)
 ```
 models/
   __init__.py
@@ -198,7 +197,7 @@ class ApiResponse[T: BaseEntity](BaseModel):
 
 ## Phase 3: Endpoints, Filters & OpenAlex Integration
 
-### 3.1 Endpoint definitions (`src/syntheca/endpoints.py`)
+### 3.1 Endpoint definitions (`src/aletheca/endpoints.py`)
 Pydantic filter models per endpoint, matching AIREloom's pattern:
 
 ```python
@@ -223,12 +222,12 @@ class WorksFilters(BaseModel):
 
 ### 3.2 OpenAlex filter serialization — override `_serialize_filters()`
 
-Bibliofabric v0.3.2 provides `_serialize_filters()` on `BaseResourceClient`. The default dumps Pydantic filter models as individual query params (OpenAIRE style). Syntheca overrides it to produce OpenAlex's single `filter=key:value,key:value` string:
+Bibliofabric v0.3.2 provides `_serialize_filters()` on `BaseResourceClient`. The default dumps Pydantic filter models as individual query params (OpenAIRE style). Aletheca overrides it to produce OpenAlex's single `filter=key:value,key:value` string:
 
 ```python
-class SynthecaResourceClient(BaseResourceClient):
+class AlethecaResourceClient(BaseResourceClient):
     """Base for all OpenAlex resource clients."""
-    
+
     _param_page_size: str = "per_page"   # OpenAlex uses per_page, not pageSize
     _param_sort: str = "sort"            # OpenAlex uses sort, not sortBy
     
@@ -267,10 +266,10 @@ This is a single override in one base class — all resource clients inherit it 
 
 ### 3.3 Parameter name customization — class attributes
 
-Bibliofabric v0.3.2 exposes parameter names as class attributes on `BaseResourceClient` with sensible defaults. Syntheca overrides only the two that differ:
+Bibliofabric v0.3.2 exposes parameter names as class attributes on `BaseResourceClient` with sensible defaults. Aletheca overrides only the two that differ:
 
 ```python
-class SynthecaResourceClient(BaseResourceClient):
+class AlethecaResourceClient(BaseResourceClient):
     _param_page_size: str = "per_page"
     _param_sort: str = "sort"
     # _param_page = "page"      # already matches default
@@ -318,7 +317,7 @@ The `_param_search = "search"` default already matches OpenAlex — no override 
 OpenAlex uses `select=id,title,doi` to limit returned fields. Not built into bibliofabric mixins. Add as a resource-client-level method:
 
 ```python
-class WorksClient(SynthecaResourceClient, GettableMixin, SearchableMixin, CursorIterableMixin):
+class WorksClient(AlethecaResourceClient, GettableMixin, SearchableMixin, CursorIterableMixin):
     async def select(self, fields: list[str], **kwargs) -> AsyncIterator[Any]:
         """Fetch only specified fields."""
         params = {**kwargs, "select": ",".join(fields)}
@@ -347,12 +346,12 @@ async def sample(self, n: int, seed: int | None = None) -> list[Work]:
 
 ## Phase 4: Resource Clients
 
-### 4.1 Syntheca resource client base
+### 4.1 Aletheca resource client base
 
-All syntheca resource clients inherit from `SynthecaResourceClient` which sets the OpenAlex-specific param names and filter serialization:
+All aletheca resource clients inherit from `AlethecaResourceClient` which sets the OpenAlex-specific param names and filter serialization:
 
 ```python
-class SynthecaResourceClient(BaseResourceClient):
+class AlethecaResourceClient(BaseResourceClient):
     """Base for all OpenAlex resource clients."""
     _param_page_size: str = "per_page"
     _param_sort: str = "sort"
@@ -365,7 +364,7 @@ class SynthecaResourceClient(BaseResourceClient):
 
 For the 8 core entities that support GET/search/iterate:
 ```python
-class WorksClient(GettableMixin, SearchableMixin, CursorIterableMixin, SynthecaResourceClient):
+class WorksClient(GettableMixin, SearchableMixin, CursorIterableMixin, AlethecaResourceClient):
     _entity_path = "works"
     _entity_model = Work
     _search_response_model = WorkResponse
@@ -411,7 +410,7 @@ class WorksClient(GettableMixin, SearchableMixin, CursorIterableMixin, SynthecaR
 
 ---
 
-## Phase 5: Convenience Queries (`src/syntheca/queries.py`)
+## Phase 5: Convenience Queries (`src/aletheca/queries.py`)
 
 Mirror AIREloom's `_QueryAccessor` pattern:
 
@@ -436,7 +435,7 @@ async def related_topics(session, entity_id) -> list[Topic]:
 
 ---
 
-## Phase 6: Helpers & Utilities (`src/syntheca/_helpers.py`)
+## Phase 6: Helpers & Utilities (`src/aletheca/_helpers.py`)
 
 - DOI normalization (`doi.org/` prefix handling)
 - OpenAlex ID parsing (`https://openalex.org/W123` → `W123`)
@@ -454,7 +453,7 @@ Copy AIREloom's CI:
 - `uv sync --all-groups --all-extras`
 - `ruff check src/`
 - `ty check src/`
-- `pytest --cov=syntheca --cov-fail-under=95 tests/`
+- `pytest --cov=aletheca --cov-fail-under=95 tests/`
 - `uv build`
 - Docs deploy on push to main
 - Publish on tag
@@ -540,8 +539,8 @@ Marimo notebooks (matching AIREloom's approach):
 
 ### 8.2 `__init__.py` public API
 ```python
-from .client import SynthecaClient
-from .session import SynthecaSession
+from .client import AlethecaClient
+from .session import AlethecaSession
 from .models import (Work, Author, Source, Institution, Topic, ...)
 from .constants import __version__
 from bibliofabric.exceptions import (APIError, NotFoundError, RateLimitError, ...)
@@ -554,7 +553,7 @@ from bibliofabric.exceptions import (APIError, NotFoundError, RateLimitError, ..
 ### 5.1 ✅ RESOLVED: Query Parameter Auth Strategy
 **Status**: `QueryParameterAuth` added to bibliofabric v0.3.2 in `auth.py`, exported in `__init__.py`.
 
-**Syntheca usage**:
+**Aletheca usage**:
 ```python
 from bibliofabric import QueryParameterAuth
 auth = QueryParameterAuth(key_name="api_key", key_value=settings.openalex_api_key)
@@ -563,17 +562,17 @@ auth = QueryParameterAuth(key_name="api_key", key_value=settings.openalex_api_ke
 ### 5.2 ✅ RESOLVED: Filter Serialization Hook
 **Status**: `_serialize_filters()` method added to `BaseResourceClient` in bibliofabric v0.3.2. All 3 mixins (`SearchableMixin`, `CursorIterableMixin`, `PageIterableMixin`) call it instead of inline serialization.
 
-**Syntheca usage**: Override in `SynthecaResourceClient` to produce OpenAlex's `filter=key:value,key:value` string (see §3.2).
+**Aletheca usage**: Override in `AlethecaResourceClient` to produce OpenAlex's `filter=key:value,key:value` string (see §3.2).
 
 ### 5.3 ✅ RESOLVED: Parameter Name Customization
 **Status**: Class attributes `_param_page`, `_param_page_size`, `_param_sort`, `_param_cursor`, `_param_id`, `_param_search` added to `BaseResourceClient`. All mixins use them.
 
-**Syntheca usage**: Override `_param_page_size="per_page"` and `_param_sort="sort"` in `SynthecaResourceClient` (see §3.3).
+**Aletheca usage**: Override `_param_page_size="per_page"` and `_param_sort="sort"` in `AlethecaResourceClient` (see §3.3).
 
 ### 5.4 ✅ RESOLVED: Search Parameter Support
 **Status**: `search: str | None = None` parameter added to `search()`, `iterate()` (both cursor and page), `collect()`, and `count()` in bibliofabric v0.3.2.
 
-**Syntheca usage**: Pass `search="query"` directly to any mixin method (see §3.5).
+**Aletheca usage**: Pass `search="query"` directly to any mixin method (see §3.5).
 
 ### 5.5 Minor gaps (not blocking, resource-level solutions)
 - **`select` parameter**: OpenAlex field selection. Add as resource-client method (see §3.6).
@@ -602,8 +601,8 @@ Phases 7 and 0 can proceed in parallel. Phase 2 is the largest single chunk of w
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| ~~Bibliofabric parameter naming gap~~ | ~~High~~ **Resolved** | Override class attributes in `SynthecaResourceClient` |
+| ~~Bibliofabric parameter naming gap~~ | ~~High~~ **Resolved** | Override class attributes in `AlethecaResourceClient` |
 | ~50 dataclasses → Pydantic migration errors | Medium | Incremental migration with tests; use `extra="allow"` for safety |
-| OpenAlex filter syntax too complex for generic serialization | Medium | Custom `_serialize_filters()` override in `SynthecaResourceClient` |
+| OpenAlex filter syntax too complex for generic serialization | Medium | Custom `_serialize_filters()` override in `AlethecaResourceClient` |
 | Deprecated entities (Concept) removal breaks users | Low | Keep with deprecation warning |
 | OpenAlex API changes underfoot | Low | `extra="allow"` on all models provides buffer |

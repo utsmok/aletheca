@@ -18,27 +18,27 @@ OpenAlex operates two request pools:
 
 ### Environment variable (recommended)
 
-Set the `SYNTHECA_OPENALEX_API_KEY` environment variable. Syntheca reads it automatically via its settings system:
+Set the `ALETHECA_OPENALEX_API_KEY` environment variable. Aletheca reads it automatically via its settings system:
 
 ```bash
-export SYNTHECA_OPENALEX_API_KEY="your-api-key-here"
+export ALETHECA_OPENALEX_API_KEY="your-api-key-here"
 ```
 
 Then create a session as usual — no extra code needed:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 ```
 
 ### .env file
 
-Syntheca loads `.env` and `secrets.env` files automatically (via pydantic-settings). Create a `.env` file in your project root:
+Aletheca loads `.env` and `secrets.env` files automatically (via pydantic-settings). Create a `.env` file in your project root:
 
 ```
-SYNTHECA_OPENALEX_API_KEY=your-api-key-here
+ALETHECA_OPENALEX_API_KEY=your-api-key-here
 ```
 
 !!! warning "Don't commit secrets"
@@ -49,29 +49,29 @@ SYNTHECA_OPENALEX_API_KEY=your-api-key-here
 Pass the key directly to the session constructor:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession(api_key="your-api-key-here") as session:
+async with AlethecaSession(api_key="your-api-key-here") as session:
     work = await session.works.get("W2741809807")
 ```
 
-### Via SynthecaSettings
+### Via AlethecaSettings
 
 For advanced configuration, construct a settings object:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.config import SynthecaSettings
+from aletheca import AlethecaSession
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(openalex_api_key="your-api-key-here")
+settings = AlethecaSettings(openalex_api_key="your-api-key-here")
 
-async with SynthecaSession(settings=settings) as session:
+async with AlethecaSession(settings=settings) as session:
     ...
 ```
 
 ## How it works
 
-When an API key is provided, syntheca appends it as the `api_key` query parameter on every request:
+When an API key is provided, aletheca appends it as the `api_key` query parameter on every request:
 
 ```
 https://api.openalex.org/works?filter=...&api_key=your-key

@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "syntheca",
+#     "aletheca",
 #     "certifi",
 #     "marimo",
 # ///
@@ -20,15 +20,15 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca.endpoints import WorksFilters
+    from aletheca import AlethecaSession
+    from aletheca.endpoints import WorksFilters
 
-    return SynthecaSession, WorksFilters
+    return AlethecaSession, WorksFilters
 
 
 @app.cell
 def _():
-    session = SynthecaSession()
+    session = AlethecaSession()
     return (session,)
 
 
@@ -38,7 +38,7 @@ async def _(mo):
         """
     # Convenience Queries
 
-    Syntheca bundles common multi-step workflows into convenience
+    Aletheca bundles common multi-step workflows into convenience
     query functions accessible via `session.queries`.
     """
     )

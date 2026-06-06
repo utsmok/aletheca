@@ -1,24 +1,24 @@
-# Syntheca
+# Aletheca
 
 **Python interface for the OpenAlex API**, built on [bibliofabric](https://github.com/utsmok/bibliofabric).
 
-Syntheca provides a fully-typed, async-first Python client for [OpenAlex](https://openalex.org) — the open catalog of the global research system. It wraps all eight entity endpoints (Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders) with Pydantic models, structured filters, and cursor-based pagination.
+Aletheca provides a fully-typed, async-first Python client for [OpenAlex](https://openalex.org) — the open catalog of the global research system. It wraps all eight entity endpoints (Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders) with Pydantic models, structured filters, and cursor-based pagination.
 
-## Why syntheca?
+## Why aletheca?
 
 - **Async-native** — every operation is `async`, designed for modern Python (3.12+).
 - **Typed end-to-end** — Pydantic v2 models for all entities and filter parameters, with full IDE autocomplete.
-- **Ergonomic API** — `async with SynthecaSession() as session:` gives you access to every endpoint through attribute access.
+- **Ergonomic API** — `async with AlethecaSession() as session:` gives you access to every endpoint through attribute access.
 - **Built on bibliofabric** — inherits robust HTTP handling, retry logic, and response unwrapping from a shared framework.
 
 ## Quick peek
 
 ```python
 import asyncio
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
 async def main():
-    async with SynthecaSession() as session:
+    async with AlethecaSession() as session:
         work = await session.works.get("W2741809807")
         print(work.display_name)
 
@@ -34,7 +34,7 @@ asyncio.run(main())
 | Cursor pagination | `async for work in session.works.iterate(...):` |
 | Convenience queries | `session.queries.works_by_author("...")`, `citing_works(...)`, etc. |
 | Helper utilities | DOI normalization, OpenAlex ID parsing, abstract reconstruction |
-| API key support | Env var `SYNTHECA_OPENALEX_API_KEY` or explicit `api_key=` parameter |
+| API key support | Env var `ALETHECA_OPENALEX_API_KEY` or explicit `api_key=` parameter |
 
 ## Next steps
 

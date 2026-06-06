@@ -7,9 +7,9 @@ The Sources endpoint represents venues where scholarly works are published — j
 ### Get a source by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     source = await session.sources.get("S137030756")  # Nature
     print(source.display_name)
     print(source.type)  # "journal"
@@ -20,9 +20,9 @@ async with SynthecaSession() as session:
 ### Search for sources
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.sources.search(
         search="nature communications",
         page_size=10,
@@ -36,10 +36,10 @@ async with SynthecaSession() as session:
 Use `SourcesFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = SourcesFilters(
         type="journal",
         is_oa=True,
@@ -52,10 +52,10 @@ async with SynthecaSession() as session:
 Source types include `journal`, `repository`, `conference`, `ebook platform`, and `book series`:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Journals only
     filters = SourcesFilters(type="journal")
 
@@ -72,10 +72,10 @@ async with SynthecaSession() as session:
 ### ISSN lookup
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Look up by specific ISSN
     filters = SourcesFilters(issn="0028-0836")  # Nature
     results = await session.sources.search(filters=filters, page_size=1)
@@ -92,10 +92,10 @@ async with SynthecaSession() as session:
 ### Filter by APC data
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Sources that charge an APC
     filters = SourcesFilters(has_apc=True, type="journal")
     results = await session.sources.search(filters=filters, page_size=25)
@@ -111,10 +111,10 @@ async with SynthecaSession() as session:
 ### Filter by open access status
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Fully open access journals
     filters = SourcesFilters(is_oa=True, type="journal")
 
@@ -126,10 +126,10 @@ async with SynthecaSession() as session:
 ### Filter by host organization (publisher)
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Sources from a specific publisher
     filters = SourcesFilters(host_organization="P4310320990")  # Springer Nature
     results = await session.sources.search(filters=filters, page_size=25)
@@ -138,10 +138,10 @@ async with SynthecaSession() as session:
 ### Filter by geography
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Sources from the Global South
     filters = SourcesFilters(is_global_south=True)
 
@@ -152,10 +152,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = SourcesFilters(
         type="journal",
         is_oa=True,
@@ -196,7 +196,7 @@ async with SynthecaSession() as session:
 ## Live API Notes
 
 - Source IDs (`ids` field) no longer include a `fatcat` key. The live API returns `openalex`, `issn_l`, `issn`, `mag`, and `wikidata` only. The `fatcat` field was removed without documentation.
-- The OpenAlex spec lists only 21 of the 37 fields that the live API returns. Syntheca models all live fields.
+- The OpenAlex spec lists only 21 of the 37 fields that the live API returns. Aletheca models all live fields.
 
 ## Notes
 

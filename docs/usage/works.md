@@ -7,9 +7,9 @@ The Works endpoint is the core of the OpenAlex API. A Work represents any schola
 ### Get a work by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
     print(work.title)
     print(work.publication_year)
@@ -19,9 +19,9 @@ async with SynthecaSession() as session:
 ### Get a work by DOI
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("https://doi.org/10.1038/nature12373")
     print(work.id)  # OpenAlex ID (e.g. W2741809807)
     print(work.cited_by_count)
@@ -32,9 +32,9 @@ The `get` method accepts OpenAlex IDs (`W1234567890`), full URLs, or DOIs (with 
 ### Search for works
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.works.search(
         search="climate change adaptation",
         page_size=25,
@@ -48,10 +48,10 @@ async with SynthecaSession() as session:
 Use `WorksFilters` to construct structured filter queries. Nested OpenAlex filter fields (e.g. `authorships.author.id`) are mapped to Python-safe attribute names using Pydantic aliases.
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         publication_year=2024,
         is_oa=True,
@@ -67,10 +67,10 @@ async with SynthecaSession() as session:
 ### Filter by author
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # By OpenAlex author ID
     filters = WorksFilters(authorships_author_id="A5023888391")
     results = await session.works.search(filters=filters, page_size=25)
@@ -82,10 +82,10 @@ async with SynthecaSession() as session:
 ### Filter by institution
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         authorships_institutions_id="I31371856",  # Stanford University
         from_publication_date="2020-01-01",
@@ -96,10 +96,10 @@ async with SynthecaSession() as session:
 ### Filter by year and date
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Exact year
     filters = WorksFilters(publication_year=2024)
 
@@ -116,10 +116,10 @@ async with SynthecaSession() as session:
 ### Filter by source (journal/conference)
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Works published in a specific journal
     filters = WorksFilters(
         primary_location_source_id="S137030756",  # Nature
@@ -132,10 +132,10 @@ async with SynthecaSession() as session:
 ### Presence and boolean filters
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         has_abstract=True,
         has_doi=True,
@@ -149,10 +149,10 @@ async with SynthecaSession() as session:
 For large result sets, use `iterate` to automatically handle cursor-based pagination:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         authorships_author_id="A5023888391",
         from_publication_date="2020-01-01",
@@ -172,9 +172,9 @@ Sorting uses the format `field:direction` (e.g. `"publication_date:desc"`, `"cit
 ### Get works that cite a given work
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 
     # Using the convenience query
@@ -185,9 +185,9 @@ async with SynthecaSession() as session:
 ### Get works referenced by a given work
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 
     # Using the convenience query
@@ -203,10 +203,10 @@ async with SynthecaSession() as session:
 ### Using filters directly
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Works that cite a specific work
     filters = WorksFilters(cites="W2741809807")
 
@@ -219,11 +219,11 @@ async with SynthecaSession() as session:
 OpenAlex stores abstracts as an inverted index to comply with publisher agreements. Use `reconstruct_abstract` to convert it back to plain text:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 # Note: _helpers is a private module; it may be relocated in a future release.
-from syntheca._helpers import reconstruct_abstract
+from aletheca._helpers import reconstruct_abstract
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 
     if work.abstract_inverted_index:
@@ -240,9 +240,9 @@ The `session.queries` accessor provides higher-level helpers that compose multip
 ### Fetch works by DOI
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     works = await session.queries.works_by_doi([
         "10.1038/nature12373",
         "10.1126/science.1248506",
@@ -254,9 +254,9 @@ async with SynthecaSession() as session:
 ### Fetch works by author name
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     works = await session.queries.works_by_author("John Smith", limit=50)
     for work in works:
         print(f"{work.publication_year}: {work.title}")
@@ -265,9 +265,9 @@ async with SynthecaSession() as session:
 ### Fetch works by institution name
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     works = await session.queries.works_by_institution("Stanford University", limit=100)
 ```
 
@@ -293,7 +293,7 @@ async with SynthecaSession() as session:
 
 ## Live API Notes
 
-The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string`), but the live API returns `content_urls` (plural, type `object` with `pdf` and `grobid_xml` keys). Syntheca follows the live API. Additionally, the spec lists `works_api_url` on Work objects, but the live API does not return this field on works.
+The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string`), but the live API returns `content_urls` (plural, type `object` with `pdf` and `grobid_xml` keys). Aletheca follows the live API. Additionally, the spec lists `works_api_url` on Work objects, but the live API does not return this field on works.
 
 ## Notes
 
@@ -302,4 +302,4 @@ The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string
 - Abstracts are stored as inverted indexes; use `reconstruct_abstract()` to get plain text.
 - DOIs can be passed with or without the `https://doi.org/` prefix.
 - Multiple values in filters can be pipe-separated (e.g. `"A123|A456"`).
-- Set the `SYNTHECA_OPENALEX_API_KEY` environment variable or pass `api_key` to `SynthecaSession` for faster access via the polite pool.
+- Set the `ALETHECA_OPENALEX_API_KEY` environment variable or pass `api_key` to `AlethecaSession` for faster access via the polite pool.

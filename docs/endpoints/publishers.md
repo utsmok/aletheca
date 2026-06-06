@@ -7,10 +7,10 @@ organizations that publish academic journals, books, and other scholarly content
 **Client access:** `session.publishers`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for pub in session.publishers.iterate(
         filters=PublishersFilters(country_codes="US"),
     ):
@@ -49,10 +49,10 @@ async with SynthecaSession() as session:
 ### Find publishers in specific countries
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = PublishersFilters(country_codes="GB|NL")
     async for pub in session.publishers.iterate(filters=filters):
         print(f"{pub.display_name} — {pub.hierarchy_level}")
@@ -61,7 +61,7 @@ async with SynthecaSession() as session:
 ### Search for a publisher by name
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = PublishersFilters(display_name_search="Elsevier")
     async for pub in session.publishers.iterate(filters=filters):
         print(f"{pub.display_name}: {pub.works_count} works")
@@ -70,7 +70,7 @@ async with SynthecaSession() as session:
 ### Large publishers by work count
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = PublishersFilters(
         works_count_range="100000-10000000",
         hierarchy_level=0,

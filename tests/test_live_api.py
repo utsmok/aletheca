@@ -5,15 +5,15 @@ These tests hit the real OpenAlex API and are skipped by default in CI.
 
 import pytest
 
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
 pytestmark = pytest.mark.live_api
 
 
 @pytest.fixture
 async def session():
-    async with SynthecaSession() as s:
+    async with AlethecaSession() as s:
         yield s
 
 

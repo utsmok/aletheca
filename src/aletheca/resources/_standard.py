@@ -1,4 +1,4 @@
-"""SynthecaResourceClient — base class for all OpenAlex resource clients.
+"""AlethecaResourceClient — base class for all OpenAlex resource clients.
 
 Overrides bibliofabric's parameter names and filter serialization
 for OpenAlex-specific conventions:
@@ -20,7 +20,7 @@ from bibliofabric.resources import (
 from pydantic import BaseModel
 
 
-class SynthecaResourceClient(BaseResourceClient):
+class AlethecaResourceClient(BaseResourceClient):
     """Base for all OpenAlex resource clients.
 
     Sets OpenAlex-specific parameter names and overrides filter
@@ -67,7 +67,7 @@ class SynthecaResourceClient(BaseResourceClient):
 
 
 class StandardResourceClient(
-    GettableMixin, SearchableMixin, CursorIterableMixin, SynthecaResourceClient
+    GettableMixin, SearchableMixin, CursorIterableMixin, AlethecaResourceClient
 ):
     """Base for standard CRUD resource clients that only differ in class attributes.
 

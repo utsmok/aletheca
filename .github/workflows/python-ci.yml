@@ -48,7 +48,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          uv run pytest --cov=syntheca --cov-fail-under=95 tests/
+          uv run pytest --cov=aletheca --cov-fail-under=95 tests/
 
       - name: Build package
         run: |
@@ -86,7 +86,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     environment:
       name: pypi
-      url: https://pypi.org/p/syntheca
+      url: https://pypi.org/p/aletheca
     permissions:
       id-token: write
 

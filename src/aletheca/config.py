@@ -1,4 +1,4 @@
-"""Syntheca-specific settings for the OpenAlex API client."""
+"""Aletheca-specific settings for the OpenAlex API client."""
 
 from functools import lru_cache
 
@@ -9,20 +9,20 @@ from pydantic_settings import SettingsConfigDict
 from .constants import DEFAULT_USER_AGENT
 
 
-class SynthecaSettings(BaseApiSettings):
+class AlethecaSettings(BaseApiSettings):
     """OpenAlex-specific settings.
 
     Inherits all generic API client settings from BaseApiSettings and adds
     OpenAlex-specific configuration.
 
-    Settings are loaded from environment variables (prefixed with 'SYNTHECA_')
+    Settings are loaded from environment variables (prefixed with 'ALETHECA_')
     or .env/secrets.env files.
     """
 
     model_config = SettingsConfigDict(
         env_file=(".env", "secrets.env"),
         env_file_encoding="utf-8",
-        env_prefix="SYNTHECA_",
+        env_prefix="ALETHECA_",
         extra="ignore",
         case_sensitive=False,
         arbitrary_types_allowed=True,
@@ -40,6 +40,6 @@ class SynthecaSettings(BaseApiSettings):
 
 
 @lru_cache
-def get_settings() -> SynthecaSettings:
+def get_settings() -> AlethecaSettings:
     """Provide cached access to application settings."""
-    return SynthecaSettings()
+    return AlethecaSettings()

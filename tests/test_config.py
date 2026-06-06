@@ -1,8 +1,8 @@
-"""Tests for syntheca.config — SynthecaSettings and get_settings."""
+"""Tests for aletheca.config — AlethecaSettings and get_settings."""
 
 import pytest
 
-from syntheca.config import SynthecaSettings, get_settings
+from aletheca.config import AlethecaSettings, get_settings
 
 
 @pytest.fixture(autouse=True)
@@ -14,19 +14,19 @@ def _clear_settings_cache():
 
 
 def test_default_settings():
-    settings = SynthecaSettings()
+    settings = AlethecaSettings()
     assert settings.openalex_api_key is None
-    assert settings.user_agent.startswith("syntheca/")
+    assert settings.user_agent.startswith("aletheca/")
 
 
 def test_settings_from_env(monkeypatch):
-    monkeypatch.setenv("SYNTHECA_OPENALEX_API_KEY", "env-key-123")
-    settings = SynthecaSettings()
+    monkeypatch.setenv("ALETHECA_OPENALEX_API_KEY", "env-key-123")
+    settings = AlethecaSettings()
     assert settings.openalex_api_key == "env-key-123"
 
 
 def test_settings_explicit_api_key():
-    settings = SynthecaSettings(openalex_api_key="explicit-key")
+    settings = AlethecaSettings(openalex_api_key="explicit-key")
     assert settings.openalex_api_key == "explicit-key"
 
 
@@ -37,4 +37,4 @@ def test_get_settings_cached():
 
 
 def test_settings_env_prefix():
-    assert SynthecaSettings.model_config["env_prefix"] == "SYNTHECA_"
+    assert AlethecaSettings.model_config["env_prefix"] == "ALETHECA_"

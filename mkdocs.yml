@@ -1,6 +1,6 @@
-site_name: Syntheca Docs
-site_url: https://utsmok.github.io/syntheca/
-repo_url: https://github.com/utsmok/syntheca/
+site_name: Aletheca Docs
+site_url: https://utsmok.github.io/aletheca/
+repo_url: https://github.com/utsmok/aletheca/
 site_author: S. Mok
 
 theme:
@@ -59,4 +59,5 @@ nav:
   - Contributing: contributing.md
   - Changelog: changelog.md
 watch:
-  - src/syntheca
+watch:
+  - src/aletheca

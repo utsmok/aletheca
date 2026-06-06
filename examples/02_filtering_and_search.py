@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "syntheca",
+#     "aletheca",
 #     "certifi",
 #     "marimo",
 # ///
@@ -20,19 +20,19 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca.endpoints import (
+    from aletheca import AlethecaSession
+    from aletheca.endpoints import (
         AuthorsFilters,
         InstitutionsFilters,
         WorksFilters,
     )
 
-    return AuthorsFilters, InstitutionsFilters, SynthecaSession, WorksFilters
+    return AuthorsFilters, InstitutionsFilters, AlethecaSession, WorksFilters
 
 
 @app.cell
 def _():
-    session = SynthecaSession()
+    session = AlethecaSession()
     return (session,)
 
 
@@ -42,7 +42,7 @@ async def _(mo):
         """
     # Filtering and Search
 
-    Syntheca provides typed Pydantic filter models for every endpoint.
+    Aletheca provides typed Pydantic filter models for every endpoint.
     This notebook demonstrates how to combine filters, use the `search`
     parameter, and query different entity types.
     """
@@ -50,7 +50,7 @@ async def _(mo):
 
 
 @app.cell
-async def _(SynthecaSession, WorksFilters, mo, session):
+async def _(AlethecaSession, WorksFilters, mo, session):
     mo.md("## Works Filters")
 
     filters = WorksFilters(

@@ -1,6 +1,6 @@
 # API Verification Guide
 
-This guide explains how to verify that Syntheca's models still match the live OpenAlex API. This is critical because the OpenAlex OpenAPI spec is incomplete and stale — the live API is the ground truth.
+This guide explains how to verify that Aletheca's models still match the live OpenAlex API. This is critical because the OpenAlex OpenAPI spec is incomplete and stale — the live API is the ground truth.
 
 ## Why This Matters
 
@@ -14,14 +14,14 @@ The OpenAlex API has several known issues that make passive trust in the spec un
 - Filter tables in docs are incomplete (e.g., Awards lists ~23 filters but the API supports 38+)
 - `per_page` maximum is documented as 100 but actually accepts 200
 
-See [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/syntheca/blob/main/OPENALEX_BUG_REPORT.md) for the full list of verified discrepancies.
+See [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md) for the full list of verified discrepancies.
 
 ## Quick Verification Script
 
 This script fetches one sample per entity and checks field names against model fields:
 
 ```python
-"""Quick verification that Syntheca models match the live OpenAlex API.
+"""Quick verification that Aletheca models match the live OpenAlex API.
 
 Usage:
     uv run python scripts/verify_api.py
@@ -31,7 +31,7 @@ import httpx
 import json
 import sys
 
-from syntheca.models import (
+from aletheca.models import (
     Work,
     Author,
     Source,
@@ -155,7 +155,7 @@ For each entity, try deserializing every sample:
 
 ```python
 import json
-from syntheca.models import Work
+from aletheca.models import Work
 
 with open("/tmp/works_samples.json") as f:
     data = json.load(f)
@@ -175,7 +175,7 @@ Deserialization must not raise on any sample. If it does, the model field types 
 For each entity, compare the live response keys against the model's declared fields:
 
 ```python
-from syntheca.models import Work
+from aletheca.models import Work
 
 sample = data["results"][0]
 live_fields = set(sample.keys())
@@ -190,7 +190,7 @@ for f in sorted(model_fields - live_fields):
     print(f"  {f}")
 ```
 
-Fields in the live API but not in the model are handled by `extra="allow"` on all Syntheca models — they're preserved but not typed. If important fields are discovered, add them to the model explicitly.
+Fields in the live API but not in the model are handled by `extra="allow"` on all Aletheca models — they're preserved but not typed. If important fields are discovered, add them to the model explicitly.
 
 Fields in the model but not in the live API indicate stale model fields that should be investigated.
 
@@ -199,7 +199,7 @@ Fields in the model but not in the live API indicate stale model fields that sho
 For each field present in both, verify the live type is compatible with the model annotation:
 
 ```python
-from syntheca.models import Work
+from aletheca.models import Work
 
 sample = data["results"][0]
 model = Work.model_validate(sample)
@@ -227,7 +227,7 @@ Send an invalid filter to discover all valid filter fields for an endpoint:
 curl -s "https://api.openalex.org/awards?filter=nonexistent:foo&per_page=1"
 ```
 
-The error message lists all valid filter names. Compare against the filter models in `syntheca.endpoints` and the docs in `docs/endpoints/`.
+The error message lists all valid filter names. Compare against the filter models in `aletheca.endpoints` and the docs in `docs/endpoints/`.
 
 ## Known Stale Areas
 
@@ -278,7 +278,7 @@ Add a marks-based test suite for API verification:
 # tests/test_api_verification.py
 import pytest
 import httpx
-from syntheca.models import Work, Author, Source, Institution, Topic, Keyword, Publisher, Funder, Award
+from aletheca.models import Work, Author, Source, Institution, Topic, Keyword, Publisher, Funder, Award
 
 @pytest.fixture(scope="module")
 def client():
@@ -331,6 +331,6 @@ def test_no_stale_model_fields(client, entity_name, model_class):
 
 For the complete list of verified OpenAlex API bugs, discrepancies, and suggestions, see:
 
-- [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/syntheca/blob/main/OPENALEX_BUG_REPORT.md) — Full bug report verified 2026-06-05
+- [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md) — Full bug report verified 2026-06-05
 - [OpenAlex API docs](https://developers.openalex.org/)
 - [OpenAlex OpenAPI spec](https://developers.openalex.org/api-reference/openapi.json)

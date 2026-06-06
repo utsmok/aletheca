@@ -1,7 +1,7 @@
 # tests/test_str_repr.py
 """Tests for __str__ and __repr__ on entity models."""
 
-from syntheca.models import (
+from aletheca.models import (
     Author,
     Funder,
     Institution,

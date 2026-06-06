@@ -9,7 +9,7 @@ backup_model = ''
 # Number of related reviews to include as context for this repo.
 review_context_count = 0
 # Extra review instructions added to prompts for this repo.
-review_guidelines = 'Python library (syntheca) for the OpenAlex academic API, built on bibliofabric framework. Tech: Pydantic v2 models, httpx async, pytest, ruff linter, ty type checker (not mypy/pyright — uses # ty: ignore[]). Verify with: uv run pytest, uv run ruff check src/, uvx ty check src/. Entity models require id field. Bibliofabric is the generic framework; syntheca is the OpenAlex-specific client. OpenAlex uses query-param auth (api_key), filter=key:value syntax, per_page (not pageSize), sort=field:direction.'
+review_guidelines = 'Python library (aletheca) for the OpenAlex academic API, built on bibliofabric framework. Tech: Pydantic v2 models, httpx async, pytest, ruff linter, ty type checker (not mypy/pyright — uses # ty: ignore[]). Verify with: uv run pytest, uv run ruff check src/, uvx ty check src/. Entity models require id field. Bibliofabric is the generic framework; aletheca is the OpenAlex-specific client. OpenAlex uses query-param auth (api_key), filter=key:value syntax, per_page (not pageSize), sort=field:direction.'
 # Override the review job timeout in minutes for this repo.
 job_timeout_minutes = 0
 # Branches that should be skipped for automatic review in this repo.

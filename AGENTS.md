@@ -1,18 +1,19 @@
-# Syntheca — Project Guide
+# Aletheca — Project Guide
 
 ## What It Is
 
-Syntheca is an async Python client library for the [OpenAlex API](https://docs.openalex.org). It provides typed, ergonomic access to scholarly works, authors, sources, institutions, topics, publishers, funders, awards, and keywords.
+Aletheca is an async Python client library for the [OpenAlex API](https://docs.openalex.org). It provides typed, ergonomic access to scholarly works, authors, sources, institutions, topics, publishers, funders, awards, and keywords.
+
 
 Built on top of **bibliofabric** — a generic async API client framework providing auth, pagination, response unwrapping, and mixin-based resource operations.
 
-**Status:** Alpha. Published on PyPI as `syntheca`.
+**Status:** Alpha. Published on PyPI as `aletheca`.
 
 ## Architecture
 
 ```
-SynthecaSession          # User-facing async context manager (session.py)
- └─ SynthecaClient       # Core HTTP client, auth resolution, resource orchestration (client.py)
+AlethecaSession          # User-facing async context manager (session.py)
+ └─ AlethecaClient       # Core HTTP client, auth resolution, resource orchestration (client.py)
      ├─ WorksClient            # mixin-based (bibliofabric)
      ├─ AuthorsClient          # mixin-based (bibliofabric)
      ├─ SourcesClient          # mixin-based (bibliofabric)
@@ -27,13 +28,12 @@ SynthecaSession          # User-facing async context manager (session.py)
 
 | Layer | File(s) | Role |
 |-------|---------|------|
-| **Session** | `session.py` | Thin async context manager wrapper around `SynthecaClient`. Entry point for users. Delegates resource access to client via `__getattr__`. |
+| **Session** | `session.py` | Thin async context manager wrapper around `AlethecaClient`. Entry point for users. Delegates resource access to client via `__getattr__`. |
 | **Client** | `client.py` | Extends `bibliofabric.BaseApiClient`. Resolves auth strategy (QueryParameterAuth or NoAuth), initializes resource clients lazily. |
-| **Resources** | `resources/*.py` | Per-endpoint clients. All inherit from `SynthecaResourceClient` (extends `BaseResourceClient`). Use mixins (`GettableMixin`, `SearchableMixin`, `CursorIterableMixin`). Override `_param_page_size="per_page"`, `_param_sort="sort"`, and `_serialize_filters()` for OpenAlex filter syntax. |
-| **Models** | `models/*.py` | Pydantic v2 models for each entity type. All inherit `BaseEntity` (has `id`, `display_name`). `ApiResponse[T]` is the generic list-response envelope with `Meta` + `results`. All models use `extra="allow"` for forward compatibility. `SafeList[T]` and `SafeStr` handle null→empty coercion. |
+| **Resources** | `resources/*.py` | Per-endpoint clients. All inherit from `AlethecaResourceClient` (extends `BaseResourceClient`). Use mixins (`GettableMixin`, `SearchableMixin`, `CursorIterableMixin`). Override `_param_page_size="per_page"`, `_param_sort="sort"`, and `_serialize_filters()` for OpenAlex filter syntax. |
 | **Endpoints** | `endpoints.py` | Pydantic filter models per endpoint (`WorksFilters`, etc.) with `extra="allow"` and `populate_by_name=True`. Field aliases map Python names to OpenAlex dot-notation filter names (e.g., `authorships_author_id` → `authorships.author.id`). |
 | **Unwrapper** | `unwrapper.py` | Implements `bibliofabric.ResponseUnwrapper` protocol. Extracts `results`, `meta.next_cursor`, `meta.count` from OpenAlex's JSON envelope. |
-| **Config** | `config.py` | `SynthecaSettings(BaseApiSettings)` via pydantic-settings. Env prefix `SYNTHECA_`. Reads `.env`. Cached via `@lru_cache`. |
+| **Config** | `config.py` | `AlethecaSettings(BaseApiSettings)` via pydantic-settings. Env prefix `ALETHECA_`. Reads `.env`. Cached via `@lru_cache`. |
 | **Constants** | `constants.py` | Base URLs, defaults, version detection (`importlib.metadata`), user-agent string. |
 | **Queries** | `queries.py` | Convenience functions (`works_by_author`, `works_by_doi`, `citing_works`, `referenced_works`, `works_by_institution`). Access via `session.queries.*`. |
 | **Helpers** | `_helpers.py` | `normalize_doi`, `parse_openalex_id`, `detect_id_type`, `reconstruct_abstract`. |
@@ -62,11 +62,11 @@ SynthecaSession          # User-facing async context manager (session.py)
 ## Project Structure
 
 ```
-src/syntheca/
+src/aletheca/
   __init__.py           # Re-exports: client, session, __version__
-  client.py             # SynthecaClient (BaseApiClient subclass)
-  session.py            # SynthecaSession (user-facing async context manager)
-  config.py             # SynthecaSettings (pydantic-settings)
+  client.py             # AlethecaClient (BaseApiClient subclass)
+  session.py            # AlethecaSession (user-facing async context manager)
+  config.py             # AlethecaSettings (pydantic-settings)
   constants.py          # URLs, defaults, version detection
   endpoints.py          # Filter models with dot-notation aliases
   unwrapper.py          # OpenAlexUnwrapper (ResponseUnwrapper protocol)
@@ -88,7 +88,7 @@ src/syntheca/
     award.py            # Award
     keyword.py          # Keyword
   resources/
-    _standard.py        # SynthecaResourceClient, StandardResourceClient
+    _standard.py        # AlethecaResourceClient, StandardResourceClient
     works_client.py     # WorksClient
     authors_client.py   # AuthorsClient
     sources_client.py   # SourcesClient
@@ -115,16 +115,16 @@ uv run ruff check src/ --fix              # Lint
 uv run ruff format src/                   # Format
 uvx ty check src/                         # Type check
 uv run pytest tests/                      # Run tests
-uv run pytest --cov=syntheca tests/       # Coverage (CI threshold: 95%)
+uv run pytest --cov=aletheca tests/       # Coverage (CI threshold: 95%)
 uv build                                  # Build package
 uv run mkdocs serve                       # Local docs
 ```
 
 ## Key Patterns & Conventions
 
-- **All I/O is async.** Every resource method is `async`. Use `async with SynthecaSession() as session:` or `async with SynthecaClient() as client:`.
+- **All I/O is async.** Every resource method is `async`. Use `async with AlethecaSession() as session:` or `async with AlethecaClient() as client:`.
 - **Pydantic filter models** use field aliases to map Python names to OpenAlex dot-notation: `authorships_author_id: str | None = Field(None, alias='authorships.author.id')`. Serialization via `model_dump(by_alias=True)` produces the correct filter string.
-- **`_serialize_filters()`** override on `SynthecaResourceClient` produces `filter=key:value,key:value` format.
+- **`_serialize_filters()`** override on `AlethecaResourceClient` produces `filter=key:value,key:value` format.
 - **Models use `extra="allow"`** everywhere to tolerate API field additions without breaking.
 - **Resource clients** all inherit from `StandardResourceClient` which combines `GettableMixin`, `SearchableMixin`, `CursorIterableMixin`. Each sets `_entity_path`, `_entity_model`, `_search_response_model`.
 - **SafeList/SafeStr** handle API's null → empty coercion pattern: `SafeList` converts `None` → `[]` and strips nulls; `SafeStr` converts `None` → `""`.

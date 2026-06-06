@@ -1,4 +1,4 @@
-"""Comprehensive live OpenAlex API verification for Syntheca.
+"""Comprehensive live OpenAlex API verification for Aletheca.
 
 Covers:
 1. Model deserialization (10 samples × 9 entities)
@@ -32,7 +32,7 @@ from typing import Annotated, Any, Union, get_args, get_origin
 import httpx
 from pydantic import BaseModel
 
-from syntheca.endpoints import (
+from aletheca.endpoints import (
     AUTHORS,
     AWARDS,
     FUNDERS,
@@ -52,7 +52,7 @@ from syntheca.endpoints import (
     TopicsFilters,
     WorksFilters,
 )
-from syntheca.models import (
+from aletheca.models import (
     Author,
     Award,
     Funder,
@@ -541,7 +541,7 @@ def check_filter_coverage(
         return
     our: set[str] = set()
     for fname, finfo in filter_cls.model_fields.items():
-        our.add(finfo.alias if finfo.alias else fname)
+        our.add(finfo.alias or fname)
     missing = live_filters - our
     extra = our - live_filters
     if missing:
@@ -639,7 +639,7 @@ def main() -> None:
     parser.add_argument("--skip-api", action="store_true", help="Skip API param tests")
     args = parser.parse_args()
 
-    print("🔬 Syntheca Comprehensive Live API Verification")
+    print("🔬 Aletheca Comprehensive Live API Verification")
     print(f"   Base URL: {BASE_URL}")
     print(f"   Samples: {SAMPLES_PER_ENTITY}")
 

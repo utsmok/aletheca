@@ -1,15 +1,15 @@
-"""SynthecaClient — async client for the OpenAlex API."""
+"""AlethecaClient — async client for the OpenAlex API."""
 
 from bibliofabric.auth import AuthStrategy, NoAuth, QueryParameterAuth
 from bibliofabric.client import BaseApiClient
 from bibliofabric.log_config import logger
 
-from .config import SynthecaSettings, get_settings
+from .config import AlethecaSettings, get_settings
 from .constants import OPENALEX_API_BASE_URL
 from .unwrapper import OpenAlexUnwrapper
 
 
-class SynthecaClient(BaseApiClient):
+class AlethecaClient(BaseApiClient):
     """Asynchronous client for the OpenAlex API.
 
     Provides access to all OpenAlex entity endpoints through typed resource
@@ -17,22 +17,22 @@ class SynthecaClient(BaseApiClient):
 
     Usage::
 
-        async with SynthecaClient() as client:
+        async with AlethecaClient() as client:
             work = await client.works.get("W1234567890")
     """
 
     def __init__(
         self,
-        settings: SynthecaSettings | None = None,
+        settings: AlethecaSettings | None = None,
         *,
         api_key: str | None = None,
         base_url: str | None = None,
         auth_strategy: AuthStrategy | None = None,
     ):
-        """Initialize the SynthecaClient.
+        """Initialize the AlethecaClient.
 
         Args:
-            settings: Optional SynthecaSettings instance. If None, loads from env.
+            settings: Optional AlethecaSettings instance. If None, loads from env.
             api_key: Optional OpenAlex API key (overrides settings). Ignored
                 when ``auth_strategy`` is also provided.
             base_url: Optional API base URL override.
@@ -66,7 +66,7 @@ class SynthecaClient(BaseApiClient):
         self._funders = None
         self._awards = None
 
-        logger.debug("SynthecaClient initialized successfully.")
+        logger.debug("AlethecaClient initialized successfully.")
 
     @staticmethod
     def _resolve_auth(api_key: str | None) -> AuthStrategy:

@@ -8,10 +8,10 @@ and subfields.
 **Client access:** `session.topics`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for topic in session.topics.iterate(
         filters=TopicsFilters(field_id="F1"),
     ):
@@ -52,10 +52,10 @@ async with SynthecaSession() as session:
 ### Find topics in a specific field
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = TopicsFilters(field_id="F3")
     async for topic in session.topics.iterate(filters=filters):
         print(f"{topic.display_name} — {topic.works_count} works")
@@ -64,7 +64,7 @@ async with SynthecaSession() as session:
 ### Search topics by keyword
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = TopicsFilters(keywords_keyword="deep learning")
     async for topic in session.topics.iterate(filters=filters):
         print(topic.display_name)
@@ -73,7 +73,7 @@ async with SynthecaSession() as session:
 ### Get a single topic by ID
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     topic = await session.topics.get("T10100")
     print(f"{topic.display_name}: {topic.description}")
 ```

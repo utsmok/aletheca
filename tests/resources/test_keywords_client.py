@@ -2,8 +2,8 @@
 
 import pytest
 
-from syntheca.models import ApiResponse, Keyword
-from syntheca.resources.keywords_client import KeywordsClient
+from aletheca.models import ApiResponse, Keyword
+from aletheca.resources.keywords_client import KeywordsClient
 
 from .conftest import _mock_response
 

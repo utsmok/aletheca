@@ -1,6 +1,6 @@
 # Rate Limiting
 
-OpenAlex applies rate limits to API requests. Syntheca provides automatic rate limit
+OpenAlex applies rate limits to API requests. Aletheca provides automatic rate limit
 handling through bibliofabric's built-in rate limiting, including proactive throttling,
 `Retry-After` header parsing, and exponential backoff on 429 responses.
 
@@ -19,27 +19,27 @@ priority and slower response times. Adding an API key moves you to a faster pool
 ### Environment Variable (Recommended)
 
 ```bash
-export SYNTHECA_OPENALEX_API_KEY="your-api-key-here"
+export ALETHECA_OPENALEX_API_KEY="your-api-key-here"
 ```
 
 ### `.env` File
 
 ```env
-SYNTHECA_OPENALEX_API_KEY=your-api-key-here
+ALETHECA_OPENALEX_API_KEY=your-api-key-here
 ```
 
 ### Programmatic
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession(api_key="your-api-key-here") as session:
+async with AlethecaSession(api_key="your-api-key-here") as session:
     ...
 ```
 
 The API key is sent as a `?api_key=` query parameter on every request.
 
-## How Syntheca Handles Rate Limiting
+## How Aletheca Handles Rate Limiting
 
 ### 1. Proactive Throttling
 
@@ -54,10 +54,10 @@ If `remaining` falls below the buffer threshold (`rate_limit_buffer_percentage`,
 the client automatically waits until the reset time before sending the next request.
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.config import SynthecaSettings
+from aletheca import AlethecaSession
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     enable_rate_limiting=True,
     rate_limit_buffer_percentage=0.15,  # Start waiting at 15% remaining
 )
@@ -78,9 +78,9 @@ If the API returns a 429 (Too Many Requests):
 Retries use `tenacity` with configurable exponential backoff:
 
 ```python
-from syntheca.config import SynthecaSettings
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     max_retries=5,
     backoff_factor=1.0,  # Wait 1s, 2s, 4s, 8s, 16s between retries
     rate_limit_retry_after_default=30,  # Wait 30s if no Retry-After header
@@ -92,9 +92,9 @@ Retryable status codes: `429`, `500`, `502`, `503`, `504`.
 ### Disabling Rate Limiting
 
 ```python
-from syntheca.config import SynthecaSettings
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(enable_rate_limiting=False)
+settings = AlethecaSettings(enable_rate_limiting=False)
 ```
 
 !!! warning

@@ -7,10 +7,10 @@ tags associated with OpenAlex topics and works.
 **Client access:** `session.keywords`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for kw in session.keywords.iterate(
         filters=KeywordsFilters(display_name_search="quantum"),
     ):
@@ -47,10 +47,10 @@ async with SynthecaSession() as session:
 ### Search keywords
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = KeywordsFilters(display_name_search="neural network")
     async for kw in session.keywords.iterate(filters=filters):
         print(f"{kw.display_name}: {kw.works_count} works")
@@ -59,7 +59,7 @@ async with SynthecaSession() as session:
 ### Find popular keywords by work count
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = KeywordsFilters(works_count_range="10000-1000000")
     async for kw in session.keywords.iterate(
         filters=filters,

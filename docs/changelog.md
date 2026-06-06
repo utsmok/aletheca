@@ -3,7 +3,7 @@
 ## v0.1.0 (2026-06-05)
 
 ### Added
-- Initial release of Syntheca
+- Initial release of Aletheca
 - Full async client for the OpenAlex API
 - 9 entity models: Work, Author, Source, Institution, Topic, Keyword, Publisher, Funder, Award
 - Pydantic v2 models with safe field access (SafeList, SafeStr)

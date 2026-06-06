@@ -2,9 +2,9 @@
 
 from pydantic import BaseModel, Field
 
-from syntheca.models import ApiResponse, Author, Meta, Work
-from syntheca.models.common import SummaryStats
-from syntheca.models.safe_types import SafeList, SafeStr
+from aletheca.models import ApiResponse, Author, Meta, Work
+from aletheca.models.common import SummaryStats
+from aletheca.models.safe_types import SafeList, SafeStr
 
 
 def test_work_from_dict(sample_work_json):
@@ -77,17 +77,21 @@ def test_summary_stats_alias():
     assert stats.i10_index == 20
 
 
-
 def test_content_urls_deserialization():
-    from syntheca.models.work import ContentUrls
+    from aletheca.models.work import ContentUrls  # noqa: PLC0415
 
-    cu = ContentUrls.model_validate({"pdf": "https://example.com/paper.pdf", "grobid_xml": "https://example.com/paper.xml"})
+    cu = ContentUrls.model_validate(
+        {
+            "pdf": "https://example.com/paper.pdf",
+            "grobid_xml": "https://example.com/paper.xml",
+        }
+    )
     assert cu.pdf == "https://example.com/paper.pdf"
     assert cu.grobid_xml == "https://example.com/paper.xml"
 
 
 def test_content_urls_none_fields():
-    from syntheca.models.work import ContentUrls
+    from aletheca.models.work import ContentUrls  # noqa: PLC0415
 
     cu = ContentUrls.model_validate({})
     assert cu.pdf is None
@@ -98,7 +102,10 @@ def test_work_with_content_urls():
     data = {
         "id": "W1",
         "display_name": "Test",
-        "content_urls": {"pdf": "https://example.com/paper.pdf", "grobid_xml": "https://example.com/paper.xml"},
+        "content_urls": {
+            "pdf": "https://example.com/paper.pdf",
+            "grobid_xml": "https://example.com/paper.xml",
+        },
     }
     work = Work.model_validate(data)
     assert work.content_urls is not None

@@ -1,6 +1,6 @@
 # Hooks
 
-Syntheca supports request/response hooks through bibliofabric's hook system. Hooks
+Aletheca supports request/response hooks through bibliofabric's hook system. Hooks
 are callables invoked at specific points in the request lifecycle, allowing you to
 add custom logging, metrics, header injection, parameter modification, or response
 inspection without subclassing the client.
@@ -47,11 +47,11 @@ PostRequestHook = Callable[[httpx.Response, Any, int], None]
 
 ## Registering Hooks
 
-Hooks are configured through `SynthecaSettings`:
+Hooks are configured through `AlethecaSettings`:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.config import SynthecaSettings
+from aletheca import AlethecaSession
+from aletheca.config import AlethecaSettings
 
 def log_request(method, url, params, headers):
     print(f"→ {method} {url} params={params}")
@@ -59,12 +59,12 @@ def log_request(method, url, params, headers):
 def log_response(response, parsed_model, attempts):
     print(f"← {response.status_code} (attempts: {attempts})")
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     pre_request_hooks=[log_request],
     post_request_hooks=[log_response],
 )
 
-async with SynthecaSession(settings=settings) as session:
+async with AlethecaSession(settings=settings) as session:
     work = await session.works.get("W2741809807")
 ```
 
@@ -91,12 +91,12 @@ class RequestTimer:
 
 timer = RequestTimer()
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     pre_request_hooks=[timer.before],
     post_request_hooks=[timer.after],
 )
 
-async with SynthecaSession(settings=settings) as session:
+async with AlethecaSession(settings=settings) as session:
     work = await session.works.get("W2741809807")
 ```
 
@@ -107,7 +107,7 @@ def add_correlation_id(method, url, params, headers):
     import uuid
     headers["X-Correlation-ID"] = str(uuid.uuid4())
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     pre_request_hooks=[add_correlation_id],
 )
 ```
@@ -126,9 +126,9 @@ class MetricsCollector:
         self.status_codes[code] = self.status_codes.get(code, 0) + 1
 
 metrics = MetricsCollector()
-settings = SynthecaSettings(post_request_hooks=[metrics.record])
+settings = AlethecaSettings(post_request_hooks=[metrics.record])
 
-async with SynthecaSession(settings=settings) as session:
+async with AlethecaSession(settings=settings) as session:
     # ... make requests ...
     pass
 
@@ -146,5 +146,5 @@ def flaky_hook(method, url, params, headers):
     raise RuntimeError("This hook fails but doesn't break the request")
 
 # This is safe — the request still completes
-settings = SynthecaSettings(pre_request_hooks=[flaky_hook])
+settings = AlethecaSettings(pre_request_hooks=[flaky_hook])
 ```

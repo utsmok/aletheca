@@ -7,9 +7,9 @@ The Authors endpoint represents individual researchers and scholars. Each author
 ### Get an author by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     author = await session.authors.get("A5023888391")
     print(author.display_name)
     print(author.orcid)
@@ -20,9 +20,9 @@ async with SynthecaSession() as session:
 ### Get an author by ORCID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     author = await session.authors.get("https://orcid.org/0000-0002-1825-0097")
     print(author.display_name)
     print(author.id)
@@ -33,9 +33,9 @@ The `get` method accepts OpenAlex IDs (`A1234567890`), full URLs, or ORCID ident
 ### Search for authors
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.authors.search(
         search="Andrea Gawrylewski",
         page_size=25,
@@ -49,10 +49,10 @@ async with SynthecaSession() as session:
 Use `AuthorsFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         display_name_search="gawrylewski",
         has_orcid=True,
@@ -65,10 +65,10 @@ async with SynthecaSession() as session:
 Filter authors by their institutional affiliations — either current or historical:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Authors affiliated with a specific institution
     filters = AuthorsFilters(
         affiliation_institution_id="I31371856",  # Stanford University
@@ -101,10 +101,10 @@ async with SynthecaSession() as session:
 The `last_known_institutions` fields filter on the author's most recent institutional affiliation:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         last_known_institutions_id="I31371856",
         last_known_institutions_country_code="US",
@@ -115,10 +115,10 @@ async with SynthecaSession() as session:
 ### Filter by ORCID presence
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(has_orcid=True)
     results = await session.authors.search(filters=filters, page_size=25)
 ```
@@ -126,10 +126,10 @@ async with SynthecaSession() as session:
 ### Filter by summary statistics
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         summary_stats_h_index=50,
     )
@@ -141,9 +141,9 @@ async with SynthecaSession() as session:
 Each author has an `affiliations` list containing their institutional history with year ranges:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     author = await session.authors.get("A5023888391")
 
     for aff in author.affiliations:
@@ -161,10 +161,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         affiliations_institution_country_code="DE",
     )

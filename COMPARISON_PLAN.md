@@ -1,31 +1,30 @@
-# AIREloom ↔ Syntheca Comparison Plan
+# AIREloom ↔ Aletheca Comparison Plan
 
 **Date:** 2026-06-05
-**Repositories:** `~/dev/aletheca/` (syntheca), `~/dev/AIREloom/` (aireloom), `~/dev/bibliofabric/` (shared base)
+**Repositories:** `~/dev/aletheca/` (aletheca), `~/dev/AIREloom/` (aireloom), `~/dev/bibliofabric/` (shared base)
 
 ---
 
 ## 1. Structural Overview
 
-| Aspect | Aireloom | Syntheca | Status |
+| Aspect | Aireloom | Aletheca | Status |
 |--------|----------|----------|--------|
-| Package lines | 3,924 | 2,494 | syntheca leaner (fewer entities with complex models) |
+| Package lines | 3,924 | 2,494 | aletheca leaner (fewer entities with complex models) |
 | Entities | 6 + Scholix + Links | 9 | Different API surfaces |
-| Resource clients | 6 + Scholix (custom) | 9 (all standard) | syntheca more uniform |
-| Pydantic models | 11 files | 14 files | syntheca has dedicated `ids.py`, `dehydrated.py` |
-| Tests | 251 (5 live deselected) | 104 | syntheca under-tested relative to surface area |
-| Examples | 11 scripts | 1 script | **syntheca gap** |
-| Docs pages | 22 | 22 | Parity, but content depth differs |
+| Resource clients | 6 + Scholix (custom) | 9 (all standard) | aletheca more uniform |
+| Pydantic models | 11 files | 14 files | aletheca has dedicated `ids.py`, `dehydrated.py` |
+| Tests | 251 (5 live deselected) | 104 | aletheca under-tested relative to surface area |
+| Examples | 11 scripts | 1 script | **aletheca gap** |
 | CI | Identical | Identical | ✅ |
 | Build system | hatchling | hatchling | ✅ |
 
 ---
 
-## 2. Syntheca Gaps (Implement)
+## 2. Aletheca Gaps (Implement)
 
 ### 2.1 [High] Expand Examples
 
-Aireloom has 11 focused examples demonstrating every feature. Syntheca has one.
+Aireloom has 11 focused examples demonstrating every feature. Aletheca has one.
 
 **Add:**
 - `examples/02_filtering_and_search.py` — WorksFilters, AuthorsFilters, etc.
@@ -44,7 +43,7 @@ Aireloom has `docs/ergonomics.md` — a dedicated page documenting:
 - Iterator helpers (collect, count, first)
 - Convenience query functions
 
-Syntheca has these features (SafeList, SafeStr in models, queries.py, iterator helpers from bibliofabric) but no docs page for them.
+Aletheca has these features (SafeList, SafeStr in models, queries.py, iterator helpers from bibliofabric) but no docs page for them.
 
 **Add `docs/ergonomics.md`** covering:
 - Safe types: `SafeList`, `SafeStr` behavior
@@ -55,15 +54,14 @@ Syntheca has these features (SafeList, SafeStr in models, queries.py, iterator h
 
 ### 2.3 [High] Add Changelog Doc
 
-Aireloom has `docs/changelog.md` with versioned entries. Syntheca doesn't.
+Aireloom has `docs/changelog.md` with versioned entries. Aletheca doesn't.
 
 **Add `docs/changelog.md`** with v0.1.0 entry covering initial release.
 Add to `mkdocs.yml` nav.
 
 ### 2.4 [Medium] Add Live API Test Module
 
-Aireloom has `tests/test_actual_data.py` with `@pytest.mark.live_api` guard (skipped in CI). Syntheca has `scripts/verify.py` for live verification but no pytest-guarded live tests.
-
+Aireloom has `tests/test_actual_data.py` with `@pytest.mark.live_api` guard (skipped in CI). Aletheca has `scripts/verify.py` for live verification but no pytest-guarded live tests.
 **Add `tests/test_live_api.py`** with:
 - `@pytest.mark.live_api` marker (already defined in `pyproject.toml`)
 - Basic smoke tests: fetch one of each entity, verify deserialization
@@ -72,8 +70,7 @@ Aireloom has `tests/test_actual_data.py` with `@pytest.mark.live_api` guard (ski
 
 ### 2.5 [Medium] Add Auth Tests
 
-Aireloom has 12 auth tests (`test_auth.py`). Syntheca has none — auth handling is simpler (QueryParameterAuth vs OAuth2) but still deserves coverage.
-
+Aireloom has 12 auth tests (`test_auth.py`). Aletheca has none — auth handling is simpler (QueryParameterAuth vs OAuth2) but still deserves coverage.
 **Add `tests/test_auth.py`** testing:
 - `QueryParameterAuth` adds `api_key` to query params
 - `NoAuth` fallback when no key
@@ -86,9 +83,9 @@ Aireloom re-exports from `__init__.py`:
 - Key models (ResearchProduct, Organization, etc.)
 - `__version__` from constants
 
-Syntheca only exports `SynthecaClient`, `SynthecaSession`, and `__version__` (via importlib in `__init__.py`).
+Aletheca only exports `AlethecaClient`, `AlethecaSession`, and `__version__` (via importlib in `__init__.py`).
 
-**Update `src/syntheca/__init__.py`** to also export:
+**Update `src/aletheca/__init__.py`** to also export:
 - Key models: `Work`, `Author`, `Source`, `Institution`, `Topic`, `Keyword`, `Publisher`, `Funder`, `Award`
 - Common models: `ApiResponse`, `BaseEntity`, `Meta`
 - Exceptions from bibliofabric
@@ -96,13 +93,13 @@ Syntheca only exports `SynthecaClient`, `SynthecaSession`, and `__version__` (vi
 
 ### 2.7 [Medium] Add Marimo-Embedded Example Iframes in Docs
 
-Aireloom embeds interactive marimo notebooks as iframes in docs pages (ergonomics.md). Syntheca has a marimo check notebook but no embedded examples.
+Aireloom embeds interactive marimo notebooks as iframes in docs pages (ergonomics.md). Aletheca has a marimo check notebook but no embedded examples.
 
 **Add iframes** to relevant docs pages (ergonomics.md when created, usage_basics.md).
 
 ### 2.8 [Low] Add Computed Properties to Models
 
-Aireloom's models expose computed properties (e.g., `product.doi`, `product.is_open_access`, `person.orcid`). Syntheca models are plain data holders.
+Aireloom's models expose computed properties (e.g., `product.doi`, `product.is_open_access`, `person.orcid`). Aletheca models are plain data holders.
 
 **Consider adding** to key models:
 - `Work.doi` — extract from `work.doi` (already a field, less needed)
@@ -110,7 +107,7 @@ Aireloom's models expose computed properties (e.g., `product.doi`, `product.is_o
 - `Author.orcid` — already a field
 - `Work.reconstruct_abstract()` — could be a computed property calling `_helpers.reconstruct_abstract`
 
-This is less impactful for syntheca since OpenAlex returns flatter structures than OpenAIRE. **Defer unless users request it.**
+This is less impactful for aletheca since OpenAlex returns flatter structures than OpenAIRE. **Defer unless users request it.**
 
 ---
 
@@ -120,19 +117,19 @@ This is less impactful for syntheca since OpenAlex returns flatter structures th
 
 ### 3.1 [High] Add `py.typed` PEP 561 Marker
 
-Syntheca has `src/syntheca/py.typed`. Aireloom doesn't. Both claim `Typing :: Typed` classifier.
+Aletheca has `src/aletheca/py.typed`. Aireloom doesn't. Both claim `Typing :: Typed` classifier.
 
 **Add `src/aireloom/py.typed`** — empty file, signals PEP 561 support.
 
 ### 3.2 [High] Move `verification_script.py` to `scripts/`
 
-Syntheca has a clean `scripts/verify.py`. Aireloom has `verification_script.py` at the repo root, cluttering the top level.
+Aletheca has a clean `scripts/verify.py`. Aireloom has `verification_script.py` at the repo root, cluttering the top level.
 
 **Move to `scripts/verification_script.py`** and update any references.
 
 ### 3.3 [Medium] Add `.python-version` File
 
-Syntheca has `.python-version` pinning the Python version. Aireloom doesn't.
+Aletheca has `.python-version` pinning the Python version. Aireloom doesn't.
 
 **Add `.python-version`** with `3.12` (or whatever the target is).
 
@@ -144,7 +141,7 @@ Aireloom has `.ruff_cache/` committed (visible in directory listing). Should be 
 
 ### 3.5 [Low] Consider Typed ID Models
 
-Syntheca has dedicated `src/syntheca/models/ids.py` with typed ID models per entity (WorkIds, AuthorIds, SourceIds, etc.). Aireloom uses `list[str]` or `dict` for PIDs and identifiers.
+Aletheca has dedicated `src/aletheca/models/ids.py` with typed ID models per entity (WorkIds, AuthorIds, SourceIds, etc.). Aireloom uses `list[str]` or `dict` for PIDs and identifiers.
 
 **Consider** adding typed PID/ID models for better autocomplete and validation, especially for the complex `Pid` structure in research products.
 
@@ -156,18 +153,18 @@ Syntheca has dedicated `src/syntheca/models/ids.py` with typed ID models per ent
 
 ### 4.1 Generalize Filter Serialization
 
-Syntheca's `SynthecaResourceClient._serialize_filters()` overrides the base to produce OpenAlex's `filter=key:value,key:value` format. This is a clean pattern that could be generalized:
+Aletheca's `AlethecaResourceClient._serialize_filters()` overrides the base to produce OpenAlex's `filter=key:value,key:value` format. This is a clean pattern that could be generalized:
 
 - Add a `_filter_serializer` protocol or class attribute to `BaseResourceClient`
 - Default: individual query params (current behavior)
 - Override: single `filter` param with custom joining (OpenAlex pattern)
 - Override: `extra="forbid"` vs `extra="allow"` config per-API
 
-**Impact:** Reduces boilerplate in syntheca's `_standard.py` from 67 lines to ~10 lines of config.
+**Impact:** Reduces boilerplate in aletheca's `_standard.py` from 67 lines to ~10 lines of config.
 
 ### 4.2 Document Iterator Helpers in Base Framework
 
-`collect()`, `count()`, `first()` come from bibliofabric mixins but aren't documented in the framework itself. Each consumer (aireloom, syntheca) documents them independently.
+`collect()`, `count()`, `first()` come from bibliofabric mixins but aren't documented in the framework itself. Each consumer (aireloom, aletheca) documents them independently.
 
 **Add a `docs/` or README section in bibliofabric** documenting the mixin-provided methods so consumers can link to it.
 
@@ -181,14 +178,14 @@ Both libraries implement `SafeList` and `SafeStr` validators independently. The 
 
 ## 5. Design Differences (Intentional, Not Gaps)
 
-| Aspect | Aireloom | Syntheca | Reason |
+| Aspect | Aireloom | Aletheca | Reason |
 |--------|----------|----------|--------|
 | Filter `extra` | `"forbid"` | `"allow"` | OpenAlex has many undocumented filters; OpenAIRE is stricter |
 | Auth | OAuth2 + Bearer | API key query param | Different API auth schemes |
 | API versioning | v1/v2/v3 routing | Single version | OpenAlex has one version |
 | Unwrapper | Complex (header + results) | Simple (meta + results) | Different response envelopes |
 | `_helpers.py` | PID extraction | DOI/ID normalization | Different identifier ecosystems |
-| `analysis` extras | More deps (seaborn, plotly, networkx) | Fewer deps | Intentionally leaner for syntheca |
+| `analysis` extras | More deps (seaborn, plotly, networkx) | Fewer deps | Intentionally leaner for aletheca |
 | Custom resource clients | ScholixClient (0-indexed pagination, different base URL) | All standard mixin-based | OpenAlex has uniform endpoints |
 | Computed model properties | Yes (doi, is_open_access, etc.) | No | OpenAlex returns flatter structures |
 

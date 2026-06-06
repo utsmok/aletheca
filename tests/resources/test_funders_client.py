@@ -2,8 +2,8 @@
 
 import pytest
 
-from syntheca.models import ApiResponse, Funder
-from syntheca.resources.funders_client import FundersClient
+from aletheca.models import ApiResponse, Funder
+from aletheca.resources.funders_client import FundersClient
 
 from .conftest import _mock_response
 

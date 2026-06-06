@@ -1,15 +1,15 @@
 # Usage Basics
 
-A practical guide to the core syntheca patterns: sessions, entity access, filtering, iteration, and collecting.
+A practical guide to the core aletheca patterns: sessions, entity access, filtering, iteration, and collecting.
 
 ## Creating a session
 
-`SynthecaSession` is the main entry point. It manages the underlying HTTP client lifecycle and provides access to all resource endpoints.
+`AlethecaSession` is the main entry point. It manages the underlying HTTP client lifecycle and provides access to all resource endpoints.
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
     print(work.display_name)
 ```
@@ -17,12 +17,12 @@ async with SynthecaSession() as session:
 Pass an API key or settings explicitly if you don't use environment variables:
 
 ```python
-async with SynthecaSession(api_key="your-key") as session:
+async with AlethecaSession(api_key="your-key") as session:
     ...
 ```
 
 ??? note "What happens under the hood?"
-    `SynthecaSession` creates a `SynthecaClient` internally, which in turn creates an `httpx.AsyncClient` on first use. Resource clients (works, authors, etc.) are initialized lazily as properties. The `async with` block ensures the HTTP client is properly closed.
+    `AlethecaSession` creates a `AlethecaClient` internally, which in turn creates an `httpx.AsyncClient` on first use. Resource clients (works, authors, etc.) are initialized lazily as properties. The `async with` block ensures the HTTP client is properly closed.
 
 ## Resource clients
 
@@ -44,7 +44,7 @@ The session exposes eight entity endpoints as attributes:
 Use `.get()` to fetch by OpenAlex ID. The works endpoint also supports DOIs and PMIDs:
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # By OpenAlex ID
     work = await session.works.get("W2741809807")
 
@@ -60,7 +60,7 @@ async with SynthecaSession() as session:
 Use `.search()` to do a full-text search on an entity:
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     response = await session.authors.search(search="Elinor Ostrom")
     for author in response.results:
         print(f"{author.display_name} — {author.works_count} works")
@@ -78,10 +78,10 @@ response = await session.works.search(
 
 ## Filtering with Pydantic models
 
-Each endpoint has a corresponding filter model in `syntheca.endpoints`. These models use Pydantic aliases to map Python-friendly attribute names to OpenAlex dot-notation filter syntax.
+Each endpoint has a corresponding filter model in `aletheca.endpoints`. These models use Pydantic aliases to map Python-friendly attribute names to OpenAlex dot-notation filter syntax.
 
 ```python
-from syntheca.endpoints import WorksFilters
+from aletheca.endpoints import WorksFilters
 
 filters = WorksFilters(
     publication_year=2024,
@@ -127,12 +127,12 @@ A subset of commonly used filters:
 For large result sets, use `.iterate()` which yields individual entities via OpenAlex cursor pagination:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
 
 async def all_oa_articles():
-    async with SynthecaSession() as session:
+    async with AlethecaSession() as session:
         filters = WorksFilters(is_oa=True, type="article", publication_year=2024)
         count = 0
         async for work in session.works.iterate(filters=filters, per_page=200):
@@ -149,7 +149,7 @@ The `per_page` parameter defaults to 200 (the OpenAlex maximum) for iteration.
 When you need all results in memory, use `.collect()`:
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     works = await session.works.collect(
         filters={"authorships.author.id": "A5023888391"},
         limit=50,
@@ -165,7 +165,7 @@ async with SynthecaSession() as session:
 Pass `sort` as `field:direction`:
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     response = await session.works.search(
         search="quantum computing",
         sort="cited_by_count:desc",
@@ -178,7 +178,7 @@ async with SynthecaSession() as session:
 `session.queries` provides higher-level functions that compose multiple API calls:
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Works by author name (looks up author ID, then fetches works)
     works = await session.queries.works_by_author("Elinor Ostrom", limit=20)
 

@@ -4,12 +4,12 @@ The Awards endpoint provides access to individual research grants and funding aw
 the specific financial instruments through which funders support scholarly work.
 
 **Endpoint path:** `awards`
-**Client access:** `session.awards` (via `SynthecaSession`)
+**Client access:** `session.awards` (via `AlethecaSession`)
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Fetch a single award
     award = await session.awards.get("A12345678")
     print(f"{award.display_name}: {award.funder}")
@@ -20,7 +20,7 @@ async with SynthecaSession() as session:
         print(f"  {award.display_name} ({award.funding_type})")
 
     # Iterate with filters
-    from syntheca.endpoints import AwardsFilters
+    from aletheca.endpoints import AwardsFilters
 
     filters = AwardsFilters(funder="F4320306100")
     async for award in session.awards.iterate(filters=filters, per_page=50):
@@ -73,10 +73,10 @@ async with SynthecaSession() as session:
 ### Find awards for a specific funder
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AwardsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AwardsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AwardsFilters(funder_id="F4320306100")
     async for award in session.awards.iterate(filters=filters, per_page=50):
         print(f"{award.display_name}: {award.amount} {award.currency}")
@@ -85,9 +85,9 @@ async with SynthecaSession() as session:
 ### Search awards by keyword
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.awards.search(search="machine learning", per_page=10)
     print(f"Found {results.meta.count} awards")
     for award in results.results:
@@ -97,9 +97,9 @@ async with SynthecaSession() as session:
 ### Access award data from a work
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 
     for award_id in work.awards:

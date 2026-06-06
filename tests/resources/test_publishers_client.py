@@ -2,8 +2,8 @@
 
 import pytest
 
-from syntheca.models import ApiResponse, Publisher
-from syntheca.resources.publishers_client import PublishersClient
+from aletheca.models import ApiResponse, Publisher
+from aletheca.resources.publishers_client import PublishersClient
 
 from .conftest import _mock_response
 

@@ -7,10 +7,10 @@ The Works endpoint is the primary endpoint in OpenAlex, providing access to scho
 **Client access:** `session.works`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Iterate all works matching a filter
     async for work in session.works.iterate(
         filters=WorksFilters(publication_year=2024, is_oa=True),
@@ -128,10 +128,10 @@ Range filters accept a format like `2020-2024`.
 ### Filter by author and year
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         authorships_author_id="A5023888391",
         publication_year=2024,
@@ -144,7 +144,7 @@ async with SynthecaSession() as session:
 ### Search works by topic
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(topics_id="T10100")
     async for work in session.works.iterate(filters=filters, per_page=200):
         print(work.display_name)
@@ -153,7 +153,7 @@ async with SynthecaSession() as session:
 ### Get works citing a specific paper
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(cited_by="W2741809807")
     results = await session.works.search(filters=filters)
     for work in results.results:
@@ -163,7 +163,7 @@ async with SynthecaSession() as session:
 ### Combined filters with presence checks
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = WorksFilters(
         publication_year=2024,
         has_doi=True,

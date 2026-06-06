@@ -7,9 +7,9 @@ The Funders endpoint represents organizations that fund research — government 
 ### Get a funder by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     funder = await session.funders.get("F4320332161")  # NIH
     print(funder.display_name)
     print(funder.country_code)
@@ -20,9 +20,9 @@ async with SynthecaSession() as session:
 ### Search for funders
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.funders.search(
         search="national science foundation",
         page_size=10,
@@ -36,10 +36,10 @@ async with SynthecaSession() as session:
 Use `FundersFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = FundersFilters(
         country_code="US",
     )
@@ -49,10 +49,10 @@ async with SynthecaSession() as session:
 ### Filter by country
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # US-based funders (NIH, NSF, DOE, etc.)
     filters = FundersFilters(country_code="US")
 
@@ -66,10 +66,10 @@ async with SynthecaSession() as session:
 ### Filter by ROR ID
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = FundersFilters(ror="https://ror.org/01cwqze88")
     results = await session.funders.search(filters=filters, page_size=1)
 ```
@@ -77,10 +77,10 @@ async with SynthecaSession() as session:
 ### Filter by awards count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Major funders with many awards
     filters = FundersFilters(works_count_range="100000-")
 
@@ -91,10 +91,10 @@ async with SynthecaSession() as session:
 ### Filter by works count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Funders whose funded outputs have high citation impact
     filters = FundersFilters(works_count_range="50000-")
 ```
@@ -102,10 +102,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import FundersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import FundersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = FundersFilters(
         country_code="US",
         works_count_range="10000-",
@@ -136,7 +136,7 @@ async with SynthecaSession() as session:
 
 ## Live API Notes
 
-- The OpenAPI spec lists `grants_count` and `works_api_url` on Funder objects, but the live API returns `awards_count` instead and does not include `works_api_url`. Syntheca follows the live API.
+- The OpenAPI spec lists `grants_count` and `works_api_url` on Funder objects, but the live API returns `awards_count` instead and does not include `works_api_url`. Aletheca follows the live API.
 - The `awards_count` field reflects the transition from "grants" to "awards" terminology in OpenAlex.
 
 ## Notes

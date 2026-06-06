@@ -1,17 +1,17 @@
 # Getting Started
 
-Install syntheca, set up authentication, and run your first query in under two minutes.
+Install aletheca, set up authentication, and run your first query in under two minutes.
 
 ## 1. Install
 
 ```bash
-pip install syntheca
+pip install aletheca
 ```
 
 Or with [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv add syntheca
+uv add aletheca
 ```
 
 See [Installation](installation.md) for Python version requirements and optional dependencies.
@@ -21,7 +21,7 @@ See [Installation](installation.md) for Python version requirements and optional
 The OpenAlex API works without an API key, but you'll be in the "polite pool" (slower). For faster responses, set your API key as an environment variable:
 
 ```bash
-export SYNTHECA_OPENALEX_API_KEY="your-key-here"
+export ALETHECA_OPENALEX_API_KEY="your-key-here"
 ```
 
 Or pass it directly in code. See [Authentication](authentication.md) for details.
@@ -30,11 +30,11 @@ Or pass it directly in code. See [Authentication](authentication.md) for details
 
 ```python
 import asyncio
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
 
 async def main():
-    async with SynthecaSession() as session:
+    async with AlethecaSession() as session:
         # Get a single work by OpenAlex ID
         work = await session.works.get("W2741809807")
         print(f"Title: {work.display_name}")
@@ -48,12 +48,12 @@ asyncio.run(main())
 ## 4. Search and iterate
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import WorksFilters
 
 
 async def search_open_access():
-    async with SynthecaSession() as session:
+    async with AlethecaSession() as session:
         # Search for open-access works about machine learning, published in 2024
         filters = WorksFilters(
             default_search="machine learning",
@@ -67,14 +67,14 @@ async def search_open_access():
 
 ## 5. Use convenience queries
 
-Syntheca bundles common multi-step workflows into query functions:
+Aletheca bundles common multi-step workflows into query functions:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
 
 async def author_works():
-    async with SynthecaSession() as session:
+    async with AlethecaSession() as session:
         # Fetch all works by an author (looks up author ID from name)
         works = await session.queries.works_by_author("John Smith", limit=20)
         for work in works:

@@ -7,10 +7,10 @@ researchers' affiliations, citation metrics, and ORCID identifiers.
 **Client access:** `session.authors`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for author in session.authors.iterate(
         filters=AuthorsFilters(has_orcid=True),
     ):
@@ -88,10 +88,10 @@ async with SynthecaSession() as session:
 ### Find authors at a specific institution
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import AuthorsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import AuthorsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         affiliations_institution_id="I136199904",
         has_orcid=True,
@@ -103,7 +103,7 @@ async with SynthecaSession() as session:
 ### Search authors by name
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(display_name_search="Albert Einstein")
     async for author in session.authors.iterate(filters=filters):
         print(author.display_name)
@@ -112,7 +112,7 @@ async with SynthecaSession() as session:
 ### Filter by country and topic
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = AuthorsFilters(
         affiliations_institution_country_code="DE",
         topics_id="T10100",

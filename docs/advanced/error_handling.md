@@ -1,6 +1,6 @@
 # Error Handling
 
-Syntheca uses bibliofabric's exception hierarchy for all errors. Every exception
+Aletheca uses bibliofabric's exception hierarchy for all errors. Every exception
 inherits from `BibliofabricError`, allowing you to catch all library errors with
 a single handler or target specific error types.
 
@@ -140,9 +140,9 @@ exponential backoff.
 ### Retry Configuration
 
 ```python
-from syntheca.config import SynthecaSettings
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     max_retries=5,          # Up to 5 retry attempts (6 total including initial)
     backoff_factor=1.0,     # Exponential backoff: 1s, 2s, 4s, 8s, 16s
 )
@@ -158,7 +158,7 @@ The backoff formula is `backoff_factor * (2 ** attempt)`. With `backoff_factor=0
 ```python
 from bibliofabric.exceptions import BibliofabricError
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     try:
         work = await session.works.get("W2741809807")
     except BibliofabricError as e:
@@ -180,7 +180,7 @@ from bibliofabric.exceptions import (
     BibliofabricError,
 )
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     try:
         work = await session.works.get(work_id)
     except NotFoundError:
@@ -208,7 +208,7 @@ from bibliofabric.exceptions import (
     RateLimitError,
 )
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work_ids = ["W1", "W2", "W3", "W_INVALID", "W4"]
 
     for wid in work_ids:

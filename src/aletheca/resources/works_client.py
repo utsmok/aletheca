@@ -10,14 +10,14 @@ from bibliofabric.resources import (
 )
 
 from ..models import ApiResponse, Work
-from ..resources._standard import SynthecaResourceClient
+from ..resources._standard import AlethecaResourceClient
 
 if TYPE_CHECKING:
-    from ..client import SynthecaClient
+    from ..client import AlethecaClient
 
 
 class WorksClient(
-    GettableMixin, SearchableMixin, CursorIterableMixin, SynthecaResourceClient
+    GettableMixin, SearchableMixin, CursorIterableMixin, AlethecaResourceClient
 ):
     """Client for the OpenAlex Works API endpoint.
 
@@ -30,6 +30,6 @@ class WorksClient(
     _search_response_model: type = ApiResponse[Work]
     _supports_direct_get: bool = True
 
-    def __init__(self, api_client: "SynthecaClient"):
+    def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)
         logger.debug("WorksClient initialized.")

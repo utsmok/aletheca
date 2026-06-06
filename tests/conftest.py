@@ -1,8 +1,8 @@
-"""Shared test fixtures for syntheca tests."""
+"""Shared test fixtures for aletheca tests."""
 
 import pytest
 
-from syntheca.unwrapper import OpenAlexUnwrapper
+from aletheca.unwrapper import OpenAlexUnwrapper
 
 
 @pytest.fixture

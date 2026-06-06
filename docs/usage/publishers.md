@@ -7,9 +7,9 @@ The Publishers endpoint represents publishing organizations — commercial publi
 ### Get a publisher by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     publisher = await session.publishers.get("P4310320990")  # Springer Nature
     print(publisher.display_name)
     print(publisher.hierarchy_level)
@@ -19,9 +19,9 @@ async with SynthecaSession() as session:
 ### Search for publishers
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.publishers.search(
         search="elsevier",
         page_size=10,
@@ -35,10 +35,10 @@ async with SynthecaSession() as session:
 Use `PublishersFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = PublishersFilters(
         display_name_search="springer",
     )
@@ -48,10 +48,10 @@ async with SynthecaSession() as session:
 ### Filter by country
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Publishers based in specific countries
     filters = PublishersFilters(country_codes="US")
     filters = PublishersFilters(country_codes="NL")  # Netherlands (Elsevier)
@@ -60,10 +60,10 @@ async with SynthecaSession() as session:
 ### Filter by hierarchy level
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Top-level publishers only
     filters = PublishersFilters(hierarchy_level=0)
     results = await session.publishers.search(filters=filters, page_size=25)
@@ -72,10 +72,10 @@ async with SynthecaSession() as session:
 ### Filter by works count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Major publishers
     filters = PublishersFilters(works_count_range="1000000-")
     results = await session.publishers.search(
@@ -90,9 +90,9 @@ async with SynthecaSession() as session:
 Publishers are organized in a hierarchy. The `lineage` field provides the full chain from root publisher to current, and `parent_publisher` links to the immediate parent:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     publisher = await session.publishers.get("P4310320990")
 
     # Hierarchy level (0 = top-level)
@@ -109,10 +109,10 @@ async with SynthecaSession() as session:
 ### Walk the hierarchy
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Get all child publishers of a parent
     parent = await session.publishers.get("P4310320554")  # A top-level publisher
 
@@ -125,10 +125,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import PublishersFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import PublishersFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = PublishersFilters(
         hierarchy_level=0,
         works_count_range="100000-",

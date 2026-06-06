@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- **Python 3.12+** — syntheca uses modern type syntax (`X | Y` unions, generic type params) that requires 3.12 or newer.
+- **Python 3.12+** — aletheca uses modern type syntax (`X | Y` unions, generic type params) that requires 3.12 or newer.
 - **pip** or **[uv](https://docs.astral.sh/uv/)** package manager.
 
 ## Install
@@ -10,35 +10,35 @@
 === "pip"
 
     ```bash
-    pip install syntheca
+    pip install aletheca
     ```
 
 === "uv"
 
     ```bash
-    uv add syntheca
+    uv add aletheca
     ```
 
 === "pipx (for scripts)"
 
     ```bash
-    pipx install syntheca
+    pipx install aletheca
     ```
 
 ## Verify installation
 
 ```python
-import syntheca
+import aletheca
 
-print(syntheca.__version__)
+print(aletheca.__version__)
 ```
 
 ## Optional dependencies
 
-Syntheca keeps its core dependency footprint small (`bibliofabric` + `pydantic`). Additional analysis packages are available as an extra:
+Aletheca keeps its core dependency footprint small (`bibliofabric` + `pydantic`). Additional analysis packages are available as an extra:
 
 ```bash
-pip install "syntheca[analysis]"
+pip install "aletheca[analysis]"
 ```
 
 This pulls in:

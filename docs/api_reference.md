@@ -1,10 +1,10 @@
 # API Reference
 
-Auto-generated API documentation for syntheca's public modules.
+Auto-generated API documentation for aletheca's public modules.
 
 ## Session
 
-::: syntheca.session.SynthecaSession
+::: aletheca.session.AlethecaSession
     options:
       heading_level: 2
       show_source: false
@@ -15,7 +15,7 @@ Auto-generated API documentation for syntheca's public modules.
 
 ## Client
 
-::: syntheca.client.SynthecaClient
+::: aletheca.client.AlethecaClient
     options:
       heading_level: 2
       show_source: false
@@ -32,98 +32,98 @@ Auto-generated API documentation for syntheca's public modules.
 
 ## Configuration
 
-::: syntheca.config.SynthecaSettings
+::: aletheca.config.AlethecaSettings
     options:
       heading_level: 2
       show_source: false
 
 ## Endpoint Filters
 
-::: syntheca.endpoints.WorksFilters
+::: aletheca.endpoints.WorksFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.AuthorsFilters
+::: aletheca.endpoints.AuthorsFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.SourcesFilters
+::: aletheca.endpoints.SourcesFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.InstitutionsFilters
+::: aletheca.endpoints.InstitutionsFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.TopicsFilters
+::: aletheca.endpoints.TopicsFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.KeywordsFilters
+::: aletheca.endpoints.KeywordsFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.PublishersFilters
+::: aletheca.endpoints.PublishersFilters
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.endpoints.FundersFilters
+::: aletheca.endpoints.FundersFilters
     options:
       heading_level: 3
       show_source: false
 
 ## Resource Clients
 
-::: syntheca.resources.WorksClient
+::: aletheca.resources.WorksClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.AuthorsClient
+::: aletheca.resources.AuthorsClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.SourcesClient
+::: aletheca.resources.SourcesClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.InstitutionsClient
+::: aletheca.resources.InstitutionsClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.TopicsClient
+::: aletheca.resources.TopicsClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.KeywordsClient
+::: aletheca.resources.KeywordsClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.PublishersClient
+::: aletheca.resources.PublishersClient
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.resources.FundersClient
+::: aletheca.resources.FundersClient
     options:
       heading_level: 3
       show_source: false
 
 ## Convenience Queries
 
-::: syntheca.queries
+::: aletheca.queries
     options:
       heading_level: 2
       show_source: false
@@ -136,7 +136,7 @@ Auto-generated API documentation for syntheca's public modules.
 
 ## Helpers
 
-::: syntheca._helpers
+::: aletheca._helpers
     options:
       heading_level: 2
       show_source: false
@@ -148,52 +148,52 @@ Auto-generated API documentation for syntheca's public modules.
 
 ## Models
 
-::: syntheca.models.work.Work
+::: aletheca.models.work.Work
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.author.Author
+::: aletheca.models.author.Author
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.source.Source
+::: aletheca.models.source.Source
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.institution.Institution
+::: aletheca.models.institution.Institution
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.topic.Topic
+::: aletheca.models.topic.Topic
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.keyword.Keyword
+::: aletheca.models.keyword.Keyword
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.publisher.Publisher
+::: aletheca.models.publisher.Publisher
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.funder.Funder
+::: aletheca.models.funder.Funder
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.base.ApiResponse
+::: aletheca.models.base.ApiResponse
     options:
       heading_level: 3
       show_source: false
 
-::: syntheca.models.base.BaseEntity
+::: aletheca.models.base.BaseEntity
     options:
       heading_level: 3
       show_source: false

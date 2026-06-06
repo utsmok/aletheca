@@ -1,10 +1,10 @@
-"""SynthecaSession — high-level async context manager for OpenAlex API access."""
+"""AlethecaSession — high-level async context manager for OpenAlex API access."""
 
 from bibliofabric.log_config import configure_logging, logger
 
 from . import queries
-from .client import SynthecaClient
-from .config import SynthecaSettings, get_settings
+from .client import AlethecaClient
+from .config import AlethecaSettings, get_settings
 
 _DELEGATED_CLIENTS = frozenset(
     {
@@ -24,7 +24,7 @@ configure_logging()
 
 
 class _QueryAccessor:
-    """Binds a SynthecaSession to convenience query functions."""
+    """Binds an AlethecaSession to convenience query functions."""
 
     def __init__(self, queries_module, session):
         self._module = queries_module
@@ -39,12 +39,12 @@ class _QueryAccessor:
         return attr
 
 
-class SynthecaSession:
+class AlethecaSession:
     """High-level session manager for interacting with the OpenAlex API.
 
     Usage::
 
-        async with SynthecaSession() as session:
+        async with AlethecaSession() as session:
             works = await session.works.search(
                 search="machine learning"
             )
@@ -52,31 +52,31 @@ class SynthecaSession:
                 print(work.title)
 
         # With API key
-        async with SynthecaSession(api_key="...") as session:
+        async with AlethecaSession(api_key="...") as session:
             count = await session.works.count()
     """
 
     def __init__(
         self,
-        settings: SynthecaSettings | None = None,
+        settings: AlethecaSettings | None = None,
         *,
         api_key: str | None = None,
         base_url: str | None = None,
     ):
-        """Initialize the SynthecaSession.
+        """Initialize the AlethecaSession.
 
         Args:
-            settings: Optional SynthecaSettings. If None, loads from env.
+            settings: Optional AlethecaSettings. If None, loads from env.
             api_key: Optional OpenAlex API key (overrides settings).
             base_url: Optional API base URL override.
         """
         self._settings = settings or get_settings()
-        self._api_client = SynthecaClient(
+        self._api_client = AlethecaClient(
             settings=self._settings,
             api_key=api_key,
             base_url=base_url,
         )
-        logger.debug("SynthecaSession initialized.")
+        logger.debug("AlethecaSession initialized.")
 
     @property
     def queries(self):
@@ -95,7 +95,7 @@ class SynthecaSession:
         """Close the underlying HTTP client session."""
         await self._api_client.aclose()
 
-    async def __aenter__(self) -> "SynthecaSession":
+    async def __aenter__(self) -> "AlethecaSession":
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:

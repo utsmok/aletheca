@@ -7,10 +7,10 @@ ebook platforms, and book series indexed in OpenAlex.
 **Client access:** `session.sources`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for source in session.sources.iterate(
         filters=SourcesFilters(type="journal", is_oa=True),
     ):
@@ -59,10 +59,10 @@ async with SynthecaSession() as session:
 ### Find OA journals with an ISSN
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import SourcesFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import SourcesFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = SourcesFilters(
         type="journal",
         is_oa=True,
@@ -75,7 +75,7 @@ async with SynthecaSession() as session:
 ### Search sources by publisher
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = SourcesFilters(host_organization="P4310320990")
     async for source in session.sources.iterate(filters=filters):
         print(source.display_name)
@@ -84,7 +84,7 @@ async with SynthecaSession() as session:
 ### Filter by works count range
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = SourcesFilters(
         type="journal",
         works_count_range="10000-1000000",

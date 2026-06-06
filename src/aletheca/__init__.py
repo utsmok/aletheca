@@ -1,9 +1,9 @@
-"""Syntheca: Python interface for the OpenAlex API."""
+"""Aletheca: Python interface for the OpenAlex API."""
 
 try:
     from importlib.metadata import PackageNotFoundError, version as _get_version
 
-    __version__ = _get_version("syntheca")
+    __version__ = _get_version("aletheca")
 except PackageNotFoundError:
     __version__ = "0.0.0"
 
@@ -19,7 +19,7 @@ from bibliofabric.exceptions import (
     ValidationError,
 )
 
-from .client import SynthecaClient
+from .client import AlethecaClient
 from .models import (
     ApiResponse,
     Author,
@@ -34,7 +34,7 @@ from .models import (
     Topic,
     Work,
 )
-from .session import SynthecaSession
+from .session import AlethecaSession
 
 __all__ = [
     "__version__",
@@ -55,8 +55,8 @@ __all__ = [
     "Publisher",
     "RateLimitError",
     "Source",
-    "SynthecaClient",
-    "SynthecaSession",
+    "AlethecaClient",
+    "AlethecaSession",
     "TimeoutError",
     "Topic",
     "ValidationError",

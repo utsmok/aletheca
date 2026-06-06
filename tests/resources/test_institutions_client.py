@@ -2,8 +2,8 @@
 
 import pytest
 
-from syntheca.models import ApiResponse, Institution
-from syntheca.resources.institutions_client import InstitutionsClient
+from aletheca.models import ApiResponse, Institution
+from aletheca.resources.institutions_client import InstitutionsClient
 
 from .conftest import _mock_response
 

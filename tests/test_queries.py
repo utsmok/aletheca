@@ -1,10 +1,10 @@
-"""Tests for syntheca.queries convenience functions."""
+"""Tests for aletheca.queries convenience functions."""
 
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from syntheca.queries import (
+from aletheca.queries import (
     citing_works,
     referenced_works,
     works_by_author,
@@ -15,7 +15,7 @@ from syntheca.queries import (
 
 @pytest.fixture
 def session():
-    """Mock SynthecaSession with async resource clients."""
+    """Mock AlethecaSession with async resource clients."""
     sess = MagicMock()
 
     sess.works = MagicMock()

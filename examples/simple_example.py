@@ -10,11 +10,11 @@ def _():
 
     mo.md(
         """
-    # Syntheca Quick Start
+    # Aletheca Quick Start
 
     **Switch to code view with Ctrl+. to see all code cells**
 
-    This notebook demonstrates basic usage of Syntheca for retrieving
+    This notebook demonstrates basic usage of Aletheca for retrieving
     and searching OpenAlex scholarly data.
     """
     )
@@ -23,10 +23,10 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca.endpoints import WorksFilters
+    from aletheca import AlethecaSession
+    from aletheca.endpoints import WorksFilters
 
-    session = SynthecaSession()
+    session = AlethecaSession()
     return WorksFilters, session
 
 

@@ -1,6 +1,6 @@
 """Convenience query functions for common OpenAlex workflows.
 
-These functions accept a SynthecaSession as their first argument
+These functions accept an AlethecaSession as their first argument
 and compose multiple API calls into higher-level operations.
 
 Access via ``session.queries.function_name(...)``.
@@ -13,11 +13,11 @@ from typing import TYPE_CHECKING
 from .models import Work
 
 if TYPE_CHECKING:
-    from .session import SynthecaSession
+    from .session import AlethecaSession
 
 
 async def works_by_author(
-    session: SynthecaSession,
+    session: AlethecaSession,
     author_name: str,
     *,
     limit: int | None = None,
@@ -25,7 +25,7 @@ async def works_by_author(
     """Get works by an author (searches by name, then fetches their works).
 
     Args:
-        session: Active SynthecaSession.
+        session: Active AlethecaSession.
         author_name: Author display name to search for.
         limit: Max number of works to return.
 
@@ -56,7 +56,7 @@ async def works_by_author(
 
 
 async def works_by_institution(
-    session: SynthecaSession,
+    session: AlethecaSession,
     institution_name: str,
     *,
     limit: int | None = None,
@@ -64,7 +64,7 @@ async def works_by_institution(
     """Get works affiliated with an institution.
 
     Args:
-        session: Active SynthecaSession.
+        session: Active AlethecaSession.
         institution_name: Institution display name to search for.
         limit: Max number of works to return.
 
@@ -95,13 +95,13 @@ async def works_by_institution(
 
 
 async def works_by_doi(
-    session: SynthecaSession,
+    session: AlethecaSession,
     dois: list[str],
 ) -> list[Work]:
     """Fetch works by their DOIs.
 
     Args:
-        session: Active SynthecaSession.
+        session: Active AlethecaSession.
         dois: List of DOI strings (with or without ``https://doi.org/`` prefix).
 
     Returns:
@@ -122,7 +122,7 @@ async def works_by_doi(
 
 
 async def citing_works(
-    session: SynthecaSession,
+    session: AlethecaSession,
     work_id: str,
     *,
     limit: int | None = None,
@@ -130,7 +130,7 @@ async def citing_works(
     """Get works that cite a given work.
 
     Args:
-        session: Active SynthecaSession.
+        session: Active AlethecaSession.
         work_id: OpenAlex work ID (e.g., ``W1234567890``).
         limit: Max number of works to return.
 
@@ -144,7 +144,7 @@ async def citing_works(
 
 
 async def referenced_works(
-    session: SynthecaSession,
+    session: AlethecaSession,
     work_id: str,
     *,
     limit: int | None = None,
@@ -152,7 +152,7 @@ async def referenced_works(
     """Get works referenced by a given work.
 
     Args:
-        session: Active SynthecaSession.
+        session: Active AlethecaSession.
         work_id: OpenAlex work ID (e.g., ``W1234567890``).
         limit: Max number of works to return.
 

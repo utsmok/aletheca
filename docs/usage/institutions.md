@@ -7,9 +7,9 @@ The Institutions endpoint represents academic and research organizations — uni
 ### Get an institution by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     institution = await session.institutions.get("I31371856")  # Stanford University
     print(institution.display_name)
     print(institution.type)
@@ -20,9 +20,9 @@ async with SynthecaSession() as session:
 ### Search for institutions
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.institutions.search(
         search="stanford",
         page_size=10,
@@ -36,10 +36,10 @@ async with SynthecaSession() as session:
 Use `InstitutionsFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = InstitutionsFilters(
         country_code="US",
         type="education",
@@ -50,10 +50,10 @@ async with SynthecaSession() as session:
 ### Filter by country
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # ISO 3166-1 alpha-2 country codes
     filters = InstitutionsFilters(country_code="DE")  # Germany
     filters = InstitutionsFilters(country_code="JP")  # Japan
@@ -71,10 +71,10 @@ async with SynthecaSession() as session:
 Institution types include `education`, `facility`, `healthcare`, `company`, `government`, `nonprofit`, and `archive`:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Universities and colleges
     filters = InstitutionsFilters(type="education")
 
@@ -94,10 +94,10 @@ async with SynthecaSession() as session:
 ### Filter by ROR ID
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = InstitutionsFilters(ror="https://ror.org/00f54p054")
     results = await session.institutions.search(filters=filters, page_size=1)
 ```
@@ -105,10 +105,10 @@ async with SynthecaSession() as session:
 ### Filter by citation or works count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # High-output institutions
     filters = InstitutionsFilters(works_count_range="100000-")
 
@@ -121,9 +121,9 @@ async with SynthecaSession() as session:
 Each institution has an `associated_institutions` list that captures parent/child relationships, predecessor/successor links, and related organizations:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     institution = await session.institutions.get("I31371856")
 
     for related in institution.associated_institutions:
@@ -137,9 +137,9 @@ The `relationship` field indicates the type of association: `parent`, `child`, `
 The `lineage` field provides the full organizational hierarchy as a list of OpenAlex IDs from root to current:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     institution = await session.institutions.get("I31371856")
     print(f"Lineage: {institution.lineage}")
 ```
@@ -147,9 +147,9 @@ async with SynthecaSession() as session:
 ## Geographic Data
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     institution = await session.institutions.get("I31371856")
 
     if institution.geo:
@@ -162,10 +162,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = InstitutionsFilters(
         country_code="US",
         type="education",

@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "syntheca",
+#     "aletheca",
 #     "certifi",
 #     "marimo",
 # ///
@@ -20,15 +20,15 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca.endpoints import AuthorsFilters, WorksFilters
+    from aletheca import AlethecaSession
+    from aletheca.endpoints import AuthorsFilters, WorksFilters
 
-    return AuthorsFilters, SynthecaSession, WorksFilters
+    return AuthorsFilters, AlethecaSession, WorksFilters
 
 
 @app.cell
 def _():
-    session = SynthecaSession()
+    session = AlethecaSession()
     return (session,)
 
 

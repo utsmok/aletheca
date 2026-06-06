@@ -1,7 +1,7 @@
 # OpenAlex API Bug Report
 
 **Date:** 2026-06-05
-**Reporter:** Syntheca client library maintainers
+**Reporter:** Aletheca client library maintainers
 **APIs tested:** OpenAlex REST API (`api.openalex.org`), all 9 entity endpoints
 **Method:** Every finding below was verified by: (1) fetching live API responses, (2) reading the OpenAPI spec at `developers.openalex.org/api-reference/openapi.json`, and (3) reading the documentation pages at `developers.openalex.org`. Discrepancies are reported only where at least two of these three sources disagree.
 

@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from syntheca.unwrapper import OpenAlexUnwrapper
+from aletheca.unwrapper import OpenAlexUnwrapper
 
 
 def _mock_response(json_data, status_code=200):
@@ -20,7 +20,7 @@ def _mock_response(json_data, status_code=200):
 
 @pytest.fixture
 def mock_api_client():
-    """AsyncMock of SynthecaClient with a mock request method and unwrapper."""
+    """AsyncMock of AlethecaClient with a mock request method and unwrapper."""
     client = AsyncMock()
     client._response_unwrapper = OpenAlexUnwrapper()
     return client

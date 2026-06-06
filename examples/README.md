@@ -1,6 +1,6 @@
-# Syntheca Example Scripts
+# Aletheca Example Scripts
 
-This directory contains example scripts demonstrating how to use the Syntheca library. Every example is also a **marimo notebook** — they can be run as scripts, explored interactively, or embedded in documentation.
+This directory contains example scripts demonstrating how to use the Aletheca library. Every example is also a **marimo notebook** — they can be run as scripts, explored interactively, or embedded in documentation.
 
 ## Examples
 
@@ -41,10 +41,10 @@ uv run marimo export html-wasm examples/simple_example.py -o site/simple_example
 
 ## No API Key Required
 
-The OpenAlex API works without authentication via its [polite pool](https://docs.openalex.org/how-to-use-the-pool/get-your-api-key/polite-pool). All examples run without credentials. Set the `SYNTHECA_EMAIL` environment variable to your email address to identify yourself and get higher rate limits:
+The OpenAlex API works without authentication via its [polite pool](https://docs.openalex.org/how-to-use-the-pool/get-your-api-key/polite-pool). All examples run without credentials. Set the `ALETHECA_EMAIL` environment variable to your email address to identify yourself and get higher rate limits:
 
 ```bash
-export SYNTHECA_EMAIL=you@example.com
+export ALETHECA_EMAIL=you@example.com
 ```
 
 ## Embedding in Documentation

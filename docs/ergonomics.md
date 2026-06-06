@@ -1,10 +1,10 @@
 # Features & Ergonomics
 
-Syntheca adds convenience features on top of the raw OpenAlex API responses: safe field access, iterator helpers, convenience queries, and OpenAlex-specific utilities.
+Aletheca adds convenience features on top of the raw OpenAlex API responses: safe field access, iterator helpers, convenience queries, and OpenAlex-specific utilities.
 
 ## Safe Field Access
 
-API responses often have missing fields. Syntheca ensures common field types never return None:
+API responses often have missing fields. Aletheca ensures common field types never return None:
 
 - **List fields** (`authorships`, `concepts`, `locations`, etc.) always return a list — empty instead of None
 - **String fields** (`display_name`, `title`, `doi`, etc.) always return a string — empty instead of None
@@ -28,7 +28,7 @@ num_ids = len(work.ids.openalex)
 Every resource client provides three helpers on top of iterate():
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Collect into a list
     papers = await session.works.collect(filters=f, limit=100)
 
@@ -54,9 +54,9 @@ async with SynthecaSession() as session:
 | `referenced_works(work_id, limit)` | Works referenced by a given work |
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     papers = await session.queries.works_by_doi("10.1038/s41586-024-07386-0")
     works = await session.queries.works_by_author("John Smith", limit=50)
     citations = await session.queries.citing_works("W2741809807")
@@ -67,7 +67,7 @@ async with SynthecaSession() as session:
 ## OpenAlex-Specific Helpers
 
 ```python
-from syntheca._helpers import normalize_doi, parse_openalex_id, reconstruct_abstract, detect_id_type
+from aletheca._helpers import normalize_doi, parse_openalex_id, reconstruct_abstract, detect_id_type
 
 # DOI normalization
 normalize_doi("https://doi.org/10.1234/test")  # "10.1234/test"

@@ -7,9 +7,9 @@ The Keywords endpoint represents keywords extracted from scholarly works. Keywor
 ### Get a keyword by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     keyword = await session.keywords.get("K123456")
     print(keyword.display_name)
     print(keyword.works_count)
@@ -19,9 +19,9 @@ async with SynthecaSession() as session:
 ### Search for keywords
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.keywords.search(
         search="neural network",
         page_size=10,
@@ -35,10 +35,10 @@ async with SynthecaSession() as session:
 Use `KeywordsFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = KeywordsFilters(
         display_name_search="deep learning",
     )
@@ -48,10 +48,10 @@ async with SynthecaSession() as session:
 ### Filter by works count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Popular keywords (many associated works)
     filters = KeywordsFilters(works_count_range="10000-")
     results = await session.keywords.search(filters=filters, page_size=50)
@@ -63,10 +63,10 @@ async with SynthecaSession() as session:
 ### Filter by display name
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Exact display name match
     filters = KeywordsFilters(display_name="machine learning")
 
@@ -77,10 +77,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import KeywordsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import KeywordsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = KeywordsFilters(works_count_range="1000-")
     async for keyword in session.keywords.iterate(
         filters=filters,

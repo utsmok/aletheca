@@ -8,10 +8,10 @@ in OpenAlex.
 **Client access:** `session.institutions`
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     async for inst in session.institutions.iterate(
         filters=InstitutionsFilters(country_code="US", type="education"),
     ):
@@ -55,10 +55,10 @@ async with SynthecaSession() as session:
 ### Find universities in a country
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import InstitutionsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import InstitutionsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = InstitutionsFilters(
         country_code="GB",
         type="education",
@@ -70,7 +70,7 @@ async with SynthecaSession() as session:
 ### Look up institution by ROR
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     inst = await session.institutions.get("https://ror.org/0130frc33")
     print(inst.display_name)
 ```
@@ -78,7 +78,7 @@ async with SynthecaSession() as session:
 ### Find institutions in the Global South with many works
 
 ```python
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = InstitutionsFilters(
         is_global_south=True,
         works_count_range="10000-1000000",

@@ -12,8 +12,8 @@ Contributions are welcome. This guide covers setting up the development environm
 ### Clone and install
 
 ```bash
-git clone https://github.com/utsmok/syntheca.git
-cd syntheca
+git clone https://github.com/utsmok/aletheca.git
+cd aletheca
 uv sync --all-groups
 ```
 
@@ -34,7 +34,7 @@ This installs the package in editable mode along with all dependency groups (`de
 uv run pytest
 
 # Run with coverage
-uv run pytest --cov=syntheca
+uv run pytest --cov=aletheca
 
 # Run a specific test file
 uv run pytest tests/test_session.py
@@ -48,7 +48,7 @@ uv run pytest -v
 Tests that hit the live OpenAlex API are marked with `@pytest.mark.live_api` and are excluded by default:
 
 ```bash
-# Run only live API tests (requires SYNTHECA_OPENALEX_API_KEY)
+# Run only live API tests (requires ALETHECA_OPENALEX_API_KEY)
 uv run pytest -m live_api
 ```
 
@@ -57,7 +57,7 @@ uv run pytest -m live_api
 
 ## Linting and formatting
 
-Syntheca uses **ruff** for both linting and formatting:
+Aletheca uses **ruff** for both linting and formatting:
 
 ```bash
 # Check for lint errors
@@ -96,11 +96,11 @@ The docs source lives in `docs/`. The mkdocs configuration is in `mkdocs.yml` at
 ## Project structure
 
 ```
-src/syntheca/
-    __init__.py          # Public API: SynthecaSession, SynthecaClient
-    client.py            # SynthecaClient — async HTTP client
-    session.py           # SynthecaSession — high-level context manager
-    config.py            # SynthecaSettings (pydantic-settings)
+src/aletheca/
+    __init__.py          # Public API: AlethecaSession, AlethecaClient
+    client.py            # AlethecaClient — async HTTP client
+    session.py           # AlethecaSession — high-level context manager
+    config.py            # AlethecaSettings (pydantic-settings)
     constants.py         # Base URL, defaults, user agent
     endpoints.py         # Pydantic filter models for all endpoints
     queries.py           # Convenience query functions
@@ -122,7 +122,7 @@ src/syntheca/
         ids.py           # Entity ID models (WorkIds, AuthorIds, etc.)
         safe_types.py    # SafeStr, SafeList wrappers
     resources/           # Endpoint-specific resource clients
-        _standard.py     # SynthecaResourceClient base class
+        _standard.py     # AlethecaResourceClient base class
         works_client.py  # WorksClient
         authors_client.py # AuthorsClient
         ...              # One client per entity

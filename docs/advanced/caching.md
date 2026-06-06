@@ -1,6 +1,6 @@
 # Caching
 
-Syntheca supports client-side response caching via [cachetools'](https://github.com/tkem/cachetools)
+Aletheca supports client-side response caching via [cachetools'](https://github.com/tkem/cachetools)
 `TTLCache` — an in-memory LRU (Least Recently Used) cache with time-to-live expiration.
 Caching is disabled by default and applies only to `GET` requests with an `expected_model`.
 
@@ -22,24 +22,24 @@ When caching is enabled:
 ### Via Environment Variables
 
 ```bash
-export SYNTHECA_ENABLE_CACHING="true"
-export SYNTHECA_CACHE_TTL_SECONDS="600"
-export SYNTHECA_CACHE_MAX_SIZE="256"
+export ALETHECA_ENABLE_CACHING="true"
+export ALETHECA_CACHE_TTL_SECONDS="600"
+export ALETHECA_CACHE_MAX_SIZE="256"
 ```
 
 ### Via Programmatic Configuration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.config import SynthecaSettings
+from aletheca import AlethecaSession
+from aletheca.config import AlethecaSettings
 
-settings = SynthecaSettings(
+settings = AlethecaSettings(
     enable_caching=True,
     cache_ttl_seconds=600,  # 10 minutes
     cache_max_size=256,      # Up to 256 unique requests cached
 )
 
-async with SynthecaSession(settings=settings) as session:
+async with AlethecaSession(settings=settings) as session:
     # First call: HTTP request + cache store
     work1 = await session.works.get("W2741809807")
     # Second call: cache hit, no HTTP request
@@ -78,7 +78,7 @@ The cache provides no explicit invalidation API. Entries expire through:
 For workflows requiring fresh data, either:
 
 - Set a short `cache_ttl_seconds` (e.g., `60`).
-- Create a new `SynthecaSession` to get a fresh cache.
+- Create a new `AlethecaSession` to get a fresh cache.
 - Disable caching entirely.
 
 ## Performance Considerations

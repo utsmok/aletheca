@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "syntheca",
+#     "aletheca",
 #     "certifi",
 #     "marimo",
 # ///
@@ -20,19 +20,19 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca._helpers import (
+    from aletheca import AlethecaSession
+    from aletheca._helpers import (
         detect_id_type,
         normalize_doi,
         parse_openalex_id,
         reconstruct_abstract,
     )
-    from syntheca.models import SafeList, SafeStr
+    from aletheca.models import SafeList, SafeStr
 
     return (
         SafeList,
         SafeStr,
-        SynthecaSession,
+        AlethecaSession,
         detect_id_type,
         normalize_doi,
         parse_openalex_id,
@@ -42,7 +42,7 @@ def _():
 
 @app.cell
 def _():
-    session = SynthecaSession()
+    session = AlethecaSession()
     return (session,)
 
 
@@ -52,7 +52,7 @@ async def _(mo):
         """
     # Safe Types and Helpers
 
-    Syntheca ships `SafeList` and `SafeStr` types that make API data
+    Aletheca ships `SafeList` and `SafeStr` types that make API data
     safe to traverse without null checks, plus utility helpers for
     common identifier operations.
     """

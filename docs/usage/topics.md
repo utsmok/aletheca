@@ -7,9 +7,9 @@ The Topics endpoint represents the OpenAlex topic classification system — a th
 ### Get a topic by OpenAlex ID
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     topic = await session.topics.get("T10001")  # Example topic
     print(topic.display_name)
     print(topic.description)
@@ -20,9 +20,9 @@ async with SynthecaSession() as session:
 ### Search for topics
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     results = await session.topics.search(
         search="machine learning",
         page_size=10,
@@ -36,10 +36,10 @@ async with SynthecaSession() as session:
 Use `TopicsFilters` to construct structured filter queries:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = TopicsFilters(
         display_name_search="climate",
         works_count_range="10000-",
@@ -52,10 +52,10 @@ async with SynthecaSession() as session:
 The OpenAlex topic hierarchy has three levels: **domain** → **field** → **subfield**. Each topic belongs to one subfield, which belongs to one field, which belongs to one domain:
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # All topics in a specific domain
     filters = TopicsFilters(domain_id="D1")  # Physical Sciences
 
@@ -69,10 +69,10 @@ async with SynthecaSession() as session:
 ### Filter by keyword
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Topics that contain a specific keyword
     filters = TopicsFilters(keywords_keyword="neural networks")
     results = await session.topics.search(filters=filters, page_size=25)
@@ -81,10 +81,10 @@ async with SynthecaSession() as session:
 ### Filter by works count
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Popular topics (100k+ works)
     filters = TopicsFilters(works_count_range="100000-")
 
@@ -97,9 +97,9 @@ async with SynthecaSession() as session:
 Each topic provides its full hierarchy context through nested objects:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     topic = await session.topics.get("T10001")
 
     # Subfield
@@ -120,9 +120,9 @@ async with SynthecaSession() as session:
 The `siblings` field lists topics within the same subfield:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     topic = await session.topics.get("T10001")
 
     print("Related topics in the same subfield:")
@@ -133,10 +133,10 @@ async with SynthecaSession() as session:
 ## Iteration
 
 ```python
-from syntheca import SynthecaSession
-from syntheca.endpoints import TopicsFilters
+from aletheca import AlethecaSession
+from aletheca.endpoints import TopicsFilters
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     filters = TopicsFilters(
         domain_id="D1",
         works_count_range="50000-",

@@ -10,9 +10,9 @@ The Awards endpoint represents individual research grants and funding awards —
 Awards are currently accessible through works. Each work has a `grants` field and an `awards` field:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     work = await session.works.get("W2741809807")
 
     # Grant/funding info attached to the work
@@ -90,9 +90,9 @@ The `Award` model includes the following fields (used when awards are returned f
 You can discover awards through the funder relationship:
 
 ```python
-from syntheca import SynthecaSession
+from aletheca import AlethecaSession
 
-async with SynthecaSession() as session:
+async with AlethecaSession() as session:
     # Find a funder
     results = await session.funders.search(search="NIH", page_size=1)
     if results.results:
@@ -101,7 +101,7 @@ async with SynthecaSession() as session:
 
         # Award IDs appear in work.grants and work.awards when filtering
         # works by funder
-        from syntheca.endpoints import WorksFilters
+        from aletheca.endpoints import WorksFilters
 
         filters = WorksFilters(
             authorships_institutions_id="I31371856",

@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "syntheca",
+#     "aletheca",
 #     "certifi",
 #     "marimo",
 # ///
@@ -20,15 +20,15 @@ def _():
 
 @app.cell
 def _():
-    from syntheca import SynthecaSession
-    from syntheca.endpoints import WorksFilters
+    from aletheca import AlethecaSession
+    from aletheca.endpoints import WorksFilters
 
-    return SynthecaSession, WorksFilters
+    return AlethecaSession, WorksFilters
 
 
 @app.cell
 def _():
-    session = SynthecaSession()
+    session = AlethecaSession()
     return (session,)
 
 
@@ -38,7 +38,7 @@ async def _(mo):
         """
     # Iterator Helpers
 
-    Syntheca provides `collect`, `count`, and `first` helpers
+    Aletheca provides `collect`, `count`, and `first` helpers
     for common patterns — so you don't need to manually paginate.
     """
     )

@@ -6,7 +6,7 @@ from ..models import ApiResponse, Award
 from ..resources._standard import StandardResourceClient
 
 if TYPE_CHECKING:
-    from ..client import SynthecaClient
+    from ..client import AlethecaClient
 
 
 class AwardsClient(StandardResourceClient):
@@ -17,5 +17,5 @@ class AwardsClient(StandardResourceClient):
     _search_response_model: type = ApiResponse[Award]
     _supports_direct_get: bool = True
 
-    def __init__(self, api_client: "SynthecaClient"):
+    def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)

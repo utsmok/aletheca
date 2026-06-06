@@ -2,8 +2,8 @@
 
 import pytest
 
-from syntheca.models import ApiResponse, Source
-from syntheca.resources.sources_client import SourcesClient
+from aletheca.models import ApiResponse, Source
+from aletheca.resources.sources_client import SourcesClient
 
 from .conftest import _mock_response
 

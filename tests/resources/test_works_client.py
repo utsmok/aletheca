@@ -1,12 +1,12 @@
 """Tests for WorksClient."""
 
-
 import pytest
 from bibliofabric.exceptions import BibliofabricError
 
-from syntheca.endpoints import WorksFilters
-from syntheca.models import ApiResponse, Work
-from syntheca.resources.works_client import WorksClient
+from aletheca.endpoints import WorksFilters
+from aletheca.models import ApiResponse, Work
+from aletheca.resources.works_client import WorksClient
+from tests.resources.conftest import _mock_response
 
 # ---------------------------------------------------------------------------
 # Test data
@@ -45,10 +45,6 @@ PAGE2 = {
 }
 
 
-from tests.resources.conftest import _mock_response  # noqa: PLC0415
-
-
-
 @pytest.fixture
 def works_client(mock_api_client):
     return WorksClient(mock_api_client)
@@ -81,6 +77,7 @@ async def test_get_work_wraps_unexpected_error(works_client, mock_api_client):
     mock_api_client.request.side_effect = Exception("Unexpected error")
     with pytest.raises(Exception, match="Unexpected error"):
         await works_client.get("W999")
+
 
 # ---------------------------------------------------------------------------
 # search()

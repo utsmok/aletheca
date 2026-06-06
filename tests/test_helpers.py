@@ -1,6 +1,6 @@
 """Tests for _helpers utility functions."""
 
-from syntheca._helpers import (
+from aletheca._helpers import (
     detect_id_type,
     normalize_doi,
     parse_openalex_id,
