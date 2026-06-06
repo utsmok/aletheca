@@ -8,3 +8,20 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Marimo session artifacts
+.marimo/
+__marimo__/
+*.session
+
+# Environment / secrets
+.env
+secrets.env
+
+# Test / coverage artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Docs build output
+site/
