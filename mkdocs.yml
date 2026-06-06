@@ -1,0 +1,58 @@
+site_name: Syntheca Docs
+site_url: https://utsmok.github.io/syntheca/
+repo_url: https://github.com/utsmok/syntheca/
+site_author: S. Mok
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Installation: installation.md
+  - Basic Usage: usage_basics.md
+  - Entities:
+      - Works: usage/works.md
+      - Authors: usage/authors.md
+      - Sources: usage/sources.md
+      - Institutions: usage/institutions.md
+      - Topics: usage/topics.md
+      - Keywords: usage/keywords.md
+      - Publishers: usage/publishers.md
+      - Funders: usage/funders.md
+      - Awards: usage/awards.md
+  - OpenAlex Endpoints:
+      - Works: endpoints/works.md
+      - Authors: endpoints/authors.md
+      - Sources: endpoints/sources.md
+      - Institutions: endpoints/institutions.md
+      - Topics: endpoints/topics.md
+      - Keywords: endpoints/keywords.md
+      - Publishers: endpoints/publishers.md
+      - Funders: endpoints/funders.md
+  - Advanced:
+      - Configuration: advanced/configuration.md
+      - Caching: advanced/caching.md
+      - Rate Limiting: advanced/rate_limiting.md
+      - Request Hooks: advanced/hooks.md
+      - Error Handling: advanced/error_handling.md
+  - API Reference: api_reference.md
+  - Authentication: authentication.md
+  - Contributing: contributing.md
+watch:
+  - src/syntheca
