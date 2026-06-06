@@ -6,3 +6,12 @@ try:
     __version__ = _get_version("syntheca")
 except PackageNotFoundError:
     __version__ = "0.0.0"
+
+from .client import SynthecaClient
+from .session import SynthecaSession
+
+__all__ = [
+    "__version__",
+    "SynthecaClient",
+    "SynthecaSession",
+]

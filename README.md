@@ -1,32 +1,78 @@
-# Aletheca
-A Python library to interact with the OpenAlex API, providing tools for data retrieval, modeling, and analysis of scholarly entities.
+# Syntheca
+
+Python interface for the [OpenAlex API](https://docs.openalex.org/), built on the [bibliofabric](https://github.com/utsmok/bibliofabric) framework.
+
+## Installation
+
+```bash
+pip install syntheca
+```
+
+## Quick Start
+
+```python
+import asyncio
+from syntheca import SynthecaSession
+
+async def main():
+    async with SynthecaSession() as session:
+        # Get a work by OpenAlex ID
+        work = await session.works.get("W1234567890")
+        print(work.title)
+
+        # Search works
+        results = await session.works.search(search="machine learning", page_size=10)
+        for work in results.results:
+            print(f"{work.title} ({work.publication_year})")
+
+        # Iterate all works by an author
+        async for work in session.works.iterate(
+            filters={"authorships.author.id": "A1234567890"},
+            page_size=200,
+        ):
+            print(work.title)
+
+asyncio.run(main())
+```
+
+## Authentication
+
+Set your OpenAlex API key via environment variable:
+
+```bash
+export SYNTHECA_OPENALEX_API_KEY=your_api_key
+```
+
+Or pass it directly:
+
+```python
+async with SynthecaSession(api_key="your_api_key") as session:
+    ...
+```
 
 ## Features
-- Easy access to OpenAlex API endpoints
-- Validation, serialization, and more for all OpenAlex entities
-- Built with performance and usability in mind
-- Efficient and elegant data retrieval methods: pagination, filtering, and bulk fetching are all handled for you
-- But if you want to get your hands dirty, low-level API access is also available
-- Extensive configuration options to set up the library to your needs
 
-# Dev instructions
+- **Async-first**: Built on `httpx` with `asyncio`
+- **Typed models**: Pydantic v2 models for all OpenAlex entities
+- **Cursor pagination**: Efficient iteration over large result sets
+- **Filter serialization**: Automatic conversion to OpenAlex `filter=key:value` syntax
+- **Safe types**: `SafeList` and `SafeStr` for None-safe traversal
+- **Convenience queries**: High-level functions for common workflows
 
-use `uv` to manage the environment and dependencies:
-
-```bash
-> uv run main.py
-> uv run pytest
-> uv add polars
-> uv remove polars
-> uv sync -U
-> uv sync --all-groups
-```
-
-use `ruff` and `ty` for linting, formatting, checking:
+## Development
 
 ```bash
-> uv run ruff check .
-> uv run ruff format .
-> uv run ty check .
+# Install with all dev dependencies
+uv sync --all-groups
+
+# Run tests
+uv run pytest
+
+# Lint
+uv run ruff check src/
+uv run ruff format src/
 ```
 
+## License
+
+MIT
