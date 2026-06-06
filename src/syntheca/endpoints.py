@@ -11,6 +11,7 @@ TOPICS = "topics"
 KEYWORDS = "keywords"
 PUBLISHERS = "publishers"
 FUNDERS = "funders"
+AWARDS = "awards"
 
 
 class WorksFilters(BaseModel):
@@ -99,7 +100,9 @@ class WorksFilters(BaseModel):
     is_paratext: bool | None = Field(None, alias="is_paratext")
     is_xpac: bool | None = Field(None, alias="is_xpac")
     referenced_works: str | None = Field(None, alias="referenced_works")
-    locations_source_has_issn: bool | None = Field(None, alias="locations.source.has_issn")
+    locations_source_has_issn: bool | None = Field(
+        None, alias="locations.source.has_issn"
+    )
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -187,12 +190,11 @@ class SourcesFilters(BaseModel):
     host_organization: str | None = None
     issn: str | None = None
     issn_l: str | None = None
-    has_apc: bool | None = None
+    has_apc: bool | None = Field(None, alias="has_apc")
     works_count: int | None = None
     works_count_range: str | None = None
     cited_by_count: int | None = None
     cited_by_count_range: str | None = None
-
     # Search and additional filters
     display_name_search: str | None = Field(None, alias="display_name.search")
     default_search: str | None = Field(None, alias="default.search")
@@ -200,7 +202,15 @@ class SourcesFilters(BaseModel):
     has_issn: bool | None = Field(None, alias="has_issn")
     is_global_south: bool | None = Field(None, alias="is_global_south")
     x_concepts_id: str | None = Field(None, alias="x_concepts.id")
-
+    # J-Stage filters (live API, not in spec)
+    is_in_jstage: bool | None = Field(None, alias="is_in_jstage")
+    is_in_jstage_since_year: int | None = Field(None, alias="is_in_jstage_since_year")
+    # Summary stats filters
+    summary_stats_2yr_mean_citedness: float | None = Field(
+        None, alias="summary_stats.2yr_mean_citedness"
+    )
+    summary_stats_h_index: int | None = Field(None, alias="summary_stats.h_index")
+    summary_stats_i10_index: int | None = Field(None, alias="summary_stats.i10_index")
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
@@ -232,16 +242,17 @@ class TopicsFilters(BaseModel):
 
     display_name: str | None = None
     id: str | None = None
-    subfield_id: str | None = None
-    field_id: str | None = None
-    domain_id: str | None = None
+    subfield_id: str | None = Field(None, alias="subfield.id")
+    field_id: str | None = Field(None, alias="field.id")
+    domain_id: str | None = Field(None, alias="domain.id")
     works_count: int | None = None
     works_count_range: str | None = None
-
     # Nested filter fields (dot notation via alias)
     display_name_search: str | None = Field(None, alias="display_name.search")
     keywords_search: str | None = Field(None, alias="keywords.search")
-
+    keywords_id: str | None = Field(None, alias="keywords.id")
+    keywords_keyword: str | None = Field(None, alias="keywords.keyword")
+    keywords_display_name: str | None = Field(None, alias="keywords.display_name")
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
@@ -286,14 +297,42 @@ class FundersFilters(BaseModel):
     ror: str | None = None
     works_count: int | None = None
     works_count_range: str | None = None
-
     # Search filters
     display_name_search: str | None = Field(None, alias="display_name.search")
     default_search: str | None = Field(None, alias="default.search")
-
     # Use awards_count (not grants_count)
     awards_count: int | None = Field(None, alias="awards_count")
     continent: str | None = Field(None, alias="continent")
     is_global_south: bool | None = Field(None, alias="is_global_south")
+    # Summary stats filters
+    summary_stats_2yr_mean_citedness: float | None = Field(
+        None, alias="summary_stats.2yr_mean_citedness"
+    )
+    summary_stats_h_index: int | None = Field(None, alias="summary_stats.h_index")
+    summary_stats_i10_index: int | None = Field(None, alias="summary_stats.i10_index")
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
+
+class AwardsFilters(BaseModel):
+    """Filter model for the Awards endpoint."""
+
+    display_name: str | None = None
+    funder: str | None = None
+    funder_award_id: str | None = Field(None, alias="funder_award_id")
+    # Nested filter fields (dot notation via alias)
+    funder_id: str | None = Field(None, alias="funder.id")
+    funder_country_code: str | None = Field(None, alias="funder.country_code")
+    lead_investigator_id: str | None = Field(None, alias="lead_investigator.id")
+    co_lead_investigator_id: str | None = Field(None, alias="co_lead_investigator.id")
+    institution_awarded_id: str | None = Field(None, alias="institution_awarded.id")
+    # Search filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+    # Date filters
+    from_awarded_date: str | None = Field(None, alias="from_awarded_date")
+    to_awarded_date: str | None = Field(None, alias="to_awarded_date")
+    from_created_date: str | None = Field(None, alias="from_created_date")
+    to_created_date: str | None = Field(None, alias="to_created_date")
+    from_updated_date: str | None = Field(None, alias="from_updated_date")
+    to_updated_date: str | None = Field(None, alias="to_updated_date")
     model_config = ConfigDict(extra="allow", populate_by_name=True)
