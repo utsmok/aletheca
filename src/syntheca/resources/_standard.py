@@ -79,6 +79,4 @@ class StandardResourceClient(
 
     def __init__(self, api_client):  # noqa: ANN001
         super().__init__(api_client)
-        logger.debug(
-            f"{type(self).__name__} initialized for path: {self._entity_path}"
-        )
+        logger.debug(f"{type(self).__name__} initialized for path: {self._entity_path}")

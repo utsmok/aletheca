@@ -1,6 +1,7 @@
 """Resource clients for OpenAlex API endpoints."""
 
 from .authors_client import AuthorsClient
+from .awards_client import AwardsClient
 from .funders_client import FundersClient
 from .institutions_client import InstitutionsClient
 from .keywords_client import KeywordsClient
@@ -11,6 +12,7 @@ from .works_client import WorksClient
 
 __all__ = [
     "AuthorsClient",
+    "AwardsClient",
     "FundersClient",
     "InstitutionsClient",
     "KeywordsClient",

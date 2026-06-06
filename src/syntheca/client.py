@@ -63,6 +63,7 @@ class SynthecaClient(BaseApiClient):
         self._keywords = None
         self._publishers = None
         self._funders = None
+        self._awards = None
 
         logger.debug("SynthecaClient initialized successfully.")
 
@@ -149,3 +150,12 @@ class SynthecaClient(BaseApiClient):
 
             self._funders = FundersClient(self)
         return self._funders
+
+    @property
+    def awards(self):
+        """Access the Awards endpoint client."""
+        if self._awards is None:
+            from .resources import AwardsClient
+
+            self._awards = AwardsClient(self)
+        return self._awards

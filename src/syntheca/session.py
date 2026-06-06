@@ -16,6 +16,7 @@ _DELEGATED_CLIENTS = frozenset(
         "keywords",
         "publishers",
         "funders",
+        "awards",
     }
 )
 
@@ -44,7 +45,9 @@ class SynthecaSession:
     Usage::
 
         async with SynthecaSession() as session:
-            works = await session.works.search(search="machine learning")
+            works = await session.works.search(
+                search="machine learning"
+            )
             for work in works.results:
                 print(work.title)
 
@@ -83,9 +86,7 @@ class SynthecaSession:
     def __getattr__(self, name: str):
         if name in _DELEGATED_CLIENTS:
             return getattr(self._api_client, name)
-        raise AttributeError(
-            f"'{type(self).__name__}' has no attribute '{name}'"
-        )
+        raise AttributeError(f"'{type(self).__name__}' has no attribute '{name}'")
 
     def __dir__(self):
         return list(super().__dir__()) + list(_DELEGATED_CLIENTS)
