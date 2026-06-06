@@ -71,7 +71,9 @@ async def _(WorksFilters, mo, session):
         page=1, page_size=5, filters=filters, search="quantum computing"
     )
 
-    total_results = response.meta.count if response.meta else len(response.results or [])
+    total_results = (
+        response.meta.count if response.meta else len(response.results or [])
+    )
 
     mo.md(f"Found **{total_results}** total results")
     return filters, response, total_results

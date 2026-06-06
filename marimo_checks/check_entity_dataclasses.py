@@ -32,9 +32,13 @@ def _(Author, Concept, Funder, Institution, Publisher, Source, Topic, Work):
 def _(mapping, mo):
     new_sample = mo.ui.run_button(kind="success", label="🔄️ Click to refresh API data.")
     selection = mo.ui.multiselect(
-        options=list(mapping.keys()), label="Select entity types to fetch", value=list(mapping.keys())
+        options=list(mapping.keys()),
+        label="Select entity types to fetch",
+        value=list(mapping.keys()),
     )
-    num_to_retrieve = mo.ui.number(label="Number of entities to retrieve per type", value=50, start=1, stop=100)
+    num_to_retrieve = mo.ui.number(
+        label="Number of entities to retrieve per type", value=50, start=1, stop=100
+    )
     mo.vstack([selection, num_to_retrieve, new_sample])
     return new_sample, num_to_retrieve, selection
 
@@ -50,7 +54,9 @@ def _(httpx, mo, new_sample, num_to_retrieve, print, selection):
                 title="Fetching example data from the OpenAlex API",
             ):
                 try:
-                    data[ent_type] = client.get(f"{base_url}{ent_type}s?sample={num_to_retrieve.value}&per-page=100").json()
+                    data[ent_type] = client.get(
+                        f"{base_url}{ent_type}s?sample={num_to_retrieve.value}&per-page=100"
+                    ).json()
                 except Exception as e:
                     print(f"Error fetching {ent_type}: {e}")
     return (data,)
@@ -64,7 +70,6 @@ def _(Pretty, error_data, mo, num_to_retrieve, parsed_data, print):
     n = 0
     msg = ""
     if parsed_data:
-    
         tab_data = {}
         for res_type, parsed_result in parsed_data.items():
             tab_name = str(res_type)
@@ -76,15 +81,27 @@ def _(Pretty, error_data, mo, num_to_retrieve, parsed_data, print):
             for itemduo in parsed_result:
                 left_col.append(Pretty(itemduo[0]))
                 right_col.append(Pretty(itemduo[1]))
-            tab_data[tab_name] = mo.vstack([mo.md(f'## {len(parsed_result)}/{num_to_retrieve.value} entries shown below.'), mo.hstack([          
-                mo.vstack([mo.md("Raw API data (dict)")] + left_col),
-                mo.vstack([mo.md("Parsed as nested dataclass")] + right_col),
-            ])])
-            print(f"{tab_name}: {len(parsed_result)} parsed entries, {len(left_col)} left col entries, {len(right_col)} right col entries")
+            tab_data[tab_name] = mo.vstack(
+                [
+                    mo.md(
+                        f"## {len(parsed_result)}/{num_to_retrieve.value} entries shown below."
+                    ),
+                    mo.hstack(
+                        [
+                            mo.vstack([mo.md("Raw API data (dict)")] + left_col),
+                            mo.vstack(
+                                [mo.md("Parsed as nested dataclass")] + right_col
+                            ),
+                        ]
+                    ),
+                ]
+            )
+            print(
+                f"{tab_name}: {len(parsed_result)} parsed entries, {len(left_col)} left col entries, {len(right_col)} right col entries"
+            )
         print(len(tab_data))
         show = mo.ui.tabs(tab_data)
 
-    
         if error_data:
             msg += "Note: some entities failed to parse. See table below."
             msg2 = mo.md("## Entity entries that failed to parse")
@@ -95,14 +112,12 @@ def _(Pretty, error_data, mo, num_to_retrieve, parsed_data, print):
                             str(res_type).capitalize(): mo.hstack(
                                 [
                                     mo.vstack(
-                                        [mo.md("Raw API data (dict)"), Pretty(parsed_result[0][0])]
-                                    ),
-                                    mo.vstack(
                                         [
-                                            mo.md("Errors:"),
-                                            parsed_result[0][1]
+                                            mo.md("Raw API data (dict)"),
+                                            Pretty(parsed_result[0][0]),
                                         ]
                                     ),
+                                    mo.vstack([mo.md("Errors:"), parsed_result[0][1]]),
                                 ]
                             )
                             for res_type, parsed_result in error_data.items()
@@ -143,14 +158,23 @@ def _(Response, data, defaultdict, mapping, mo, new_sample, print):
                         ent_data = entity_class.from_dict(raw_data)
                         list_of_results.append(ent_data)
                     except Exception as inner_e:
-                        print(f"Error parsing individual {ent} entity number {ent_num}: {inner_e}")
+                        print(
+                            f"Error parsing individual {ent} entity number {ent_num}: {inner_e}"
+                        )
                         list_of_results.append(None)
                         error_data["❌ " + ent].append(
                             [raw_data, mo.md(f"⚠️ Error! ----- {inner_e}")]
                         )
             for ent_data, raw_data in zip(list_of_results, response.get("results")):
                 if not ent_data:
-                    parsed_data["✅ " + ent].append([raw_data, mo.md("⚠️ Failed to parse entity See table below for details.")])
+                    parsed_data["✅ " + ent].append(
+                        [
+                            raw_data,
+                            mo.md(
+                                "⚠️ Failed to parse entity See table below for details."
+                            ),
+                        ]
+                    )
                 parsed_data["✅ " + ent].append([raw_data, ent_data])
     return error_data, parsed_data
 
@@ -263,7 +287,6 @@ def _():
     # Base class(es)
     # ----------------------------------------------------------------------------------------------------------------
 
-
     @dataclass
     class BaseOpenAlex:
         """
@@ -297,11 +320,9 @@ def _():
         def from_dict(cls, data: dict) -> Self:
             return from_dict(data_class=cls, data=data, config=default_dacite_config)
 
-
     # ----------------------------------------------------------------------------------------------------------------
     #  Nested fields
     # ----------------------------------------------------------------------------------------------------------------
-
 
     @dataclass
     class WorkIds:
@@ -311,7 +332,6 @@ def _():
         pmid: str | None
         pmcid: str | None
 
-
     @dataclass
     class AuthorIds:
         openalex: str
@@ -319,7 +339,6 @@ def _():
         scopus: str | None
         twitter: str | None
         wikipedia: str | None
-
 
     @dataclass
     class SourceIds:
@@ -330,7 +349,6 @@ def _():
         mag: int | str | None
         wikidata: str | None
 
-
     @dataclass
     class InstitutionIds:
         openalex: str
@@ -340,19 +358,16 @@ def _():
         wikidata: str | None
         wikipedia: str | None
 
-
     @dataclass
     class TopicIds:
         openalex: str
         wikipedia: str | None
-
 
     @dataclass
     class PublisherIds:
         openalex: str
         ror: str | None
         wikidata: str | None
-
 
     @dataclass
     class FunderIds:
@@ -361,7 +376,6 @@ def _():
         crossref: str | None
         ror: str | None
         wikidata: str | None
-
 
     @dataclass
     class ConceptIds:
@@ -372,17 +386,14 @@ def _():
         wikidata: str | None
         wikipedia: str | None
 
-
     @dataclass
     class Affiliation:
         raw_affiliation_string: str
         institution_ids: list[str | None]
 
-
     @dataclass
     class DehydratedAuthor(BaseOpenAlex):
         orcid: str | None
-
 
     @dataclass
     class DehydratedInstitution(BaseOpenAlex):
@@ -391,18 +402,15 @@ def _():
         ror: str | None
         type: InstitutionType | None
 
-
     @dataclass
     class RelatedInstitution(DehydratedInstitution):
         # undocumented value found: "successor"
         relationship: Literal["parent", "child", "related", "successor"] | None
 
-
     @dataclass
     class DehydratedInstitutionWithYear:
         institution: DehydratedInstitution
         years: list[int | None]
-
 
     @dataclass
     class DehydratedSource(BaseOpenAlex):
@@ -423,7 +431,6 @@ def _():
             str | None
         )  # undocumented field!! e.g. 'journal-article', ex. https://openalex.org/W4382601591
 
-
     @dataclass
     class Repository(BaseOpenAlex):
         # specific field for the 'repositories' field of Institution entity
@@ -431,18 +438,15 @@ def _():
         host_organization_lineage: list[str | None]
         host_organization_name: str | None
 
-
     @dataclass
     class SimpleDehydratedConcept(BaseOpenAlex):
         # field is sometimes missing? happened for author in the x_concept field, here: https://openalex.org/A5011476733
         level: int | None
         wikidata: str | None
 
-
     @dataclass
     class DehydratedConcept(SimpleDehydratedConcept):
         score: float
-
 
     @dataclass
     class Authorship:
@@ -455,7 +459,6 @@ def _():
         institutions: list[DehydratedInstitution]
         raw_affiliation_strings: list[str]
 
-
     @dataclass
     class APCData:
         value: int | None
@@ -463,12 +466,10 @@ def _():
         value_usd: int | None
         provenance: str | None
 
-
     @dataclass
     class APCEntry:
         price: int
         currency: str
-
 
     @dataclass
     class Biblio:
@@ -477,7 +478,6 @@ def _():
         first_page: str | None
         last_page: str | None
 
-
     @dataclass
     class Mesh:
         descriptor_ui: str
@@ -485,7 +485,6 @@ def _():
         is_major_topic: bool
         qualifier_ui: str | None
         qualifier_name: str | None
-
 
     @dataclass
     class Location:
@@ -502,7 +501,9 @@ def _():
         license_id: str | None  # undocumented field!!
 
         source: DehydratedSource | None
-        version: Literal["publishedVersion", "acceptedVersion", "submittedVersion"] | None
+        version: (
+            Literal["publishedVersion", "acceptedVersion", "submittedVersion"] | None
+        )
 
         raw_source_name: (
             str | None
@@ -511,7 +512,6 @@ def _():
             str | None
         )  # undocumented field!! e.g. 'doi:10.1115/pvp2009-77064', from same example as above
 
-
     @dataclass
     class OpenAccess:
         is_oa: bool
@@ -519,13 +519,11 @@ def _():
         oa_url: str | None
         any_repository_has_fulltext: bool
 
-
     @dataclass
     class Grant:
         funder: str | None
         funder_display_name: str | None
         award_id: str | None
-
 
     # UNDOCUMENTED! work.funders field is a list of these?
     @dataclass
@@ -534,22 +532,17 @@ def _():
         display_name: str | None  # name of the funder
         ror: str | None  # ror id of the funder
 
-
     @dataclass
     class Domain(BaseOpenAlex): ...
-
 
     @dataclass
     class Field(BaseOpenAlex): ...
 
-
     @dataclass
     class Subfield(BaseOpenAlex): ...
 
-
     @dataclass
     class TopicMinimal(BaseOpenAlex): ...
-
 
     @dataclass
     class DehydratedTopic(BaseOpenAlex):
@@ -557,7 +550,6 @@ def _():
         subfield: Subfield
         field: Field
         domain: Domain
-
 
     @dataclass
     class TopicCount(BaseOpenAlex):
@@ -567,7 +559,6 @@ def _():
         field: Field
         domain: Domain
 
-
     @dataclass
     class TopicShare(BaseOpenAlex):
         value: float
@@ -575,16 +566,13 @@ def _():
         field: Field
         domain: Domain
 
-
     @dataclass
     class SDG(BaseOpenAlex):
         score: float
 
-
     @dataclass
     class DehydratedKeyword(BaseOpenAlex):
         score: float
-
 
     @dataclass
     class CitationNormalizedPercentile:
@@ -592,12 +580,10 @@ def _():
         is_in_top_1_percent: bool
         is_in_top_10_percent: bool
 
-
     @dataclass
     class YearCountBasic:
         year: int | None
         cited_by_count: int | None
-
 
     @dataclass
     class YearCount:
@@ -605,7 +591,6 @@ def _():
         cited_by_count: int | None
         works_count: int | None
         oa_works_count: int | None  # undocumented field!!
-
 
     @dataclass
     class SummaryStats:
@@ -620,12 +605,10 @@ def _():
         h_index: int
         i10_index: int
 
-
     @dataclass
     class Society:
         url: str | None
         organization: str | None
-
 
     @dataclass
     class Geo:
@@ -637,13 +620,11 @@ def _():
         latitude: float | None
         longitude: float | None
 
-
     @dataclass
     class Role:
         role: Literal["funder", "publisher", "institution"]
         id: str
         works_count: int | None
-
 
     @dataclass
     class International:
@@ -661,21 +642,17 @@ def _():
         display_name: dict[str, str] | None
         description: dict[str, str] | None  # this 'description' key is undocumented!
 
-
     @dataclass
     class HasContent:  # undocumented field for Work entity?
         pdf: bool
         grobid_xml: bool
 
-
     # ----------------------------------------------------------------------------------------------------------------
     # Main entities
     # ----------------------------------------------------------------------------------------------------------------
 
-
     @dataclass
     class Keyword(BaseOpenAlex): ...
-
 
     @dataclass
     class Topic(BaseOpenAlex):
@@ -686,7 +663,6 @@ def _():
         field: Field
         domain: Domain
         siblings: list[TopicMinimal]
-
 
     @dataclass
     class Author(BaseOpenAlex):
@@ -706,7 +682,6 @@ def _():
         # UNDOCUMENTED FIELDS
         topics: list[TopicCount | None]
         topic_share: list[TopicShare | None]
-
 
     @dataclass
     class Source(BaseOpenAlex):
@@ -750,7 +725,6 @@ def _():
         last_publication_year: int | None
         first_publication_year: int | None
 
-
     @dataclass
     class Institution(BaseOpenAlex):
         ids: InstitutionIds
@@ -785,7 +759,6 @@ def _():
         topics: list[TopicCount | None]
         topic_share: list[TopicShare | None]
 
-
     @dataclass
     class Publisher(BaseOpenAlex):
         hierarchy_level: (
@@ -819,7 +792,6 @@ def _():
         # UNDOCUMENTED FIELDS
         homepage_url: str | None
 
-
     @dataclass
     class Funder(BaseOpenAlex):
         ids: FunderIds
@@ -836,7 +808,6 @@ def _():
         image_thumbnail_url: str | None
         image_url: str | None
         roles: list[Role | None]
-
 
     @dataclass
     class Concept(BaseOpenAlex):
@@ -861,7 +832,6 @@ def _():
 
         # sometimes empty (null) even though not level 0, e.g. https://openalex.org/C94727143
         ancestors: list[SimpleDehydratedConcept | None] | None
-
 
     @dataclass
     class Work(BaseOpenAlex):
@@ -934,12 +904,10 @@ def _():
         versions: list[str | None] | None  # ?
         referenced_works_count: int | None
 
-
     # ----------------------------------------------------------------------------------------------------------------
     # Response metadata and wrapper
     # ----------------------------------------------------------------------------------------------------------------
     T = TypeVar("T", bound=BaseOpenAlex)
-
 
     @dataclass
     class Meta:
@@ -953,7 +921,6 @@ def _():
         @classmethod
         def from_dict(cls, data: dict) -> Meta:
             return from_dict(data_class=cls, data=data, config=default_dacite_config)
-
 
     @dataclass
     class Response(Generic[T]):
