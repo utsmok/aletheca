@@ -1,27 +1,86 @@
-# Python-generated files
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.py[cod]
+*$py.class
 
-# Virtual environments
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Environments
+.env
 .venv
+/env/
+/venv/
+/ENV/
+/env.bak/
+/venv.bak/
+secrets.env
 
 # Marimo session artifacts
 .marimo/
 __marimo__/
 *.session
 
-# Environment / secrets
-.env
-secrets.env
+# mkdocs documentation
+/site
 
-# Test / coverage artifacts
-.coverage
-htmlcov/
-.pytest_cache/
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# Docs build output
-site/
+# Pyre type checker
+.pyre/
+
+# pytype static analysis results
+.pytype/
+
+# Ruff
+.ruff_cache/
+
+# uv
+.uv_cache/
+
+# VSCode
+.vscode/
+
+# roborev snapshots
+/.roborev/

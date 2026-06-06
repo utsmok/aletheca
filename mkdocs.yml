@@ -59,5 +59,4 @@ nav:
   - Contributing: contributing.md
   - Changelog: changelog.md
 watch:
-watch:
   - src/aletheca
