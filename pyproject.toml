@@ -49,7 +49,7 @@ analysis = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/utsmok/syntheca"
+"Homepage" = "https://github.com/utsmok/aletheca"
 
 [build-system]
 requires = ["hatchling"]

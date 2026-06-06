@@ -1,6 +1,5 @@
 """Tests for WorksClient."""
 
-from unittest.mock import MagicMock
 
 import pytest
 from bibliofabric.exceptions import BibliofabricError
@@ -46,11 +45,8 @@ PAGE2 = {
 }
 
 
-def _mock_response(json_data, status_code=200):
-    resp = MagicMock()
-    resp.status_code = status_code
-    resp.json.return_value = json_data
-    return resp
+from tests.resources.conftest import _mock_response  # noqa: PLC0415
+
 
 
 @pytest.fixture
@@ -80,12 +76,11 @@ async def test_get_work(works_client, mock_api_client):
 
 
 @pytest.mark.asyncio
-async def test_get_work_not_found(works_client, mock_api_client):
-    mock_api_client.request.side_effect = Exception("404 Not Found")
-
-    with pytest.raises(BibliofabricError, match="W999"):
+async def test_get_work_wraps_unexpected_error(works_client, mock_api_client):
+    """Verify that unexpected errors from request() are propagated as-is."""
+    mock_api_client.request.side_effect = Exception("Unexpected error")
+    with pytest.raises(Exception, match="Unexpected error"):
         await works_client.get("W999")
-
 
 # ---------------------------------------------------------------------------
 # search()

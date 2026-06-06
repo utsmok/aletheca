@@ -59,9 +59,8 @@ This pulls in:
 ## From source
 
 ```bash
-git clone https://github.com/utsmok/syntheca.git
-cd syntheca
-uv sync --all-groups   # install all dev/doc/test dependencies
+git clone https://github.com/utsmok/aletheca.git
+cd aletheca
 ```
 
 See [Contributing](contributing.md) for the full development setup.

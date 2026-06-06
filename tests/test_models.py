@@ -75,3 +75,32 @@ def test_summary_stats_alias():
     assert stats.two_yr_mean_citedness == 1.5
     assert stats.h_index == 10
     assert stats.i10_index == 20
+
+
+
+def test_content_urls_deserialization():
+    from syntheca.models.work import ContentUrls
+
+    cu = ContentUrls.model_validate({"pdf": "https://example.com/paper.pdf", "grobid_xml": "https://example.com/paper.xml"})
+    assert cu.pdf == "https://example.com/paper.pdf"
+    assert cu.grobid_xml == "https://example.com/paper.xml"
+
+
+def test_content_urls_none_fields():
+    from syntheca.models.work import ContentUrls
+
+    cu = ContentUrls.model_validate({})
+    assert cu.pdf is None
+    assert cu.grobid_xml is None
+
+
+def test_work_with_content_urls():
+    data = {
+        "id": "W1",
+        "display_name": "Test",
+        "content_urls": {"pdf": "https://example.com/paper.pdf", "grobid_xml": "https://example.com/paper.xml"},
+    }
+    work = Work.model_validate(data)
+    assert work.content_urls is not None
+    assert work.content_urls.pdf == "https://example.com/paper.pdf"
+    assert work.content_urls.grobid_xml == "https://example.com/paper.xml"

@@ -33,10 +33,11 @@ class SynthecaClient(BaseApiClient):
 
         Args:
             settings: Optional SynthecaSettings instance. If None, loads from env.
-            api_key: Optional OpenAlex API key (overrides settings).
+            api_key: Optional OpenAlex API key (overrides settings). Ignored
+                when ``auth_strategy`` is also provided.
             base_url: Optional API base URL override.
-            auth_strategy: Optional auth strategy override. If provided, takes
-                precedence over api_key.
+            auth_strategy: Optional auth strategy override. When provided,
+                takes precedence over ``api_key``.
         """
         self._settings = settings or get_settings()
         resolved_api_key = api_key or self._settings.openalex_api_key
