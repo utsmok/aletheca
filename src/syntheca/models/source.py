@@ -4,7 +4,7 @@ from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
-from .common import APCEntry, Society, TopicCount, TopicShare, YearCount
+from .common import APCEntry, Society, SummaryStats, TopicCount, TopicShare, YearCount
 from .ids import SourceIds
 from .safe_types import SafeList, SafeStr
 
@@ -53,5 +53,10 @@ class Source(BaseEntity):
     oa_works_count: int | None = None
     last_publication_year: int | None = None
     first_publication_year: int | None = None
+    # Common fields
+    created_date: str | None = None
+    updated_date: str | None = None
+    works_api_url: str | None = None
+    summary_stats: SummaryStats | None = None
 
     model_config = ConfigDict(extra="allow")

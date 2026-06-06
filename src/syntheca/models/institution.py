@@ -8,6 +8,7 @@ from .common import (
     Geo,
     International,
     Role,
+    SummaryStats,
     TopicCount,
     TopicShare,
     YearCount,
@@ -52,6 +53,12 @@ class Institution(BaseEntity):
     ror: SafeStr | None = None
     works_count: int | None = None
     cited_by_count: int | None = None
+    # Common fields
+    created_date: str | None = None
+    updated_date: str | None = None
+    works_api_url: str | None = None
+    summary_stats: SummaryStats | None = None
+    status: SafeStr | None = None
 
     # Deprecated
     x_concepts: SafeList[dict] = Field(default_factory=list)

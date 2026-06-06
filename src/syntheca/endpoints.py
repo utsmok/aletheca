@@ -1,6 +1,6 @@
 """Endpoint path constants and Pydantic filter models for OpenAlex API."""
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 # Endpoint paths
 WORKS = "works"
@@ -17,33 +17,84 @@ class WorksFilters(BaseModel):
     """Filter model for the Works endpoint.
 
     OpenAlex filter syntax: ``filter=field:value,field:value``
+    Nested fields use dot notation via Pydantic aliases.
     """
 
     publication_year: int | None = None
     publication_year_range: str | None = None
     publication_date: str | None = None
-    publication_date_range: str | None = None
+    from_publication_date: str | None = Field(None, alias="from_publication_date")
+    to_publication_date: str | None = Field(None, alias="to_publication_date")
     type: str | None = None
     is_oa: bool | None = None
-    open_access: str | None = None
-    authorships_author_id: str | None = None
-    authorships_institutions_id: str | None = None
-    concepts_id: str | None = None
-    topics_id: str | None = None
-    primary_location_source_id: str | None = None
-    primary_location_source_type: str | None = None
     doi: str | None = None
     pmid: str | None = None
     language: str | None = None
     cites: str | None = None
     cited_by: str | None = None
     related_to: str | None = None
-    title: str | None = None
-    title_search: str | None = None
-    abstract_search: str | None = None
-    default_search: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Nested filter fields (dot notation via alias)
+    authorships_author_id: str | None = Field(None, alias="authorships.author.id")
+    authorships_institutions_id: str | None = Field(
+        None, alias="authorships.institutions.id"
+    )
+    concepts_id: str | None = Field(None, alias="concepts.id")
+    topics_id: str | None = Field(None, alias="topics.id")
+    primary_location_source_id: str | None = Field(
+        None, alias="primary_location.source.id"
+    )
+    primary_location_source_type: str | None = Field(
+        None, alias="primary_location.source.type"
+    )
+    primary_location_source_has_issn: bool | None = Field(
+        None, alias="primary_location.source.has_issn"
+    )
+    primary_location_is_oa: bool | None = Field(None, alias="primary_location.is_oa")
+    locations_is_oa: bool | None = Field(None, alias="locations.is_oa")
+    locations_source_id: str | None = Field(None, alias="locations.source.id")
+    locations_source_type: str | None = Field(None, alias="locations.source.type")
+
+    # Search filters
+    title_search: str | None = Field(None, alias="title.search")
+    abstract_search: str | None = Field(None, alias="abstract.search")
+    default_search: str | None = Field(None, alias="default.search")
+    fulltext_search: str | None = Field(None, alias="fulltext.search")
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    title_and_abstract_search: str | None = Field(
+        None, alias="title_and_abstract.search"
+    )
+    raw_affiliation_strings_search: str | None = Field(
+        None, alias="raw_affiliation_strings.search"
+    )
+
+    # Boolean presence filters
+    has_doi: bool | None = Field(None, alias="has_doi")
+    has_pmid: bool | None = Field(None, alias="has_pmid")
+    has_pmcid: bool | None = Field(None, alias="has_pmcid")
+    has_orcid: bool | None = Field(None, alias="has_orcid")
+    has_abstract: bool | None = Field(None, alias="has_abstract")
+    has_fulltext: bool | None = Field(None, alias="has_fulltext")
+    has_references: bool | None = Field(None, alias="has_references")
+    has_oa_accepted_or_published_version: bool | None = Field(
+        None, alias="has_oa_accepted_or_published_version"
+    )
+    has_oa_submitted_version: bool | None = Field(
+        None, alias="has_oa_submitted_version"
+    )
+
+    # Date range filters
+    from_created_date: str | None = Field(None, alias="from_created_date")
+    to_created_date: str | None = Field(None, alias="to_created_date")
+    from_updated_date: str | None = Field(None, alias="from_updated_date")
+    to_updated_date: str | None = Field(None, alias="to_updated_date")
+
+    # Count / attribute filters
+    authors_count: int | None = Field(None, alias="authors_count")
+    best_oa_version: str | None = Field(None, alias="best_oa_version")
+    version: str | None = Field(None, alias="version")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class AuthorsFilters(BaseModel):
@@ -51,24 +102,74 @@ class AuthorsFilters(BaseModel):
 
     orcid: str | None = None
     display_name: str | None = None
-    display_name_search: str | None = None
     works_count: int | None = None
-    works_count_range: str | None = None
     cited_by_count: int | None = None
-    cited_by_count_range: str | None = None
-    last_known_institution_id: str | None = None
-    affiliation_institution_id: str | None = None
-    topics_id: str | None = None
-    x_concepts_id: str | None = None
+    topics_id: str | None = Field(None, alias="topics.id")
 
-    model_config = ConfigDict(extra="allow")
+    # Nested filter fields (dot notation via alias)
+    affiliation_institution_id: str | None = Field(
+        None, alias="affiliations.institution.id"
+    )
+    last_known_institutions_id: str | None = Field(
+        None, alias="last_known_institutions.id"
+    )
+    x_concepts_id: str | None = Field(None, alias="x_concepts.id")
+
+    # Search filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+
+    # Boolean / presence filters
+    has_orcid: bool | None = Field(None, alias="has_orcid")
+    scopus: int | None = Field(None, alias="scopus")
+
+    # Nested institution filters
+    affiliations_institution_country_code: str | None = Field(
+        None, alias="affiliations.institution.country_code"
+    )
+    affiliations_institution_lineage: str | None = Field(
+        None, alias="affiliations.institution.lineage"
+    )
+    affiliations_institution_ror: str | None = Field(
+        None, alias="affiliations.institution.ror"
+    )
+    affiliations_institution_type: str | None = Field(
+        None, alias="affiliations.institution.type"
+    )
+    last_known_institutions_country_code: str | None = Field(
+        None, alias="last_known_institutions.country_code"
+    )
+    last_known_institutions_lineage: str | None = Field(
+        None, alias="last_known_institutions.lineage"
+    )
+    last_known_institutions_ror: str | None = Field(
+        None, alias="last_known_institutions.ror"
+    )
+    last_known_institutions_type: str | None = Field(
+        None, alias="last_known_institutions.type"
+    )
+    last_known_institution_continent: str | None = Field(
+        None, alias="last_known_institution.continent"
+    )
+    last_known_institution_is_global_south: bool | None = Field(
+        None, alias="last_known_institution.is_global_south"
+    )
+
+    # ID and summary stats filters
+    ids_openalex: str | None = Field(None, alias="ids.openalex")
+    summary_stats_2yr_mean_citedness: float | None = Field(
+        None, alias="summary_stats.2yr_mean_citedness"
+    )
+    summary_stats_h_index: int | None = Field(None, alias="summary_stats.h_index")
+    summary_stats_i10_index: int | None = Field(None, alias="summary_stats.i10_index")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class SourcesFilters(BaseModel):
     """Filter model for the Sources endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
     type: str | None = None
     is_oa: bool | None = None
     host_organization: str | None = None
@@ -80,14 +181,21 @@ class SourcesFilters(BaseModel):
     cited_by_count: int | None = None
     cited_by_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Search and additional filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+    continent: str | None = Field(None, alias="continent")
+    has_issn: bool | None = Field(None, alias="has_issn")
+    is_global_south: bool | None = Field(None, alias="is_global_south")
+    x_concepts_id: str | None = Field(None, alias="x_concepts.id")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class InstitutionsFilters(BaseModel):
     """Filter model for the Institutions endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
     country_code: str | None = None
     type: str | None = None
     ror: str | None = None
@@ -96,60 +204,77 @@ class InstitutionsFilters(BaseModel):
     cited_by_count: int | None = None
     cited_by_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Search and additional filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+    continent: str | None = Field(None, alias="continent")
+    is_global_south: bool | None = Field(None, alias="is_global_south")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class TopicsFilters(BaseModel):
     """Filter model for the Topics endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
     id: str | None = None
-    keywords_keyword: str | None = None
     subfield_id: str | None = None
     field_id: str | None = None
     domain_id: str | None = None
     works_count: int | None = None
     works_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Nested filter fields (dot notation via alias)
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    keywords_keyword: str | None = Field(None, alias="keywords.keyword")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class KeywordsFilters(BaseModel):
     """Filter model for the Keywords endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
-    keyword: str | None = None
     works_count: int | None = None
     works_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Search filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class PublishersFilters(BaseModel):
     """Filter model for the Publishers endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
     country_codes: str | None = None
     hierarchy_level: int | None = None
     works_count: int | None = None
     works_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Search filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class FundersFilters(BaseModel):
     """Filter model for the Funders endpoint."""
 
     display_name: str | None = None
-    display_name_search: str | None = None
     country_code: str | None = None
     ror: str | None = None
-    grants_count: int | None = None
-    grants_count_range: str | None = None
     works_count: int | None = None
     works_count_range: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    # Search filters
+    display_name_search: str | None = Field(None, alias="display_name.search")
+    default_search: str | None = Field(None, alias="default.search")
+
+    # Use awards_count (not grants_count)
+    awards_count: int | None = Field(None, alias="awards_count")
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
