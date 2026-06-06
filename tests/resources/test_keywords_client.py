@@ -24,14 +24,22 @@ SEARCH_RESPONSE = {
 PAGE1 = {
     "meta": {"count": 2, "next_cursor": "cursor_page2"},
     "results": [
-        {**MINIMAL_KEYWORD, "id": "https://openalex.org/K1", "display_name": "Keyword 1"},
+        {
+            **MINIMAL_KEYWORD,
+            "id": "https://openalex.org/K1",
+            "display_name": "Keyword 1",
+        },
     ],
 }
 
 PAGE2 = {
     "meta": {"count": 2, "next_cursor": None},
     "results": [
-        {**MINIMAL_KEYWORD, "id": "https://openalex.org/K2", "display_name": "Keyword 2"},
+        {
+            **MINIMAL_KEYWORD,
+            "id": "https://openalex.org/K2",
+            "display_name": "Keyword 2",
+        },
     ],
 }
 

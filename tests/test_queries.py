@@ -50,7 +50,9 @@ class TestWorksByAuthor:
 
         session.works.collect.assert_called_once()
         collect_kwargs = session.works.collect.call_args[1]
-        assert collect_kwargs["filters"] == {"authorships.author.id": "https://openalex.org/A123"}
+        assert collect_kwargs["filters"] == {
+            "authorships.author.id": "https://openalex.org/A123"
+        }
         assert collect_kwargs["limit"] is None
 
     @pytest.mark.asyncio

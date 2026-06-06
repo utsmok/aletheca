@@ -22,14 +22,25 @@ def sample_work_json():
         "type": "article",
         "cited_by_count": 42,
         "ids": {"openalex": "W1234567890", "doi": "10.1234/test"},
-        "open_access": {"is_oa": True, "oa_status": "gold", "oa_url": "https://example.com/paper", "any_repository_has_fulltext": True},
+        "open_access": {
+            "is_oa": True,
+            "oa_status": "gold",
+            "oa_url": "https://example.com/paper",
+            "any_repository_has_fulltext": True,
+        },
     }
 
 
 @pytest.fixture
 def sample_works_response():
     return {
-        "meta": {"count": 1, "db_response_time_ms": 12.3, "page": 1, "per_page": 25, "next_cursor": "cursor123"},
+        "meta": {
+            "count": 1,
+            "db_response_time_ms": 12.3,
+            "page": 1,
+            "per_page": 25,
+            "next_cursor": "cursor123",
+        },
         "results": [
             {
                 "id": "https://openalex.org/W1234567890",
@@ -41,7 +52,12 @@ def sample_works_response():
                 "type": "article",
                 "cited_by_count": 42,
                 "ids": {"openalex": "W1234567890", "doi": "10.1234/test"},
-                "open_access": {"is_oa": True, "oa_status": "gold", "oa_url": "https://example.com/paper", "any_repository_has_fulltext": True},
+                "open_access": {
+                    "is_oa": True,
+                    "oa_status": "gold",
+                    "oa_url": "https://example.com/paper",
+                    "any_repository_has_fulltext": True,
+                },
             }
         ],
     }

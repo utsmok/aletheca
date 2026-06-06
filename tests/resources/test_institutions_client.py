@@ -24,14 +24,22 @@ SEARCH_RESPONSE = {
 PAGE1 = {
     "meta": {"count": 2, "next_cursor": "cursor_page2"},
     "results": [
-        {**MINIMAL_INSTITUTION, "id": "https://openalex.org/I1", "display_name": "Institution 1"},
+        {
+            **MINIMAL_INSTITUTION,
+            "id": "https://openalex.org/I1",
+            "display_name": "Institution 1",
+        },
     ],
 }
 
 PAGE2 = {
     "meta": {"count": 2, "next_cursor": None},
     "results": [
-        {**MINIMAL_INSTITUTION, "id": "https://openalex.org/I2", "display_name": "Institution 2"},
+        {
+            **MINIMAL_INSTITUTION,
+            "id": "https://openalex.org/I2",
+            "display_name": "Institution 2",
+        },
     ],
 }
 

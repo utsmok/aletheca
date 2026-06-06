@@ -24,14 +24,22 @@ SEARCH_RESPONSE = {
 PAGE1 = {
     "meta": {"count": 2, "next_cursor": "cursor_page2"},
     "results": [
-        {**MINIMAL_PUBLISHER, "id": "https://openalex.org/P1", "display_name": "Publisher 1"},
+        {
+            **MINIMAL_PUBLISHER,
+            "id": "https://openalex.org/P1",
+            "display_name": "Publisher 1",
+        },
     ],
 }
 
 PAGE2 = {
     "meta": {"count": 2, "next_cursor": None},
     "results": [
-        {**MINIMAL_PUBLISHER, "id": "https://openalex.org/P2", "display_name": "Publisher 2"},
+        {
+            **MINIMAL_PUBLISHER,
+            "id": "https://openalex.org/P2",
+            "display_name": "Publisher 2",
+        },
     ],
 }
 

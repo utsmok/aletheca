@@ -69,7 +69,9 @@ def test_author_from_minimal():
 
 
 def test_summary_stats_alias():
-    stats = SummaryStats.model_validate({"2yr_mean_citedness": 1.5, "h_index": 10, "i10_index": 20})
+    stats = SummaryStats.model_validate(
+        {"2yr_mean_citedness": 1.5, "h_index": 10, "i10_index": 20}
+    )
     assert stats.two_yr_mean_citedness == 1.5
     assert stats.h_index == 10
     assert stats.i10_index == 20
