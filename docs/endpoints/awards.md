@@ -4,27 +4,36 @@ The Awards endpoint provides access to individual research grants and funding aw
 the specific financial instruments through which funders support scholarly work.
 
 **Endpoint path:** `awards`
-**Client access:** Not yet available as a dedicated resource client. Awards are accessible via works (`work.grants`, `work.awards`) and funders.
+**Client access:** `session.awards` (via `SynthecaSession`)
 
 ```python
 from syntheca import SynthecaSession
-from syntheca.endpoints import WorksFilters
 
 async with SynthecaSession() as session:
-    # Access awards through works
-    filters = WorksFilters(has_doi=True)
-    async for work in session.works.iterate(filters=filters, per_page=50):
-        for grant in work.grants:
-            print(f"{grant.award_id} from {grant.funder_display_name}")
+    # Fetch a single award
+    award = await session.awards.get("A12345678")
+    print(f"{award.display_name}: {award.funder}")
+
+    # Search awards
+    results = await session.awards.search(search="cancer", per_page=10)
+    for award in results.results:
+        print(f"  {award.display_name} ({award.funding_type})")
+
+    # Iterate with filters
+    from syntheca.endpoints import AwardsFilters
+
+    filters = AwardsFilters(funder="F4320306100")
+    async for award in session.awards.iterate(filters=filters, per_page=50):
+        print(f"{award.display_name}: {award.amount} {award.currency}")
 ```
 
 ## Supported Operations
 
 | Operation | Method | Description |
 |-----------|--------|-------------|
-| Get by ID | Not yet implemented | Fetch a single award by OpenAlex ID |
-| Search | Not yet implemented | Search awards |
-| Iterate | Not yet implemented | Cursor-based pagination over filtered results |
+| Get by ID | `session.awards.get(id)` | Fetch a single award by OpenAlex ID |
+| Search | `session.awards.search(search=..., ...)` | Search awards by keyword |
+| Iterate | `session.awards.iterate(filters=..., ...)` | Cursor-based pagination over filtered results |
 
 ## AwardsFilters Field Reference
 
@@ -33,62 +42,31 @@ async with SynthecaSession() as session:
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
 | `display_name` | `display_name` | `str` | Exact display name match |
-| `funder` | `funder` | `str` | Funder OpenAlex ID |
-| `funding_type` | `funding_type` | `str` | Type of funding (grant, contract, fellowship, etc.) |
-| `funder_scheme` | `funder_scheme` | `str` | Funding scheme/program name |
-| `doi` | `doi` | `str` | Award DOI |
+| `funder` | `funder` | `str` | Funder identifier |
 | `funder_award_id` | `funder_award_id` | `str` | Funder's own award identifier |
-
-### Date Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
-| `from_publication_date` | `from_publication_date` | `str` | Lower bound date (inclusive) |
-| `to_publication_date` | `to_publication_date` | `str` | Upper bound date (inclusive) |
-
-### Financial Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
-| `amount` | `amount` | `str` | Award amount (use range syntax) |
-| `grant_income_by_currency` | `grant_income_by_currency` | `str` | Grant income in specific currency |
-
-### People Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
-| `lead_investigator_orcid` | `lead_investigator.orcid` | `str` | Lead investigator ORCID |
-| `lead_investigator_family_name` | `lead_investigator.family_name` | `str` | Lead investigator family name |
-| `lead_investigator_given_name` | `lead_investigator.given_name` | `str` | Lead investigator given name |
-
-### Institution Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
+| `funder_id` | `funder.id` | `str` | Funder OpenAlex ID |
+| `funder_country_code` | `funder.country_code` | `str` | Funder ISO country code |
+| `lead_investigator_id` | `lead_investigator.id` | `str` | Lead investigator ID |
+| `co_lead_investigator_id` | `co_lead_investigator.id` | `str` | Co-lead investigator ID |
 | `institution_awarded_id` | `institution_awarded.id` | `str` | Institution OpenAlex ID |
-| `institution_awarded_country_code` | `institution_awarded.country_code` | `str` | ISO country code |
-| `institution_awarded_ror` | `institution_awarded.ror` | `str` | ROR ID |
-| `institution_awarded_type` | `institution_awarded.type` | `str` | Institution type |
-| `institution_awarded_continent` | `institution_awarded.continent` | `str` | Continent |
-
-### Topic Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
-| `primary_topic_id` | `primary_topic.id` | `str` | Primary topic OpenAlex ID |
-| `topics_id` | `topics.id` | `str` | Any associated topic ID |
 
 ### Search Filters
 
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within display name |
 | `default_search` | `default.search` | `str` | Default search across multiple fields |
 
-### Boolean & Presence Filters
+### Date Filters
 
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
-| `has_funder` | `has_funder` | `bool` | Whether the award has a linked funder |
+| `from_awarded_date` | `from_awarded_date` | `str` | Awarded date lower bound (inclusive) |
+| `to_awarded_date` | `to_awarded_date` | `str` | Awarded date upper bound (inclusive) |
+| `from_created_date` | `from_created_date` | `str` | Created date lower bound |
+| `to_created_date` | `to_created_date` | `str` | Created date upper bound |
+| `from_updated_date` | `from_updated_date` | `str` | Updated date lower bound |
+| `to_updated_date` | `to_updated_date` | `str` | Updated date upper bound |
 
 ## Usage Examples
 
@@ -96,23 +74,24 @@ async with SynthecaSession() as session:
 
 ```python
 from syntheca import SynthecaSession
+from syntheca.endpoints import AwardsFilters
 
 async with SynthecaSession() as session:
-    results = await session.funders.search(search="NIH", page_size=1)
-    if results.results:
-        funder = results.results[0]
-        print(f"{funder.display_name}: {funder.awards_count} awards")
+    filters = AwardsFilters(funder_id="F4320306100")
+    async for award in session.awards.iterate(filters=filters, per_page=50):
+        print(f"{award.display_name}: {award.amount} {award.currency}")
+```
 
-        # Discover awards through works
-        from syntheca.endpoints import WorksFilters
+### Search awards by keyword
 
-        filters = WorksFilters(
-            authorships_institutions_id="I31371856",
-        )
-        async for work in session.works.iterate(filters=filters, per_page=50):
-            for grant in work.grants:
-                if grant.funder_display_name:
-                    print(f"  {grant.award_id} from {grant.funder_display_name}")
+```python
+from syntheca import SynthecaSession
+
+async with SynthecaSession() as session:
+    results = await session.awards.search(search="machine learning", per_page=10)
+    print(f"Found {results.meta.count} awards")
+    for award in results.results:
+        print(f"  {award.display_name} ({award.funding_type})")
 ```
 
 ### Access award data from a work
@@ -123,12 +102,10 @@ from syntheca import SynthecaSession
 async with SynthecaSession() as session:
     work = await session.works.get("W2741809807")
 
-    for grant in work.grants:
-        print(f"Funder: {grant.funder_display_name}")
-        print(f"Award ID: {grant.award_id}")
-
     for award_id in work.awards:
-        print(f"Award: {award_id}")
+        # Fetch full award details
+        award = await session.awards.get(award_id.split("/")[-1])
+        print(f"{award.display_name} from {award.funder}")
 ```
 
 ## Live API Notes
@@ -137,3 +114,4 @@ async with SynthecaSession() as session:
 - The OpenAlex docs filter table lists ~23 filters, but the live API supports 38+ filter fields. Send `?filter=nonexistent:foo` to discover all valid filters from the error message.
 - The `funded_outputs` field returns raw OpenAlex work ID strings, not structured objects.
 - The Awards endpoint is not listed in the OpenAlex `llms.txt` quick reference.
+- The OpenAlex API returns more filters than are modeled here. Use `extra="allow"` to pass additional filters via keyword arguments.
