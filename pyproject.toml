@@ -63,8 +63,6 @@ allow-direct-references = true
 
 [tool.uv.pip]
 generate-hashes = true
-[tool.uv.sources]
-bibliofabric = { path = "../bibliofabric", editable = true }
 
 [tool.ruff]
 line-length = 88
