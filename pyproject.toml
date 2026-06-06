@@ -9,7 +9,7 @@ readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.12"
 dependencies = [
-    "bibliofabric>=0.4.0,<0.5.0",
+    "bibliofabric>=0.4.1,<0.5.0",
 ]
 
 classifiers = [
@@ -63,6 +63,8 @@ allow-direct-references = true
 
 [tool.uv.pip]
 generate-hashes = true
+[tool.uv.sources]
+bibliofabric = { path = "../bibliofabric", editable = true }
 
 [tool.ruff]
 line-length = 88
@@ -101,6 +103,8 @@ combine-as-imports = true
 "**/session.py" = ["PLC0415"]
 "**/queries.py" = ["PLC0415"]
 "**/endpoints.py" = ["PLR0913"]
+"examples/**/*.py" = ["PLC0415", "F821", "PERF401", "B007", "F841"]
+"marimo_checks/**/*.py" = ["PLC0415", "F821", "F841", "B905", "PLW2901", "I001", "PLR1711", "F404", "UP037"]
 
 [tool.ruff.lint.pylint]
 max-args = 10
