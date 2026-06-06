@@ -59,22 +59,22 @@ def detect_id_type(identifier: str) -> str | None:
         One of ``"openalex"``, ``"doi"``, ``"pmid"``, ``"orcid"``,
         ``"issn"``, ``"ror"``, or ``None``.
     """
-    identifier = identifier.strip().lower()
-
-    if re.match(r"^[WAITSFPDC]\d+$", identifier):
+    identifier = identifier.strip()
+    if re.match(r"^[WAITSFPDC]\d+$", identifier, re.IGNORECASE):
         return "openalex"
-    if identifier.startswith("10.") or "doi.org/" in identifier:
+    identifier_lower = identifier.lower()
+    if identifier_lower.startswith("10.") or "doi.org/" in identifier_lower:
         return "doi"
-    if re.match(r"^\d{4}-\d{3,4}$", identifier):
+    if re.match(r"^\d{4}-\d{3,4}$", identifier_lower):
         return "issn"
-    if re.match(r"^\d{7,8}$", identifier):
+    if re.match(r"^\d{7,8}$", identifier_lower):
         return "pmid"
-    if identifier.startswith("https://orcid.org/") or re.match(
-        r"\d{4}-\d{4}-\d{4}-\d{4}", identifier
+    if identifier_lower.startswith("https://orcid.org/") or re.match(
+        r"\d{4}-\d{4}-\d{4}-\d{4}", identifier_lower
     ):
         return "orcid"
-    if identifier.startswith("https://ror.org/") or re.match(
-        r"^0[a-hj-km-np-tv-z]{2,3}\w{3,14}$", identifier
+    if identifier_lower.startswith("https://ror.org/") or re.match(
+        r"^0[a-hj-km-np-tv-z]{2,3}\w{3,14}$", identifier_lower
     ):
         return "ror"
     return None

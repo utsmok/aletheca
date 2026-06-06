@@ -48,7 +48,16 @@ from .ids import (
     TopicIds,
     WorkIds,
 )
+from .author import Author
+from .award import Award
+from .funder import Funder
+from .institution import Institution
+from .keyword import Keyword
+from .publisher import Publisher
 from .safe_types import SafeList, SafeStr
+from .source import Source
+from .topic import Topic
+from .work import Authorship, DehydratedSource, Work
 
 __all__ = [
     # Base
@@ -103,4 +112,16 @@ __all__ = [
     "SourceIds",
     "TopicIds",
     "WorkIds",
+    # Entity models
+    "Author",
+    "Authorship",
+    "Award",
+    "DehydratedSource",
+    "Funder",
+    "Institution",
+    "Keyword",
+    "Publisher",
+    "Source",
+    "Topic",
+    "Work",
 ]
