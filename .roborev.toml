@@ -1,0 +1,39 @@
+# Default agent for this repo when no workflow-specific agent is set.
+agent = 'pi'
+# Default model for this repo when no workflow-specific model is set.
+model = ''
+# Backup agent for this repo if the primary agent fails.
+backup_agent = ''
+# Backup model for this repo if the primary model fails.
+backup_model = ''
+# Number of related reviews to include as context for this repo.
+review_context_count = 0
+# Extra review instructions added to prompts for this repo.
+review_guidelines = 'Python library (syntheca) for the OpenAlex academic API, built on bibliofabric framework. Tech: Pydantic v2 models, httpx async, pytest, ruff linter, ty type checker (not mypy/pyright — uses # ty: ignore[]). Verify with: uv run pytest, uv run ruff check src/, uvx ty check src/. Entity models require id field. Bibliofabric is the generic framework; syntheca is the OpenAlex-specific client. OpenAlex uses query-param auth (api_key), filter=key:value syntax, per_page (not pageSize), sort=field:direction.'
+# Override the review job timeout in minutes for this repo.
+job_timeout_minutes = 0
+# Branches that should be skipped for automatic review in this repo.
+excluded_branches = []
+# Commit message substrings that should skip review for this repo.
+excluded_commit_patterns = []
+# Display name shown for this repo in the TUI and output.
+display_name = ''
+# Reasoning level for reviews in this repo: fast, standard, medium, thorough, or maximum.
+review_reasoning = ''
+# Reasoning level for refine in this repo: fast, standard, medium, thorough, or maximum.
+refine_reasoning = ''
+# Reasoning level for fix in this repo: fast, standard, medium, thorough, or maximum.
+fix_reasoning = ''
+# Minimum severity for fix in this repo: critical, high, medium, or low.
+fix_min_severity = ''
+# Minimum severity for refine in this repo: critical, high, medium, low.
+refine_min_severity = ''
+# Minimum severity for reviews in this repo: critical, high, medium, low.
+review_min_severity = ''
+# Filenames or glob patterns to exclude from review diffs for this repo.
+exclude_patterns = []
+# Repo-local directory for temporary oversized diff snapshots.
+snapshot_dir = ''
+# Automatic post-commit review mode for this repo: commit or branch.
+post_commit_review = 'commit'
+reuse_review_session_lookback = 0
