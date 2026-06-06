@@ -52,11 +52,11 @@ from .ids import (
 )
 from .institution import Institution
 from .keyword import Keyword
-from .publisher import Publisher
+from .publisher import ParentPublisher, Publisher
 from .safe_types import SafeList, SafeStr
 from .source import Source
 from .topic import Topic
-from .work import Authorship, DehydratedSource, Work
+from .work import Authorship, ContentUrls, DehydratedSource, Work
 
 __all__ = [
     # Base
@@ -114,10 +114,12 @@ __all__ = [
     "Author",
     "Authorship",
     "Award",
+    "ContentUrls",
     "DehydratedSource",
     "Funder",
     "Institution",
     "Keyword",
+    "ParentPublisher",
     "Publisher",
     "Source",
     "Topic",

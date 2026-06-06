@@ -33,6 +33,7 @@ class Source(BaseEntity):
     societies: SafeList[Society] = Field(default_factory=list)
     works_count: int | None = None
     cited_by_count: int | None = None
+    works_api_url: SafeStr | None = None
 
     # Deprecated
     x_concepts: SafeList[dict] = Field(default_factory=list)
@@ -48,6 +49,8 @@ class Source(BaseEntity):
     is_high_oa_rate: bool | None = None
     is_ojs: bool | None = None
     is_in_scielo: bool | None = None
+    is_in_jstage: bool | None = None
+    is_in_jstage_since_year: int | None = None
     is_high_oa_rate_since_year: int | None = None
     is_in_doaj_since_year: int | None = None
     oa_works_count: int | None = None
@@ -56,7 +59,6 @@ class Source(BaseEntity):
     # Common fields
     created_date: str | None = None
     updated_date: str | None = None
-    works_api_url: str | None = None
     summary_stats: SummaryStats | None = None
 
     model_config = ConfigDict(extra="allow")

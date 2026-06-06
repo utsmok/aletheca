@@ -87,9 +87,9 @@ class OpenAccess(BaseModel):
     """Open access status of a work."""
 
     is_oa: bool = False
-    oa_status: Literal[
-        "diamond", "gold", "green", "hybrid", "bronze", "closed"
-    ] | None = None
+    oa_status: (
+        Literal["diamond", "gold", "green", "hybrid", "bronze", "closed"] | None
+    ) = None
     oa_url: SafeStr | None = None
     any_repository_has_fulltext: bool = False
 

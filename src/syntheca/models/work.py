@@ -22,6 +22,15 @@ from .ids import WorkIds
 from .safe_types import SafeList, SafeStr
 
 
+class ContentUrls(BaseModel):
+    """Content URLs for a work (PDF, GROBID XML)."""
+
+    pdf: SafeStr | None = None
+    grobid_xml: SafeStr | None = None
+
+    model_config = ConfigDict(extra="allow")
+
+
 class DehydratedSource(BaseEntity):
     """Minimal source info embedded in locations."""
 
@@ -99,11 +108,10 @@ class Work(BaseEntity):
     has_content: HasContent | None = None
     cited_by_percentile_year: dict[str, int] | None = None
     referenced_works_count: int | None = None
-    content_urls: dict | None = None
+    content_urls: ContentUrls | None = None
     # Common fields
     created_date: str | None = None
     updated_date: str | None = None
-    works_api_url: str | None = None
 
     # Undocumented
     funders: SafeList[DehydratedFunder] = Field(default_factory=list)

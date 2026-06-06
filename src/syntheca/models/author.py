@@ -16,9 +16,7 @@ class Author(BaseEntity):
     ids: AuthorIds | None = None
     orcid: SafeStr | None = None
     display_name_alternatives: SafeList[str] = Field(default_factory=list)
-    affiliations: SafeList[DehydratedInstitutionWithYear] = Field(
-        default_factory=list
-    )
+    affiliations: SafeList[DehydratedInstitutionWithYear] = Field(default_factory=list)
     counts_by_year: SafeList[YearCount] = Field(default_factory=list)
     last_known_institutions: SafeList[DehydratedInstitution] = Field(
         default_factory=list

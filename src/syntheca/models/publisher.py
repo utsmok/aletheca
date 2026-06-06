@@ -1,12 +1,21 @@
 """Pydantic models for the Publisher entity."""
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import Role, SummaryStats, YearCount
 from .ids import PublisherIds
 from .safe_types import SafeList, SafeStr
+
+
+class ParentPublisher(BaseModel):
+    """Parent publisher info (id + display_name)."""
+
+    id: SafeStr | None = None
+    display_name: SafeStr | None = None
+
+    model_config = ConfigDict(extra="allow")
 
 
 class Publisher(BaseEntity):
@@ -22,7 +31,7 @@ class Publisher(BaseEntity):
     image_thumbnail_url: SafeStr | None = None
     image_url: SafeStr | None = None
     lineage: SafeList[str] = Field(default_factory=list)
-    parent_publisher: dict | None = None
+    parent_publisher: ParentPublisher | None = None
     roles: SafeList[Role] = Field(default_factory=list)
     works_count: int | None = None
     cited_by_count: int | None = None

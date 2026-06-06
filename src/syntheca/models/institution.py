@@ -35,9 +35,7 @@ class Institution(BaseEntity):
     is_super_system: bool | None = None
     type: str | None = None
 
-    associated_institutions: SafeList[RelatedInstitution] = Field(
-        default_factory=list
-    )
+    associated_institutions: SafeList[RelatedInstitution] = Field(default_factory=list)
     country_code: SafeStr | None = None
     counts_by_year: SafeList[YearCount] = Field(default_factory=list)
     display_name_acronyms: SafeList[str] = Field(default_factory=list)

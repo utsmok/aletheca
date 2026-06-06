@@ -34,7 +34,6 @@ class SourceIds(BaseModel):
     """IDs for a Source entity."""
 
     openalex: SafeStr = ""
-    fatcat: SafeStr | None = None
     issn: SafeList[str] = Field(default_factory=list)
     issn_l: SafeStr | None = None
     mag: int | str | None = None

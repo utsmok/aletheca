@@ -11,8 +11,6 @@ from .safe_types import SafeList, SafeStr
 class Award(BaseEntity):
     """An OpenAlex Award entity."""
 
-    ids: dict | None = None
-
     # Core fields
     description: SafeStr | None = None
     doi: SafeStr | None = None
@@ -37,7 +35,7 @@ class Award(BaseEntity):
     investigators: SafeList[dict] = Field(default_factory=list)
 
     # Outputs
-    institution_awarded: dict | list | None = None
+    institution_awarded: SafeList[dict] = Field(default_factory=list)
     funded_outputs: SafeList[str] = Field(default_factory=list)
     funded_outputs_count: int | None = None
     landing_page_url: SafeStr | None = None
@@ -48,10 +46,9 @@ class Award(BaseEntity):
 
     # Provenance
     provenance: SafeStr | None = None
-
     # Common fields
     created_date: str | None = None
     updated_date: str | None = None
-    works_api_url: str | None = None
+    works_api_url: SafeStr | None = None
 
     model_config = ConfigDict(extra="allow")
