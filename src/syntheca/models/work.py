@@ -72,7 +72,6 @@ class Work(BaseEntity):
     locations_count: int = 0
     countries_distinct_count: int | None = None
     institutions_distinct_count: int | None = None
-    works_count: int | None = None
 
     # Nested
     abstract_inverted_index: dict[str, list[int]] | None = None
@@ -108,6 +107,11 @@ class Work(BaseEntity):
     datasets: list | None = None
     versions: SafeList[str] = Field(default_factory=list)
     referenced_works_count: int | None = None
+    content_urls: dict | None = None
+    # Common fields
+    created_date: str | None = None
+    updated_date: str | None = None
+    works_api_url: str | None = None
 
     # Undocumented
     institution_assertions: SafeList[str] = Field(default_factory=list)

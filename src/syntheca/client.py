@@ -1,7 +1,5 @@
 """SynthecaClient — async client for the OpenAlex API."""
 
-from typing import Self
-
 from bibliofabric.auth import AuthStrategy, NoAuth, QueryParameterAuth
 from bibliofabric.client import BaseApiClient
 from bibliofabric.log_config import logger
@@ -29,6 +27,7 @@ class SynthecaClient(BaseApiClient):
         *,
         api_key: str | None = None,
         base_url: str | None = None,
+        auth_strategy: AuthStrategy | None = None,
     ):
         """Initialize the SynthecaClient.
 
@@ -36,20 +35,23 @@ class SynthecaClient(BaseApiClient):
             settings: Optional SynthecaSettings instance. If None, loads from env.
             api_key: Optional OpenAlex API key (overrides settings).
             base_url: Optional API base URL override.
+            auth_strategy: Optional auth strategy override. If provided, takes
+                precedence over api_key.
         """
         self._settings = settings or get_settings()
         resolved_api_key = api_key or self._settings.openalex_api_key
         resolved_base_url = base_url or OPENALEX_API_BASE_URL
 
-        auth = self._resolve_auth(resolved_api_key)
+        if auth_strategy is not None:
+            auth = auth_strategy
+        else:
+            auth = self._resolve_auth(resolved_api_key)
 
         super().__init__(
-            base_url=resolved_base_url,
-            auth_strategy=auth,
+            settings=self._settings,
             response_unwrapper=OpenAlexUnwrapper(),
-            timeout=self._settings.timeout,
-            max_retries=self._settings.max_retries,
-            user_agent=self._settings.user_agent,
+            auth_strategy=auth,
+            base_url=resolved_base_url,
         )
 
         # Resource clients will be initialized lazily as properties
@@ -147,12 +149,3 @@ class SynthecaClient(BaseApiClient):
 
             self._funders = FundersClient(self)
         return self._funders
-
-    async def __aenter__(self) -> Self:
-        """Async context manager entry."""
-        await self._ensure_client()
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Async context manager exit."""
-        await self.aclose()

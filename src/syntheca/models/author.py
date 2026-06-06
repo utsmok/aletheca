@@ -5,6 +5,7 @@ from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import SummaryStats, TopicCount, TopicShare, YearCount
+from .dehydrated import DehydratedInstitution, DehydratedInstitutionWithYear
 from .ids import AuthorIds
 from .safe_types import SafeList, SafeStr
 
