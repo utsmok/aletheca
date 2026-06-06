@@ -77,6 +77,8 @@ class StandardResourceClient(
         _search_response_model: Pydantic model for the search response envelope.
     """
 
+    _entity_path: str
+
     def __init__(self, api_client):  # noqa: ANN001
         super().__init__(api_client)
         logger.debug(f"{type(self).__name__} initialized for path: {self._entity_path}")
