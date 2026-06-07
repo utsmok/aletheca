@@ -84,3 +84,4 @@ dmypy.json
 
 # roborev snapshots
 /.roborev/
+output/
