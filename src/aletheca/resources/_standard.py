@@ -142,7 +142,7 @@ class AlethecaResourceClient(BaseResourceClient):
         Performs a minimal search (per_page=1) and reads ``meta.count``
         from the OpenAlex response envelope.
         """
-        response = await self.search(
+        response = await self.search(  # ty: ignore[unresolved-attribute]
             page=1, page_size=1, filters=filters, search=search
         )
         if isinstance(response, BaseModel) and hasattr(response, "meta"):
@@ -192,7 +192,7 @@ class AlethecaResourceClient(BaseResourceClient):
         for i in range(0, len(identifiers), batch_size):
             batch = identifiers[i : i + batch_size]
             pipe_value = "|".join(batch)
-            response = await self.search(
+            response = await self.search(  # ty: ignore[unresolved-attribute]
                 page=1,
                 page_size=batch_size,
                 filters={field: pipe_value},
