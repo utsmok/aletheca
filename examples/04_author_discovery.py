@@ -4,6 +4,7 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
 import marimo
 
@@ -34,13 +35,13 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(
+    _ = mo.md(
         """
-    # Author Discovery
+# Author Discovery
 
-    Search for authors by name, inspect their metadata, and retrieve
-    their published works.
-    """
+Search for authors by name, inspect their metadata, and retrieve
+their published works.
+"""
     )
 
 
@@ -51,48 +52,48 @@ async def _(AuthorsFilters, mo, session):
     filters = AuthorsFilters(display_name_search="Yann LeCun")
     resp = await session.authors.search(page=1, page_size=5, filters=filters)
 
-    author = (resp.results or [])[0] if resp.results else None
+    _author = (resp.results or [])[0] if resp.results else None
 
-    if author:
-        mo.md(
-            f"**{author.display_name}**\n\n"
-            f"- **ORCID:** {author.orcid or 'N/A'}\n"
-            f"- **Works:** {author.works_count:,}\n"
-            f"- **Cited by:** {author.cited_by_count:,}\n"
+    if _author:
+        _ = mo.md(
+            f"**{_author.display_name}**\n\n"
+            f"- **ORCID:** {_author.orcid or 'N/A'}\n"
+            f"- **Works:** {_author.works_count:,}\n"
+            f"- **Cited by:** {_author.cited_by_count:,}\n"
             f"- **Affiliations:** "
-            + ", ".join(a.display_name or "N/A" for a in author.affiliations[:3])
+            + ", ".join(a.display_name or "N/A" for a in _author.affiliations[:3])
         )
     else:
-        mo.md("No author found.")
-    return author, filters, resp
+        _ = mo.md("No author found.")
+    return _author, filters, resp
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Author Details (h-index, i10-index)")
 
-    author = await session.authors.get("A5023888391")
+    _author = await session.authors.get("A5023888391")
 
-    stats = author.summary_stats
+    stats = _author.summary_stats
     if stats:
-        mo.md(
-            f"**{author.display_name}** — Summary Stats\n\n"
+        _ = mo.md(
+            f"**{_author.display_name}** — Summary Stats\n\n"
             f"- **h-index:** {stats.h_index}\n"
             f"- **i10-index:** {stats.i10_index}\n"
             f"- **2yr mean citedness:** {stats.two_yr_mean_citedness}\n"
         )
     else:
-        mo.md("No summary stats available.")
-    return author, stats
+        _ = mo.md("No summary stats available.")
+    return _author, stats
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Author Affiliations")
 
-    author = await session.authors.get("A5023888391")
+    _author = await session.authors.get("A5023888391")
     aff_rows = []
-    for aff in author.affiliations[:10]:
+    for aff in _author.affiliations[:10]:
         aff_rows.append(
             {
                 "Institution": aff.display_name or "N/A",

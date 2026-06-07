@@ -4,6 +4,7 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
 import marimo
 
@@ -34,13 +35,13 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(
-        """
-    # Iterator Helpers
+    _ = mo.md(
+"""
+# Iterator Helpers
 
-    Aletheca provides `collect`, `count`, and `first` helpers
-    for common patterns — so you don't need to manually paginate.
-    """
+Aletheca provides `collect`, `count`, and `first` helpers
+for common patterns — so you don't need to manually paginate.
+"""
     )
 
 
@@ -48,22 +49,22 @@ async def _(mo):
 async def _(WorksFilters, mo, session):
     mo.md("## `count()` — Total Without Downloading")
 
-    filters = WorksFilters(publication_year=2024, is_oa=True, type="article")
-    total = await session.works.count(filters=filters)
+    _filters = WorksFilters(publication_year=2024, is_oa=True, type="article")
+    total = await session.works.count(filters=_filters)
 
     mo.md(f"**{total:,}** open-access articles published in 2024")
-    return filters, total
+    return _filters, total
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
     mo.md("## `first()` — Top Result with Sort")
 
-    filters = WorksFilters(publication_year=2024, type="article")
-    top = await session.works.first(filters=filters, sort="cited_by_count:desc")
+    _filters = WorksFilters(publication_year=2024, type="article")
+    top = await session.works.first(filters=_filters, sort="cited_by_count:desc")
 
     if top:
-        mo.md(
+        _ = mo.md(
             f"### Most-cited article of 2024\n\n"
             f"**{top.title}**\n\n"
             f"- **Citations:** {top.cited_by_count:,}\n"
@@ -71,7 +72,7 @@ async def _(WorksFilters, mo, session):
             f"- **Type:** {top.type or 'N/A'}\n"
         )
     else:
-        mo.md("No result found.")
+        _ = mo.md("No result found.")
     return (top,)
 
 
@@ -79,15 +80,15 @@ async def _(WorksFilters, mo, session):
 async def _(WorksFilters, mo, session):
     mo.md("## `collect()` — Gather Results Into a List")
 
-    filters = WorksFilters(
+    _filters = WorksFilters(
         publication_year=2024,
         type="article",
         is_oa=True,
     )
-    works = await session.works.collect(filters=filters, limit=20)
+    works = await session.works.collect(filters=_filters, limit=20)
 
     mo.md(f"Collected **{len(works)}** works into a list (limit=20)")
-    return filters, works
+    return _filters, works
 
 
 @app.cell
@@ -96,10 +97,10 @@ def _(mo, works):
 
     rows = []
     for w in works[:10]:
-        title = w.title or "No title"
+        _title = w.title or "No title"
         rows.append(
             {
-                "Title": title[:80],
+                "Title": _title[:80],
                 "Year": w.publication_year or "N/A",
                 "Citations": w.cited_by_count,
             }
@@ -112,7 +113,7 @@ def _(mo, works):
 async def _(WorksFilters, mo, session):
     mo.md("## Manual Iteration vs. Helpers")
 
-    filters = WorksFilters(publication_year=2024, is_oa=True)
+    _filters = WorksFilters(publication_year=2024, is_oa=True)
 
     mo.md(
         "**Manual iteration:**\n\n"

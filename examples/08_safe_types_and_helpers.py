@@ -4,6 +4,7 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
 import marimo
 
@@ -48,14 +49,14 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(
-        """
-    # Safe Types and Helpers
+    _ = mo.md(
+        r"""
+# Safe Types and Helpers
 
-    Aletheca ships `SafeList` and `SafeStr` types that make API data
-    safe to traverse without null checks, plus utility helpers for
-    common identifier operations.
-    """
+Aletheca ships `SafeList` and `SafeStr` types that make API data
+safe to traverse without null checks, plus utility helpers for
+common identifier operations.
+"""
     )
 
 
@@ -63,10 +64,10 @@ async def _(mo):
 async def _(mo, session):
     mo.md("## SafeList — Iterate Without Null Checks")
 
-    work = await session.works.get("W2741809807")
+    _work = await session.works.get("W2741809807")
 
     author_rows = []
-    for a in work.authorships:
+    for a in _work.authorships:
         author_rows.append(
             {
                 "Position": a.author_position or "N/A",
@@ -76,21 +77,21 @@ async def _(mo, session):
         )
 
     mo.md(
-        f"Work has **{len(work.authorships)}** authorships — "
+        f"Work has **{len(_work.authorships)}** authorships — "
         f"no null-check needed on the list itself:\n"
     )
     mo.ui.table(author_rows, selection=None)
-    return author_rows, work
+    return author_rows, _work
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## SafeStr — String Methods on Nullable Fields")
 
-    work = await session.works.get("W2741809807")
+    _work = await session.works.get("W2741809807")
 
     # SafeStr coerces None → "", so string methods never raise
-    doi = work.doi
+    doi = _work.doi
     mo.md(
         f"- **DOI (raw):** `{doi}`\n"
         f"- **DOI uppercased:** `{doi.upper()}`\n"
@@ -106,45 +107,45 @@ async def _(mo, session):
 def _(mo, normalize_doi):
     mo.md("## `normalize_doi()` — Strip URL Prefix")
 
-    examples = [
+    _examples = [
         "https://doi.org/10.1038/s41586-019-1234-0",
         "http://doi.org/10.1126/science.abc123",
         "doi.org/10.1000/xyz123",
         "10.1234/test",
     ]
 
-    rows = []
-    for raw in examples:
-        rows.append({"Input": raw, "Normalized": normalize_doi(raw)})
+    _rows = []
+    for _raw in _examples:
+        _rows.append({"Input": _raw, "Normalized": normalize_doi(_raw)})
 
-    mo.ui.table(rows, selection=None)
-    return examples, rows
+    mo.ui.table(_rows, selection=None)
+    return _examples, _rows
 
 
 @app.cell
 def _(mo, parse_openalex_id):
     mo.md("## `parse_openalex_id()` — Extract Short ID from URL")
 
-    examples = [
+    _examples = [
         "https://openalex.org/W2741809807",
         "W2741809807",
         "https://openalex.org/A5023888391",
         "I136233082",
     ]
 
-    rows = []
-    for raw in examples:
-        rows.append({"Input": raw, "Parsed": parse_openalex_id(raw)})
+    _rows = []
+    for _raw in _examples:
+        _rows.append({"Input": _raw, "Parsed": parse_openalex_id(_raw)})
 
-    mo.ui.table(rows, selection=None)
-    return examples, rows
+    mo.ui.table(_rows, selection=None)
+    return _examples, _rows
 
 
 @app.cell
 def _(detect_id_type, mo):
     mo.md("## `detect_id_type()` — Identify Identifier Type")
 
-    examples = [
+    _examples = [
         "W2741809807",
         "A5023888391",
         "I136233082",
@@ -154,28 +155,28 @@ def _(detect_id_type, mo):
         "https://orcid.org/0000-0002-1825-0097",
     ]
 
-    rows = []
-    for raw in examples:
-        rows.append({"Identifier": raw, "Type": detect_id_type(raw) or "unknown"})
+    _rows = []
+    for _raw in _examples:
+        _rows.append({"Identifier": _raw, "Type": detect_id_type(_raw) or "unknown"})
 
-    mo.ui.table(rows, selection=None)
-    return examples, rows
+    mo.ui.table(_rows, selection=None)
+    return _examples, _rows
 
 
 @app.cell
 async def _(mo, reconstruct_abstract, session):
     mo.md("## `reconstruct_abstract()` — Inverted Index to Text")
 
-    work = await session.works.get("W2741809807")
+    _work = await session.works.get("W2741809807")
 
-    if work.abstract_inverted_index:
-        abstract = reconstruct_abstract(work.abstract_inverted_index)
-        mo.md(
+    if _work.abstract_inverted_index:
+        abstract = reconstruct_abstract(_work.abstract_inverted_index)
+        _ = mo.md(
             f"### Reconstructed Abstract\n\n"
             f"{abstract[:500]}{'...' if abstract and len(abstract) > 500 else ''}"
         )
     else:
-        mo.md("No abstract available for this work.")
+        _ = mo.md("No abstract available for this work.")
 
     # Or use the convenience property:
     mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut.")

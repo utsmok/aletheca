@@ -2,10 +2,11 @@
 
 import pytest
 
-from aletheca.resources.works_client import WorksClient
 from aletheca.resources.authors_client import AuthorsClient
 from aletheca.resources.institutions_client import InstitutionsClient
 from aletheca.resources.sources_client import SourcesClient
+from aletheca.resources.works_client import WorksClient
+
 from .conftest import _mock_response
 
 # ---------------------------------------------------------------------------
@@ -134,9 +135,7 @@ async def test_batch_get_single_batch(works_client, mock_api_client):
         {"meta": {"count": 2}, "results": [WORK_A, WORK_B]}
     )
 
-    result = await works_client.batch_get_by_doi(
-        ["10.1234/alpha", "10.5678/beta"]
-    )
+    result = await works_client.batch_get_by_doi(["10.1234/alpha", "10.5678/beta"])
 
     assert len(result) == 2
     # Keys are normalized bare DOIs
@@ -145,7 +144,9 @@ async def test_batch_get_single_batch(works_client, mock_api_client):
     mock_api_client.request.assert_awaited_once()
 
     # Verify the filter param uses pipe syntax
-    call_params = mock_api_client.request.call_args[1].get("params") or mock_api_client.request.call_args.kwargs.get("params")
+    call_params = mock_api_client.request.call_args[1].get(
+        "params"
+    ) or mock_api_client.request.call_args.kwargs.get("params")
     assert "10.1234/alpha|10.5678/beta" in call_params.get("filter", "")
 
 
@@ -246,9 +247,7 @@ async def test_batch_get_by_ror(institutions_client, mock_api_client):
         {"meta": {"count": 2}, "results": [INST_UT, INST_MIT]}
     )
 
-    result = await institutions_client.batch_get_by_ror(
-        ["006hf6244", "042nb2s44"]
-    )
+    result = await institutions_client.batch_get_by_ror(["006hf6244", "042nb2s44"])
 
     assert "006hf6244" in result
     assert "042nb2s44" in result
@@ -278,9 +277,9 @@ async def test_batch_get_custom_field(works_client, mock_api_client):
         {"meta": {"count": 1}, "results": [WORK_A]}
     )
 
-    result = await works_client.batch_get(
-        ["12345"], field="pmid"
-    )
+    _result = await works_client.batch_get(["12345"], field="pmid")
 
-    call_params = mock_api_client.request.call_args[1].get("params") or mock_api_client.request.call_args.kwargs.get("params")
+    call_params = mock_api_client.request.call_args[1].get(
+        "params"
+    ) or mock_api_client.request.call_args.kwargs.get("params")
     assert call_params.get("filter") == "pmid:12345"

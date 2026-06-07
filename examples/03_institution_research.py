@@ -4,6 +4,7 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
 import marimo
 
@@ -34,42 +35,40 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(
-        """
+    mo.md(r"""
     # Institution Research
 
     Fetch an institution by ID, retrieve its works, and analyse its
     research output and topics.
-    """
-    )
+    """)
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Fetch Institution by ID")
 
-    inst = await session.institutions.get("I136233082")
+    _inst = await session.institutions.get("I136233082")
     summary = (
-        f"**{inst.display_name}**\n\n"
-        f"- **Country:** {inst.country_code or 'N/A'}\n"
-        f"- **Type:** {inst.type or 'N/A'}\n"
-        f"- **Homepage:** {inst.homepage_url or 'N/A'}\n"
-        f"- **ROR:** {inst.ror or 'N/A'}\n"
-        f"- **Works count:** {inst.works_count:,}\n"
-        f"- **Cited by:** {inst.cited_by_count:,}\n"
+        f"**{_inst.display_name}**\n\n"
+        f"- **Country:** {_inst.country_code or 'N/A'}\n"
+        f"- **Type:** {_inst.type or 'N/A'}\n"
+        f"- **Homepage:** {_inst.homepage_url or 'N/A'}\n"
+        f"- **ROR:** {_inst.ror or 'N/A'}\n"
+        f"- **Works count:** {_inst.works_count:,}\n"
+        f"- **Cited by:** {_inst.cited_by_count:,}\n"
     )
-    mo.md(summary)
-    return inst, summary
+    _ = mo.md(summary)
+    return _inst, summary
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Associated Institutions")
 
-    inst = await session.institutions.get("I136233082")
-    rows = []
-    for assoc in inst.associated_institutions[:10]:
-        rows.append(
+    _inst = await session.institutions.get("I136233082")
+    _rows = []
+    for assoc in _inst.associated_institutions[:10]:
+        _rows.append(
             {
                 "Name": assoc.display_name or "N/A",
                 "Type": assoc.type or "N/A",
@@ -77,8 +76,8 @@ async def _(mo, session):
                 "Relationship": assoc.relationship or "N/A",
             }
         )
-    mo.ui.table(rows, selection=None)
-    return (rows,)
+    _ = mo.ui.table(_rows, selection=None)
+    return (_rows,)
 
 
 @app.cell
@@ -107,8 +106,8 @@ async def _(WorksFilters, mo, session):
                 "Type": work.type or "N/A",
             }
         )
-    mo.md(f"**{total:,}** articles from 2024\n")
-    mo.ui.table(work_rows, selection=None)
+    _ = mo.md(f"**{total:,}** articles from 2024\n")
+    _ = mo.ui.table(work_rows, selection=None)
     return filters, resp, total, work_rows
 
 
@@ -116,10 +115,10 @@ async def _(WorksFilters, mo, session):
 async def _(mo, session):
     mo.md("## Topic Distribution")
 
-    inst = await session.institutions.get("I136233082")
-    topic_rows = []
-    for t in inst.topics[:10]:
-        topic_rows.append(
+    _inst = await session.institutions.get("I136233082")
+    _topic_rows = []
+    for t in _inst.topics[:10]:
+        _topic_rows.append(
             {
                 "Topic": t.display_name or "N/A",
                 "Works": t.works_count,
@@ -127,8 +126,8 @@ async def _(mo, session):
                 "Field": t.field and t.field.display_name or "N/A",
             }
         )
-    mo.ui.table(topic_rows, selection=None)
-    return (topic_rows,)
+    _ = mo.ui.table(_topic_rows, selection=None)
+    return (_topic_rows,)
 
 
 @app.cell

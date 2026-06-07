@@ -4,7 +4,9 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
+
 import marimo
 
 __generated_with = "0.0.0"
@@ -34,13 +36,13 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(
+    _ = mo.md(
         """
-    # Advanced Queries
+# Advanced Queries
 
-    Cursor pagination, field selection, sorting, dot-notation filters,
-    and maximum-throughput page sizes.
-    """
+Cursor pagination, field selection, sorting, dot-notation filters,
+and maximum-throughput page sizes.
+"""
     )
 
 
@@ -49,7 +51,7 @@ async def _(mo, session):
     mo.md("## Cursor Pagination with `iterate`")
 
     count = 0
-    async for work in session.works.iterate(
+    async for _work in session.works.iterate(
         page_size=200,
         filters=WorksFilters(publication_year=2024, type="article", is_oa=True),
     ):
@@ -65,100 +67,100 @@ async def _(mo, session):
 async def _(mo, session):
     mo.md("## Sort Results")
 
-    resp = await session.works.search(
+    _resp = await session.works.search(
         page=1,
         page_size=5,
         filters=WorksFilters(publication_year=2024),
         sort="cited_by_count:desc",
     )
 
-    rows = []
-    for work in (resp.results or [])[:5]:
-        title = work.title or "No title"
-        rows.append(
+    _rows = []
+    for _work in (_resp.results or [])[:5]:
+        _title = _work.title or "No title"
+        _rows.append(
             {
-                "Title": title[:80],
-                "Citations": work.cited_by_count,
-                "Year": work.publication_year or "N/A",
+                "Title": _title[:80],
+                "Citations": _work.cited_by_count,
+                "Year": _work.publication_year or "N/A",
             }
         )
     mo.md("### Most-cited works of 2024\n")
-    mo.ui.table(rows, selection=None)
-    return resp, rows
+    mo.ui.table(_rows, selection=None)
+    return _resp, _rows
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Sort by Publication Date (Ascending)")
 
-    resp = await session.works.search(
+    _resp = await session.works.search(
         page=1,
         page_size=5,
         filters=WorksFilters(publication_year=2024, type="article"),
         sort="publication_date:asc",
     )
 
-    rows = []
-    for work in (resp.results or [])[:5]:
-        title = work.title or "No title"
-        rows.append(
+    _rows = []
+    for _work in (_resp.results or [])[:5]:
+        _title = _work.title or "No title"
+        _rows.append(
             {
-                "Title": title[:80],
-                "Date": work.publication_date or "N/A",
-                "Citations": work.cited_by_count,
+                "Title": _title[:80],
+                "Date": _work.publication_date or "N/A",
+                "Citations": _work.cited_by_count,
             }
         )
     mo.md("### Earliest published articles of 2024\n")
-    mo.ui.table(rows, selection=None)
-    return (rows,)
+    mo.ui.table(_rows, selection=None)
+    return (_rows,)
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Dot-Notation Filters (authorships.author.id)")
 
-    resp = await session.works.search(
+    _resp = await session.works.search(
         page=1,
         page_size=5,
         filters=WorksFilters(authorships_author_id="A5023888391"),
         sort="cited_by_count:desc",
     )
 
-    total = resp.meta.count if resp.meta else 0
-    rows = []
-    for work in (resp.results or [])[:5]:
-        title = work.title or "No title"
-        rows.append(
+    _total = _resp.meta.count if _resp.meta else 0
+    _rows = []
+    for _work in (_resp.results or [])[:5]:
+        _title = _work.title or "No title"
+        _rows.append(
             {
-                "Title": title[:80],
-                "Year": work.publication_year or "N/A",
-                "Citations": work.cited_by_count,
+                "Title": _title[:80],
+                "Year": _work.publication_year or "N/A",
+                "Citations": _work.cited_by_count,
             }
         )
-    mo.md(f"**{total:,}** works by author A5023888391. Top 5:\n")
-    mo.ui.table(rows, selection=None)
-    return resp, rows, total
+    mo.md(f"**{_total:,}** works by author A5023888391. Top 5:\n")
+    mo.ui.table(_rows, selection=None)
+    return _resp, _rows, _total
 
 
 @app.cell
 async def _(mo, session):
     mo.md("## Maximum Throughput (per_page=200)")
 
-    resp = await session.works.search(
+    _resp = await session.works.search(
         page=1,
         page_size=200,
         filters=WorksFilters(publication_year=2024, is_oa=True),
     )
 
-    page_count = len(resp.results or [])
-    total = resp.meta.count if resp.meta else 0
+    page_count = len(_resp.results or [])
+    _total = _resp.meta.count if _resp.meta else 0
     mo.md(
         f"Fetched **{page_count}** results in a single request "
-        f"(per_page=200) out of **{total:,}** total.\n\n"
+        f"(per_page=200) out of **{_total:,}** total.\n\n"
         f"Use cursor pagination (`iterate`) to retrieve all results "
         f"without hitting page limits."
     )
-    return page_count, resp, total
+    return page_count, _resp, _total
 
 
 @app.cell

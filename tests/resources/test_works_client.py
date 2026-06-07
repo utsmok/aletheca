@@ -6,6 +6,7 @@ from bibliofabric.exceptions import BibliofabricError
 from aletheca.endpoints import WorksFilters
 from aletheca.models import ApiResponse, Work
 from aletheca.resources.works_client import WorksClient
+
 from .conftest import _mock_response
 
 # ---------------------------------------------------------------------------
@@ -82,7 +83,7 @@ async def test_get_work_wraps_unexpected_error(works_client, mock_api_client):
 @pytest.mark.asyncio
 async def test_get_work_raises_bibliofabric_error_on_404(works_client, mock_api_client):
     """Verify that a 404 API response raises BibliofabricError."""
-    from bibliofabric.exceptions import APIError
+    from bibliofabric.exceptions import APIError  # noqa: PLC0415
 
     error = APIError("Not found", response=None)
     mock_api_client.request.side_effect = error

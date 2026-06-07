@@ -64,9 +64,7 @@ def _make_batch_getter(field: str) -> Any:
         *,
         batch_size: int = BATCH_GET_SIZE,
     ) -> dict[str, Any]:
-        return await self.batch_get(
-            identifiers, field=field, batch_size=batch_size
-        )
+        return await self.batch_get(identifiers, field=field, batch_size=batch_size)
 
     return _batch_get_by
 
@@ -228,7 +226,9 @@ class AlethecaResourceClient(BaseResourceClient):
             if raw is None and isinstance(entity, dict):
                 raw = entity.get("id")
         else:
-            raw = getattr(entity, field, None) if isinstance(entity, BaseModel) else None
+            raw = (
+                getattr(entity, field, None) if isinstance(entity, BaseModel) else None
+            )
             if raw is None and isinstance(entity, dict):
                 raw = entity.get(field)
         if raw is None:

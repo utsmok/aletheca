@@ -1,3 +1,12 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "aletheca",
+#     "certifi",
+#     "marimo",
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.0.0"
@@ -10,13 +19,13 @@ def _():
 
     mo.md(
         """
-    # Aletheca Quick Start
+# Aletheca Quick Start
 
-    **Switch to code view with Ctrl+. to see all code cells**
+**Switch to code view with Ctrl+. to see all code cells**
 
-    This notebook demonstrates basic usage of Aletheca for retrieving
-    and searching OpenAlex scholarly data.
-    """
+This notebook demonstrates basic usage of Aletheca for retrieving
+and searching OpenAlex scholarly data.
+"""
     )
     return (mo,)
 
@@ -34,15 +43,15 @@ def _():
 async def _(mo, session):
     mo.md("## 📄 Get a Single Work by ID")
 
-    work = await session.works.get("W4237179648")
+    _work = await session.works.get("W4237179648")
     mo.md(
-        f"**Title:** {work.title or 'N/A'}\n\n"
-        f"**Year:** {work.publication_year or 'N/A'}\n\n"
-        f"**DOI:** {work.doi or 'N/A'}\n\n"
-        f"**Type:** {work.type or 'N/A'}\n\n"
-        f"**Cited by:** {work.cited_by_count}"
+        f"**Title:** {_work.title or 'N/A'}\n\n"
+        f"**Year:** {_work.publication_year or 'N/A'}\n\n"
+        f"**DOI:** {_work.doi or 'N/A'}\n\n"
+        f"**Type:** {_work.type or 'N/A'}\n\n"
+        f"**Cited by:** {_work.cited_by_count}"
     )
-    return (work,)
+    return (_work,)
 
 
 @app.cell
@@ -51,9 +60,9 @@ async def _(mo, session):
 
     try:
         doi_work = await session.works.get("https://doi.org/10.1038/s41586-021-03819-2")
-        mo.md(f"**Found:** {doi_work.title}")
+        _ = mo.md(f"**Found:** {doi_work.title}")
     except Exception as e:
-        mo.md(f"**Error:** {e}")
+        _ = mo.md(f"**Error:** {e}")
     return (doi_work,)
 
 
@@ -84,14 +93,14 @@ def _(mo, response):
     mo.md("### Results Table")
 
     rows = []
-    for work in (response.results or [])[:5]:
-        title = work.title or "No title"
+    for _work in (response.results or [])[:5]:
+        _title = _work.title or "No title"
         rows.append(
             {
-                "Title": title[:80] if len(title) > 80 else title,
-                "Year": work.publication_year or "N/A",
-                "Type": work.type or "Unknown",
-                "Citations": work.cited_by_count,
+                "Title": _title[:80] if len(_title) > 80 else _title,
+                "Year": _work.publication_year or "N/A",
+                "Type": _work.type or "Unknown",
+                "Citations": _work.cited_by_count,
             }
         )
 
@@ -104,7 +113,7 @@ async def _(filters, mo, session):
     mo.md("## 🔄 Iterate Through Results")
 
     count = 0
-    async for work in session.works.iterate(page_size=10, filters=filters):
+    async for _work in session.works.iterate(page_size=10, filters=filters):
         count += 1
         if count >= 25:
             break

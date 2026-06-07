@@ -4,10 +4,12 @@
 #     "aletheca",
 #     "certifi",
 #     "marimo",
+# ]
 # ///
+
 import marimo
 
-__generated_with = "0.0.0"
+__generated_with = "0.23.9"
 app = marimo.App(width="medium")
 
 
@@ -27,30 +29,29 @@ def _():
         WorksFilters,
     )
 
-    return AuthorsFilters, InstitutionsFilters, AlethecaSession, WorksFilters
+    return AlethecaSession, AuthorsFilters, InstitutionsFilters, WorksFilters
 
 
 @app.cell
-def _():
+def _(AlethecaSession):
     session = AlethecaSession()
     return (session,)
 
 
 @app.cell
-async def _(mo):
-    mo.md(
-        """
+def _(mo):
+    mo.md("""
     # Filtering and Search
 
     Aletheca provides typed Pydantic filter models for every endpoint.
     This notebook demonstrates how to combine filters, use the `search`
     parameter, and query different entity types.
-    """
-    )
+    """)
+    return
 
 
 @app.cell
-async def _(AlethecaSession, WorksFilters, mo, session):
+async def _(WorksFilters, mo, session):
     mo.md("## Works Filters")
 
     filters = WorksFilters(
@@ -72,7 +73,7 @@ async def _(AlethecaSession, WorksFilters, mo, session):
         f'**Open-access English articles from 2024** matching "machine learning": '
         f"**{total:,}** results"
     )
-    return filters, response, total
+    return (response,)
 
 
 @app.cell
@@ -91,7 +92,7 @@ def _(mo, response):
             }
         )
     mo.ui.table(rows, selection=None)
-    return (rows,)
+    return
 
 
 @app.cell
@@ -114,7 +115,7 @@ async def _(AuthorsFilters, mo, session):
             }
         )
     mo.ui.table(author_rows, selection=None)
-    return author_filters, author_resp, author_rows
+    return
 
 
 @app.cell
@@ -137,7 +138,7 @@ async def _(InstitutionsFilters, mo, session):
             }
         )
     mo.ui.table(inst_rows, selection=None)
-    return inst_filters, inst_resp, inst_rows
+    return
 
 
 @app.cell
@@ -160,12 +161,13 @@ async def _(WorksFilters, mo, session):
 
     n = resp.meta.count if resp.meta else 0
     mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs")
-    return combined, resp, n
+    return
 
 
 @app.cell
 async def _(session):
     await session.close()
+    return
 
 
 if __name__ == "__main__":
