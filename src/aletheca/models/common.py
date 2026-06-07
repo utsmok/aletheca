@@ -64,7 +64,7 @@ class Location(BaseModel):
     """A location where a work can be found."""
 
     is_accepted: bool | None = None
-    is_oa: bool = False
+    is_oa: bool | None = None
     is_published: bool | None = None
     landing_page_url: SafeStr | None = None
     pdf_url: SafeStr | None = None
@@ -91,7 +91,7 @@ class OpenAccess(BaseModel):
         Literal["diamond", "gold", "green", "hybrid", "bronze", "closed"] | None
     ) = None
     oa_url: SafeStr | None = None
-    any_repository_has_fulltext: bool = False
+    any_repository_has_fulltext: bool | None = None
 
     model_config = ConfigDict(extra="allow")
 
