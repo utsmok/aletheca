@@ -17,12 +17,7 @@ Aletheca (currently `aletheca`) is a stub: only `entities.py` has substance (~82
 
 ## Phase 0: Repository Restructure & Cleanup
 
-### 0.1 Rename package from `aletheca` to `aletheca`
-- Rename `src/aletheca/` → `src/aletheca/`
-- Update `pyproject.toml` name, build targets, all imports
-- Update all references in README, copilot-instructions, marimo checks
-
-### 0.2 Delete dead/stub code
+### 0.1 Delete dead/stub code
 - **Delete** `src/aletheca/api.py` (docstring-only stub — replaced by bibliofabric `BaseApiClient`)
 - **Delete** `src/aletheca/endpoints.py` (docstring-only stub — replaced by Pydantic filter models)
 - **Delete** `src/aletheca/utils.py` (4 ellipsis-bodies — reimplement if needed after migration)
@@ -30,7 +25,7 @@ Aletheca (currently `aletheca`) is a stub: only `entities.py` has substance (~82
 - **Keep but heavily revise** `src/aletheca/entities.py` (rewrite as Pydantic models, see Phase 2)
 - **Delete** `marimo_checks/__marimo__/session/` (1.8MB session cache — add to `.gitignore`)
 
-### 0.3 Update `pyproject.toml`
+### 0.2 Update `pyproject.toml`
 - **Remove** dependencies not needed with bibliofabric: `dacite`, `polars` (move to optional `[analysis]`)
 - **Add** `bibliofabric>=0.3.2,<0.4.0` as sole runtime dependency (brings httpx, pydantic, pydantic-settings, tenacity, cachetools, loguru transitively)
 - **Add** dev dependencies matching AIREloom: `pytest`, `pytest-asyncio`, `pytest-cov`, `pytest-httpx`, `python-dotenv`
@@ -39,13 +34,13 @@ Aletheca (currently `aletheca`) is a stub: only `entities.py` has substance (~82
 - **Change** build backend from `uv_build` to `hatchling` (consistency with AIREloom/bibliofabric)
 - **Add** `[tool.ruff]`, `[tool.ruff.lint]`, `[tool.ruff.format]`, `[tool.pytest.ini_options]` sections matching AIREloom's config
 
-### 0.4 Update `.gitignore`
+### 0.3 Update `.gitignore`
 - Add `.marimo/`, `__marimo__/`, `*.session`, `.env`, `.coverage`, `htmlcov/`, `.pytest_cache/`, `site/`
 
-### 0.5 Update `.github/copilot-instructions.md`
+### 0.4 Update `.github/copilot-instructions.md`
 - Rewrite to reflect bibliofabric-based architecture, Pydantic models, async-only patterns
 
-### 0.6 Update marimo check notebook
+### 0.5 Update marimo check notebook
 - `marimo_checks/check_entity_dataclasses.py` contains a full duplicate of all dataclasses. After Phase 2, update to import from the package instead of duplicating.
 
 ---

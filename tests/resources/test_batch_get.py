@@ -6,7 +6,7 @@ from aletheca.resources.works_client import WorksClient
 from aletheca.resources.authors_client import AuthorsClient
 from aletheca.resources.institutions_client import InstitutionsClient
 from aletheca.resources.sources_client import SourcesClient
-from tests.resources.conftest import _mock_response
+from .conftest import _mock_response
 
 # ---------------------------------------------------------------------------
 # Test data

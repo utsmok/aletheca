@@ -6,7 +6,7 @@ from bibliofabric.exceptions import BibliofabricError
 from aletheca.endpoints import WorksFilters
 from aletheca.models import ApiResponse, Work
 from aletheca.resources.works_client import WorksClient
-from tests.resources.conftest import _mock_response
+from .conftest import _mock_response
 
 # ---------------------------------------------------------------------------
 # Test data
@@ -73,10 +73,21 @@ async def test_get_work(works_client, mock_api_client):
 
 @pytest.mark.asyncio
 async def test_get_work_wraps_unexpected_error(works_client, mock_api_client):
-    """Verify that unexpected errors from request() are propagated as-is."""
+    """Verify that unexpected errors from request() are wrapped in BibliofabricError."""
     mock_api_client.request.side_effect = Exception("Unexpected error")
-    with pytest.raises(Exception, match="Unexpected error"):
+    with pytest.raises(BibliofabricError, match="Unexpected error"):
         await works_client.get("W999")
+
+
+@pytest.mark.asyncio
+async def test_get_work_raises_bibliofabric_error_on_404(works_client, mock_api_client):
+    """Verify that a 404 API response raises BibliofabricError."""
+    from bibliofabric.exceptions import APIError
+
+    error = APIError("Not found", response=None)
+    mock_api_client.request.side_effect = error
+    with pytest.raises(BibliofabricError):
+        await works_client.get("W-nonexistent")
 
 
 # ---------------------------------------------------------------------------

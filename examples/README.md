@@ -41,11 +41,10 @@ uv run marimo export html-wasm examples/simple_example.py -o site/simple_example
 
 ## No API Key Required
 
-The OpenAlex API works without authentication via its [polite pool](https://docs.openalex.org/how-to-use-the-pool/get-your-api-key/polite-pool). All examples run without credentials. Set the `ALETHECA_EMAIL` environment variable to your email address to identify yourself and get higher rate limits:
+The OpenAlex API works without authentication via its [polite pool](https://docs.openalex.org/how-to-use-the-api/get-your-api-key/polite-pool). All examples run without credentials. Set the `ALETHECA_OPENALEX_API_KEY` environment variable to your API key for higher rate limits:
 
 ```bash
-export ALETHECA_EMAIL=you@example.com
-```
+export ALETHECA_OPENALEX_API_KEY=your-api-key-here
 
 ## Embedding in Documentation
 
