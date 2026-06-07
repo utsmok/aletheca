@@ -35,7 +35,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    _ = mo.md(r"""
+    mo.md(r"""
     # Institution Research
 
     Fetch an institution by ID, retrieve its works, and analyse its
@@ -45,7 +45,7 @@ async def _(mo):
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Fetch Institution by ID")
+    mo.md("## Fetch Institution by ID")
 
     _inst = await session.institutions.get("I136233082")
     summary = (
@@ -57,13 +57,13 @@ async def _(mo, session):
         f"- **Works count:** {_inst.works_count:,}\n"
         f"- **Cited by:** {_inst.cited_by_count:,}\n"
     )
-    _ = mo.md(summary)
+    mo.md(summary)
     return _inst, summary
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Associated Institutions")
+    mo.md("## Associated Institutions")
 
     _inst = await session.institutions.get("I136233082")
     _rows = []
@@ -76,13 +76,13 @@ async def _(mo, session):
                 "Relationship": assoc.relationship or "N/A",
             }
         )
-    _ = mo.ui.table(_rows, selection=None)
+    mo.ui.table(_rows, selection=None)
     return (_rows,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## Recent Works from This Institution")
+    mo.md("## Recent Works from This Institution")
 
     filters = WorksFilters(
         authorships_institutions_id="I136233082",
@@ -106,14 +106,14 @@ async def _(WorksFilters, mo, session):
                 "Type": work.type or "N/A",
             }
         )
-    _ = mo.md(f"**{total:,}** articles from 2024\n")
-    _ = mo.ui.table(work_rows, selection=None)
+    mo.md(f"**{total:,}** articles from 2024\n")
+    mo.ui.table(work_rows, selection=None)
     return filters, resp, total, work_rows
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Topic Distribution")
+    mo.md("## Topic Distribution")
 
     _inst = await session.institutions.get("I136233082")
     _topic_rows = []
@@ -126,7 +126,7 @@ async def _(mo, session):
                 "Field": t.field and t.field.display_name or "N/A",
             }
         )
-    _ = mo.ui.table(_topic_rows, selection=None)
+    mo.ui.table(_topic_rows, selection=None)
     return (_topic_rows,)
 
 

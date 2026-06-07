@@ -35,7 +35,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    _ = mo.md(
+    mo.md(
 """
 # Iterator Helpers
 
@@ -47,24 +47,27 @@ for common patterns — so you don't need to manually paginate.
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## `count()` — Total Without Downloading")
+    _heading = mo.md("## `count()` — Total Without Downloading")
 
     _filters = WorksFilters(publication_year=2024, is_oa=True, type="article")
     total = await session.works.count(filters=_filters)
 
-    mo.md(f"**{total:,}** open-access articles published in 2024")
+    mo.vstack([
+        _heading,
+        mo.md(f"**{total:,}** open-access articles published in 2024"),
+    ])
     return _filters, total
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## `first()` — Top Result with Sort")
+    _heading = mo.md("## `first()` — Top Result with Sort")
 
     _filters = WorksFilters(publication_year=2024, type="article")
     top = await session.works.first(filters=_filters, sort_by="cited_by_count:desc")
 
     if top:
-        _ = mo.md(
+        _body = mo.md(
             f"### Most-cited article of 2024\n\n"
             f"**{top.title}**\n\n"
             f"- **Citations:** {top.cited_by_count:,}\n"
@@ -72,13 +75,17 @@ async def _(WorksFilters, mo, session):
             f"- **Type:** {top.type or 'N/A'}\n"
         )
     else:
-        _ = mo.md("No result found.")
+        _body = mo.md("No result found.")
+    mo.vstack([
+        _heading,
+        _body,
+    ])
     return (top,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## `collect()` — Gather Results Into a List")
+    _heading = mo.md("## `collect()` — Gather Results Into a List")
 
     _filters = WorksFilters(
         publication_year=2024,
@@ -87,13 +94,16 @@ async def _(WorksFilters, mo, session):
     )
     works = await session.works.collect(filters=_filters, limit=20)
 
-    mo.md(f"Collected **{len(works)}** works into a list (limit=20)")
+    mo.vstack([
+        _heading,
+        mo.md(f"Collected **{len(works)}** works into a list (limit=20)"),
+    ])
     return _filters, works
 
 
 @app.cell
 def _(mo, works):
-    _ = mo.md("### Collected Works")
+    _heading = mo.md("### Collected Works")
 
     rows = []
     for w in works[:10]:
@@ -105,31 +115,37 @@ def _(mo, works):
                 "Citations": w.cited_by_count,
             }
         )
-    mo.ui.table(rows, selection=None)
+    mo.vstack([
+        _heading,
+        mo.ui.table(rows, selection=None),
+    ])
     return (rows,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## Manual Iteration vs. Helpers")
+    _heading = mo.md("## Manual Iteration vs. Helpers")
 
     _filters = WorksFilters(publication_year=2024, is_oa=True)
 
-    mo.md(
-        "**Manual iteration:**\n\n"
-        "```python\n"
-        "count = 0\n"
-        "async for work in session.works.iterate(filters=filters, page_size=50):\n"
-        "    count += 1\n"
-        "    if count >= 100:\n"
-        "        break\n"
-        "```\n\n"
-        "**Using `collect()`:**\n\n"
-        "```python\n"
-        "works = await session.works.collect(filters=filters, limit=100)\n"
-        "```\n\n"
-        "The helper is shorter and handles cursor pagination internally."
-    )
+    mo.vstack([
+        _heading,
+        mo.md(
+            "**Manual iteration:**\n\n"
+            "```python\n"
+            "count = 0\n"
+            "async for work in session.works.iterate(filters=filters, page_size=50):\n"
+            "    count += 1\n"
+            "    if count >= 100:\n"
+            "        break\n"
+            "```\n\n"
+            "**Using `collect()`:**\n\n"
+            "```python\n"
+            "works = await session.works.collect(filters=filters, limit=100)\n"
+            "```\n\n"
+            "The helper is shorter and handles cursor pagination internally."
+        ),
+    ])
 
 
 @app.cell

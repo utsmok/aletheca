@@ -17,7 +17,7 @@ app = marimo.App(width="medium")
 def _():
     import marimo as mo
 
-    _ = mo.md(
+    mo.md(
         """
 # Aletheca Quick Start
 
@@ -41,34 +41,36 @@ def _():
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## 📄 Get a Single Work by ID")
+    _heading = mo.md("## 📄 Get a Single Work by ID")
 
     _work = await session.works.get("W4237179648")
-    _ = mo.md(
+    _info = mo.md(
         f"**Title:** {_work.title or 'N/A'}\n\n"
         f"**Year:** {_work.publication_year or 'N/A'}\n\n"
         f"**DOI:** {_work.doi or 'N/A'}\n\n"
         f"**Type:** {_work.type or 'N/A'}\n\n"
         f"**Cited by:** {_work.cited_by_count}"
     )
+    mo.vstack([_heading, _info])
     return (_work,)
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## 📄 Get a Work by DOI")
+    _heading = mo.md("## 📄 Get a Work by DOI")
 
     try:
         doi_work = await session.works.get("https://doi.org/10.1038/s41586-021-03819-2")
-        _ = mo.md(f"**Found:** {doi_work.title}")
+        _result = mo.md(f"**Found:** {doi_work.title}")
     except Exception as e:
-        _ = mo.md(f"**Error:** {e}")
+        _result = mo.md(f"**Error:** {e}")
+    mo.vstack([_heading, _result])
     return (doi_work,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## 🔍 Search Works with Filters")
+    _heading = mo.md("## 🔍 Search Works with Filters")
 
     filters = WorksFilters(
         publication_year=2024,
@@ -84,13 +86,14 @@ async def _(WorksFilters, mo, session):
         response.meta.count if response.meta else len(response.results or [])
     )
 
-    _ = mo.md(f"Found **{total_results}** total results")
+    _count_md = mo.md(f"Found **{total_results}** total results")
+    mo.vstack([_heading, _count_md])
     return filters, response, total_results
 
 
 @app.cell
 def _(mo, response):
-    _ = mo.md("### Results Table")
+    _heading = mo.md("### Results Table")
 
     rows = []
     for _work in (response.results or [])[:5]:
@@ -104,13 +107,14 @@ def _(mo, response):
             }
         )
 
-    _ = mo.ui.table(rows, selection=None)
+    _table = mo.ui.table(rows, selection=None)
+    mo.vstack([_heading, _table])
     return (rows,)
 
 
 @app.cell
 async def _(filters, mo, session):
-    _ = mo.md("## 🔄 Iterate Through Results")
+    _heading = mo.md("## 🔄 Iterate Through Results")
 
     count = 0
     async for _work in session.works.iterate(page_size=10, filters=filters):
@@ -118,7 +122,8 @@ async def _(filters, mo, session):
         if count >= 25:
             break
 
-    _ = mo.md(f"Processed **{count}** works (capped at 25)")
+    _result = mo.md(f"Processed **{count}** works (capped at 25)")
+    mo.vstack([_heading, _result])
     return (count,)
 
 

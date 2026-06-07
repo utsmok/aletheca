@@ -36,7 +36,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    _ = mo.md(
+    mo.md(
         """
 # Advanced Queries
 
@@ -48,7 +48,7 @@ and maximum-throughput page sizes.
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Cursor Pagination with `iterate`")
+    _heading = mo.md("## Cursor Pagination with `iterate`")
 
     count = 0
     async for _work in session.works.iterate(
@@ -59,13 +59,14 @@ async def _(mo, session):
         if count >= 500:
             break
 
-    _ = mo.md(f"Iterated through **{count}** open-access 2024 articles (capped at 500)")
+    _result = mo.md(f"Iterated through **{count}** open-access 2024 articles (capped at 500)")
+    mo.vstack([_heading, _result])
     return (count,)
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Sort Results")
+    _heading = mo.md("## Sort Results")
 
     _resp = await session.works.search(
         page=1,
@@ -84,14 +85,15 @@ async def _(mo, session):
                 "Year": _work.publication_year or "N/A",
             }
         )
-    _ = mo.md("### Most-cited works of 2024\n")
-    _ = mo.ui.table(_rows, selection=None)
+    _subheading = mo.md("### Most-cited works of 2024\n")
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _subheading, _table])
     return _resp, _rows
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Sort by Publication Date (Ascending)")
+    _heading = mo.md("## Sort by Publication Date (Ascending)")
 
     _resp = await session.works.search(
         page=1,
@@ -110,14 +112,15 @@ async def _(mo, session):
                 "Citations": _work.cited_by_count,
             }
         )
-    _ = mo.md("### Earliest published articles of 2024\n")
-    _ = mo.ui.table(_rows, selection=None)
+    _subheading = mo.md("### Earliest published articles of 2024\n")
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _subheading, _table])
     return (_rows,)
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Dot-Notation Filters (authorships.author.id)")
+    _heading = mo.md("## Dot-Notation Filters (authorships.author.id)")
 
     _resp = await session.works.search(
         page=1,
@@ -137,14 +140,15 @@ async def _(mo, session):
                 "Citations": _work.cited_by_count,
             }
         )
-    _ = mo.md(f"**{_total:,}** works by author A5023888391. Top 5:\n")
-    _ = mo.ui.table(_rows, selection=None)
+    _info = mo.md(f"**{_total:,}** works by author A5023888391. Top 5:\n")
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _info, _table])
     return _resp, _rows, _total
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Maximum Throughput (per_page=200)")
+    _heading = mo.md("## Maximum Throughput (per_page=200)")
 
     _resp = await session.works.search(
         page=1,
@@ -154,12 +158,13 @@ async def _(mo, session):
 
     page_count = len(_resp.results or [])
     _total = _resp.meta.count if _resp.meta else 0
-    _ = mo.md(
+    _info = mo.md(
         f"Fetched **{page_count}** results in a single request "
         f"(per_page=200) out of **{_total:,}** total.\n\n"
         f"Use cursor pagination (`iterate`) to retrieve all results "
         f"without hitting page limits."
     )
+    mo.vstack([_heading, _info])
     return page_count, _resp, _total
 
 

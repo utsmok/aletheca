@@ -35,7 +35,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    _ = mo.md(
+    mo.md(
         """
 # Author Discovery
 
@@ -47,7 +47,7 @@ their published works.
 
 @app.cell
 async def _(AuthorsFilters, mo, session):
-    _ = mo.md("## Search for an Author")
+    _heading = mo.md("## Search for an Author")
 
     filters = AuthorsFilters(display_name_search="Yann LeCun")
     resp = await session.authors.search(page=1, page_size=5, filters=filters)
@@ -55,7 +55,7 @@ async def _(AuthorsFilters, mo, session):
     _author = (resp.results or [])[0] if resp.results else None
 
     if _author:
-        _ = mo.md(
+        _body = mo.md(
             f"**{_author.display_name}**\n\n"
             f"- **ORCID:** {_author.orcid or 'N/A'}\n"
             f"- **Works:** {_author.works_count:,}\n"
@@ -64,32 +64,34 @@ async def _(AuthorsFilters, mo, session):
             + ", ".join(a.display_name or "N/A" for a in _author.affiliations[:3])
         )
     else:
-        _ = mo.md("No author found.")
+        _body = mo.md("No author found.")
+    mo.vstack([_heading, _body])
     return _author, filters, resp
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Author Details (h-index, i10-index)")
+    _heading = mo.md("## Author Details (h-index, i10-index)")
 
     _author = await session.authors.get("A5023888391")
 
     stats = _author.summary_stats
     if stats:
-        _ = mo.md(
+        _body = mo.md(
             f"**{_author.display_name}** — Summary Stats\n\n"
             f"- **h-index:** {stats.h_index}\n"
             f"- **i10-index:** {stats.i10_index}\n"
             f"- **2yr mean citedness:** {stats.two_yr_mean_citedness}\n"
         )
     else:
-        _ = mo.md("No summary stats available.")
+        _body = mo.md("No summary stats available.")
+    mo.vstack([_heading, _body])
     return _author, stats
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Author Affiliations")
+    _heading = mo.md("## Author Affiliations")
 
     _author = await session.authors.get("A5023888391")
     aff_rows = []
@@ -104,13 +106,14 @@ async def _(mo, session):
                 or "N/A",
             }
         )
-    _ = mo.ui.table(aff_rows, selection=None)
+    _table = mo.ui.table(aff_rows, selection=None)
+    mo.vstack([_heading, _table])
     return (aff_rows,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## Get an Author's Works")
+    _heading = mo.md("## Get an Author's Works")
 
     works_filters = WorksFilters(authorships_author_id="A5023888391")
     works_resp = await session.works.search(
@@ -131,17 +134,19 @@ async def _(WorksFilters, mo, session):
                 "Citations": work.cited_by_count,
             }
         )
-    _ = mo.md(f"**{total:,}** total works. Top 5 by citation count:\n")
-    _ = mo.ui.table(work_rows, selection=None)
+    _summary = mo.md(f"**{total:,}** total works. Top 5 by citation count:\n")
+    _table = mo.ui.table(work_rows, selection=None)
+    mo.vstack([_heading, _summary, _table])
     return total, work_rows, works_filters, works_resp
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## Convenience: `works_by_author`")
+    _heading = mo.md("## Convenience: `works_by_author`")
 
     works = await session.queries.works_by_author("Yann LeCun", limit=5)
-    _ = mo.md(f"Retrieved **{len(works)}** works via `session.queries.works_by_author`")
+    _body = mo.md(f"Retrieved **{len(works)}** works via `session.queries.works_by_author`")
+    mo.vstack([_heading, _body])
     return (works,)
 
 

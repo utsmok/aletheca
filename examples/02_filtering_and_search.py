@@ -40,19 +40,18 @@ def _(AlethecaSession):
 
 @app.cell
 def _(mo):
-    _ = mo.md("""
+    mo.md("""
     # Filtering and Search
 
     Aletheca provides typed Pydantic filter models for every endpoint.
     This notebook demonstrates how to combine filters, use the `search`
     parameter, and query different entity types.
     """)
-    return
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## Works Filters")
+    _heading = mo.md("## Works Filters")
 
     filters = WorksFilters(
         publication_year=2024,
@@ -69,16 +68,19 @@ async def _(WorksFilters, mo, session):
     )
 
     total = response.meta.count if response.meta else 0
-    _ = mo.md(
-        f'**Open-access English articles from 2024** matching "machine learning": '
-        f"**{total:,}** results"
-    )
+    mo.vstack([
+        _heading,
+        mo.md(
+            f'**Open-access English articles from 2024** matching "machine learning": '
+            f"**{total:,}** results"
+        ),
+    ])
     return (response,)
 
 
 @app.cell
 def _(mo, response):
-    _ = mo.md("### Top Results")
+    _heading = mo.md("### Top Results")
 
     rows = []
     for work in (response.results or [])[:5]:
@@ -91,13 +93,15 @@ def _(mo, response):
                 "OA": work.open_access and work.open_access.oa_status or "N/A",
             }
         )
-    _ = mo.ui.table(rows, selection=None)
-    return
+    mo.vstack([
+        _heading,
+        mo.ui.table(rows, selection=None),
+    ])
 
 
 @app.cell
 async def _(AuthorsFilters, mo, session):
-    _ = mo.md("## Author Search by Name")
+    _heading = mo.md("## Author Search by Name")
 
     author_filters = AuthorsFilters(display_name_search="Geoffrey Hinton")
     author_resp = await session.authors.search(
@@ -114,13 +118,15 @@ async def _(AuthorsFilters, mo, session):
                 "ORCID": author.orcid or "N/A",
             }
         )
-    _ = mo.ui.table(author_rows, selection=None)
-    return
+    mo.vstack([
+        _heading,
+        mo.ui.table(author_rows, selection=None),
+    ])
 
 
 @app.cell
 async def _(InstitutionsFilters, mo, session):
-    _ = mo.md("## Institutions by Country")
+    _heading = mo.md("## Institutions by Country")
 
     inst_filters = InstitutionsFilters(country_code="CH", type="education")
     inst_resp = await session.institutions.search(
@@ -137,13 +143,15 @@ async def _(InstitutionsFilters, mo, session):
                 "Works": inst.works_count,
             }
         )
-    _ = mo.ui.table(inst_rows, selection=None)
-    return
+    mo.vstack([
+        _heading,
+        mo.ui.table(inst_rows, selection=None),
+    ])
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    _ = mo.md("## Combining Multiple Filters")
+    _heading = mo.md("## Combining Multiple Filters")
 
     combined = WorksFilters(
         publication_year=2023,
@@ -160,14 +168,15 @@ async def _(WorksFilters, mo, session):
     )
 
     n = resp.meta.count if resp.meta else 0
-    _ = mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs")
-    return
+    mo.vstack([
+        _heading,
+        mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs"),
+    ])
 
 
 @app.cell
 async def _(session):
     await session.close()
-    return
 
 
 if __name__ == "__main__":

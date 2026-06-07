@@ -49,7 +49,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    _ = mo.md(
+    mo.md(
         r"""
 # Safe Types and Helpers
 
@@ -62,7 +62,7 @@ common identifier operations.
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## SafeList — Iterate Without Null Checks")
+    _heading = mo.md("## SafeList — Iterate Without Null Checks")
 
     _work = await session.works.get("W2741809807")
 
@@ -76,23 +76,24 @@ async def _(mo, session):
             }
         )
 
-    _ = mo.md(
+    _desc = mo.md(
         f"Work has **{len(_work.authorships)}** authorships — "
         f"no null-check needed on the list itself:\n"
     )
-    _ = mo.ui.table(author_rows, selection=None)
+    _table = mo.ui.table(author_rows, selection=None)
+    mo.vstack([_heading, _desc, _table])
     return author_rows, _work
 
 
 @app.cell
 async def _(mo, session):
-    _ = mo.md("## SafeStr — String Methods on Nullable Fields")
+    _heading = mo.md("## SafeStr — String Methods on Nullable Fields")
 
     _work = await session.works.get("W2741809807")
 
     # SafeStr coerces None → "", so string methods never raise
     doi = _work.doi
-    _ = mo.md(
+    _info = mo.md(
         f"- **DOI (raw):** `{doi}`\n"
         f"- **DOI uppercased:** `{doi.upper()}`\n"
         f"- **DOI starts with 'https':** `{doi.startswith('https')}`\n"
@@ -100,12 +101,13 @@ async def _(mo, session):
         f"`SafeStr` fields always return a string, even when the "
         f"API returns `null`."
     )
+    mo.vstack([_heading, _info])
     return (doi,)
 
 
 @app.cell
 def _(mo, normalize_doi):
-    _ = mo.md("## `normalize_doi()` — Strip URL Prefix")
+    _heading = mo.md("## `normalize_doi()` — Strip URL Prefix")
 
     _examples = [
         "https://doi.org/10.1038/s41586-019-1234-0",
@@ -118,13 +120,14 @@ def _(mo, normalize_doi):
     for _raw in _examples:
         _rows.append({"Input": _raw, "Normalized": normalize_doi(_raw)})
 
-    _ = mo.ui.table(_rows, selection=None)
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _table])
     return _examples, _rows
 
 
 @app.cell
 def _(mo, parse_openalex_id):
-    _ = mo.md("## `parse_openalex_id()` — Extract Short ID from URL")
+    _heading = mo.md("## `parse_openalex_id()` — Extract Short ID from URL")
 
     _examples = [
         "https://openalex.org/W2741809807",
@@ -137,13 +140,14 @@ def _(mo, parse_openalex_id):
     for _raw in _examples:
         _rows.append({"Input": _raw, "Parsed": parse_openalex_id(_raw)})
 
-    _ = mo.ui.table(_rows, selection=None)
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _table])
     return _examples, _rows
 
 
 @app.cell
 def _(detect_id_type, mo):
-    _ = mo.md("## `detect_id_type()` — Identify Identifier Type")
+    _heading = mo.md("## `detect_id_type()` — Identify Identifier Type")
 
     _examples = [
         "W2741809807",
@@ -159,27 +163,32 @@ def _(detect_id_type, mo):
     for _raw in _examples:
         _rows.append({"Identifier": _raw, "Type": detect_id_type(_raw) or "unknown"})
 
-    _ = mo.ui.table(_rows, selection=None)
+    _table = mo.ui.table(_rows, selection=None)
+    mo.vstack([_heading, _table])
     return _examples, _rows
 
 
 @app.cell
 async def _(mo, reconstruct_abstract, session):
-    _ = mo.md("## `reconstruct_abstract()` — Inverted Index to Text")
+    _heading = mo.md("## `reconstruct_abstract()` — Inverted Index to Text")
 
     _work = await session.works.get("W2741809807")
 
+    _items = [_heading]
     if _work.abstract_inverted_index:
         abstract = reconstruct_abstract(_work.abstract_inverted_index)
-        _ = mo.md(
-            f"### Reconstructed Abstract\n\n"
-            f"{abstract[:500]}{'...' if abstract and len(abstract) > 500 else ''}"
+        _items.append(
+            mo.md(
+                f"### Reconstructed Abstract\n\n"
+                f"{abstract[:500]}{'...' if abstract and len(abstract) > 500 else ''}"
+            )
         )
     else:
-        _ = mo.md("No abstract available for this work.")
+        _items.append(mo.md("No abstract available for this work."))
 
     # Or use the convenience property:
-    _ = mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut.")
+    _items.append(mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut."))
+    mo.vstack(_items)
     return (abstract,)
 
 
