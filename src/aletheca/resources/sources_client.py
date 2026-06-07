@@ -16,6 +16,10 @@ class SourcesClient(StandardResourceClient):
     _entity_model: type[Source] = Source
     _search_response_model: type = ApiResponse[Source]
     _supports_direct_get: bool = True
+    _batch_fields: dict[str, str] = {
+        "openalex_id": "openalex",
+        "issn": "issn",
+    }
 
     def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)

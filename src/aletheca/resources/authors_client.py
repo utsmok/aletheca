@@ -16,6 +16,11 @@ class AuthorsClient(StandardResourceClient):
     _entity_model: type[Author] = Author
     _search_response_model: type = ApiResponse[Author]
     _supports_direct_get: bool = True
+    _batch_fields: dict[str, str] = {
+        "openalex_id": "openalex",
+        "orcid": "orcid",
+        "scopus_id": "scopus",
+    }
 
     def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)

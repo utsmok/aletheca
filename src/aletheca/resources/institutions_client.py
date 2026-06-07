@@ -16,6 +16,10 @@ class InstitutionsClient(StandardResourceClient):
     _entity_model: type[Institution] = Institution
     _search_response_model: type = ApiResponse[Institution]
     _supports_direct_get: bool = True
+    _batch_fields: dict[str, str] = {
+        "openalex_id": "openalex",
+        "ror": "ror",
+    }
 
     def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)
