@@ -45,6 +45,7 @@ The OpenAlex API works without authentication via its [polite pool](https://docs
 
 ```bash
 export ALETHECA_OPENALEX_API_KEY=your-api-key-here
+```
 
 ## Embedding in Documentation
 
