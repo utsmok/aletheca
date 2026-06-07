@@ -35,7 +35,7 @@ def _():
 
 @app.cell
 async def _(mo):
-    mo.md(r"""
+    _ = mo.md(r"""
     # Institution Research
 
     Fetch an institution by ID, retrieve its works, and analyse its
@@ -45,7 +45,7 @@ async def _(mo):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Fetch Institution by ID")
+    _ = mo.md("## Fetch Institution by ID")
 
     _inst = await session.institutions.get("I136233082")
     summary = (
@@ -63,7 +63,7 @@ async def _(mo, session):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Associated Institutions")
+    _ = mo.md("## Associated Institutions")
 
     _inst = await session.institutions.get("I136233082")
     _rows = []
@@ -82,7 +82,7 @@ async def _(mo, session):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## Recent Works from This Institution")
+    _ = mo.md("## Recent Works from This Institution")
 
     filters = WorksFilters(
         authorships_institutions_id="I136233082",
@@ -113,7 +113,7 @@ async def _(WorksFilters, mo, session):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Topic Distribution")
+    _ = mo.md("## Topic Distribution")
 
     _inst = await session.institutions.get("I136233082")
     _topic_rows = []

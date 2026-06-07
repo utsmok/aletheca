@@ -47,7 +47,7 @@ their published works.
 
 @app.cell
 async def _(AuthorsFilters, mo, session):
-    mo.md("## Search for an Author")
+    _ = mo.md("## Search for an Author")
 
     filters = AuthorsFilters(display_name_search="Yann LeCun")
     resp = await session.authors.search(page=1, page_size=5, filters=filters)
@@ -70,7 +70,7 @@ async def _(AuthorsFilters, mo, session):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Author Details (h-index, i10-index)")
+    _ = mo.md("## Author Details (h-index, i10-index)")
 
     _author = await session.authors.get("A5023888391")
 
@@ -89,7 +89,7 @@ async def _(mo, session):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Author Affiliations")
+    _ = mo.md("## Author Affiliations")
 
     _author = await session.authors.get("A5023888391")
     aff_rows = []
@@ -104,13 +104,13 @@ async def _(mo, session):
                 or "N/A",
             }
         )
-    mo.ui.table(aff_rows, selection=None)
+    _ = mo.ui.table(aff_rows, selection=None)
     return (aff_rows,)
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## Get an Author's Works")
+    _ = mo.md("## Get an Author's Works")
 
     works_filters = WorksFilters(authorships_author_id="A5023888391")
     works_resp = await session.works.search(
@@ -131,17 +131,17 @@ async def _(WorksFilters, mo, session):
                 "Citations": work.cited_by_count,
             }
         )
-    mo.md(f"**{total:,}** total works. Top 5 by citation count:\n")
-    mo.ui.table(work_rows, selection=None)
+    _ = mo.md(f"**{total:,}** total works. Top 5 by citation count:\n")
+    _ = mo.ui.table(work_rows, selection=None)
     return total, work_rows, works_filters, works_resp
 
 
 @app.cell
 async def _(mo, session):
-    mo.md("## Convenience: `works_by_author`")
+    _ = mo.md("## Convenience: `works_by_author`")
 
-    works = await session.queries.works_by_author(session, "Yann LeCun", limit=5)
-    mo.md(f"Retrieved **{len(works)}** works via `session.queries.works_by_author`")
+    works = await session.queries.works_by_author("Yann LeCun", limit=5)
+    _ = mo.md(f"Retrieved **{len(works)}** works via `session.queries.works_by_author`")
     return (works,)
 
 

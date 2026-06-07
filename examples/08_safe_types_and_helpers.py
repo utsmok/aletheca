@@ -62,7 +62,7 @@ common identifier operations.
 
 @app.cell
 async def _(mo, session):
-    mo.md("## SafeList — Iterate Without Null Checks")
+    _ = mo.md("## SafeList — Iterate Without Null Checks")
 
     _work = await session.works.get("W2741809807")
 
@@ -76,23 +76,23 @@ async def _(mo, session):
             }
         )
 
-    mo.md(
+    _ = mo.md(
         f"Work has **{len(_work.authorships)}** authorships — "
         f"no null-check needed on the list itself:\n"
     )
-    mo.ui.table(author_rows, selection=None)
+    _ = mo.ui.table(author_rows, selection=None)
     return author_rows, _work
 
 
 @app.cell
 async def _(mo, session):
-    mo.md("## SafeStr — String Methods on Nullable Fields")
+    _ = mo.md("## SafeStr — String Methods on Nullable Fields")
 
     _work = await session.works.get("W2741809807")
 
     # SafeStr coerces None → "", so string methods never raise
     doi = _work.doi
-    mo.md(
+    _ = mo.md(
         f"- **DOI (raw):** `{doi}`\n"
         f"- **DOI uppercased:** `{doi.upper()}`\n"
         f"- **DOI starts with 'https':** `{doi.startswith('https')}`\n"
@@ -105,7 +105,7 @@ async def _(mo, session):
 
 @app.cell
 def _(mo, normalize_doi):
-    mo.md("## `normalize_doi()` — Strip URL Prefix")
+    _ = mo.md("## `normalize_doi()` — Strip URL Prefix")
 
     _examples = [
         "https://doi.org/10.1038/s41586-019-1234-0",
@@ -118,13 +118,13 @@ def _(mo, normalize_doi):
     for _raw in _examples:
         _rows.append({"Input": _raw, "Normalized": normalize_doi(_raw)})
 
-    mo.ui.table(_rows, selection=None)
+    _ = mo.ui.table(_rows, selection=None)
     return _examples, _rows
 
 
 @app.cell
 def _(mo, parse_openalex_id):
-    mo.md("## `parse_openalex_id()` — Extract Short ID from URL")
+    _ = mo.md("## `parse_openalex_id()` — Extract Short ID from URL")
 
     _examples = [
         "https://openalex.org/W2741809807",
@@ -137,13 +137,13 @@ def _(mo, parse_openalex_id):
     for _raw in _examples:
         _rows.append({"Input": _raw, "Parsed": parse_openalex_id(_raw)})
 
-    mo.ui.table(_rows, selection=None)
+    _ = mo.ui.table(_rows, selection=None)
     return _examples, _rows
 
 
 @app.cell
 def _(detect_id_type, mo):
-    mo.md("## `detect_id_type()` — Identify Identifier Type")
+    _ = mo.md("## `detect_id_type()` — Identify Identifier Type")
 
     _examples = [
         "W2741809807",
@@ -159,13 +159,13 @@ def _(detect_id_type, mo):
     for _raw in _examples:
         _rows.append({"Identifier": _raw, "Type": detect_id_type(_raw) or "unknown"})
 
-    mo.ui.table(_rows, selection=None)
+    _ = mo.ui.table(_rows, selection=None)
     return _examples, _rows
 
 
 @app.cell
 async def _(mo, reconstruct_abstract, session):
-    mo.md("## `reconstruct_abstract()` — Inverted Index to Text")
+    _ = mo.md("## `reconstruct_abstract()` — Inverted Index to Text")
 
     _work = await session.works.get("W2741809807")
 
@@ -179,7 +179,7 @@ async def _(mo, reconstruct_abstract, session):
         _ = mo.md("No abstract available for this work.")
 
     # Or use the convenience property:
-    mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut.")
+    _ = mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut.")
     return (abstract,)
 
 

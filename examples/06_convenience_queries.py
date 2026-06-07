@@ -49,7 +49,7 @@ query functions accessible via `session.queries`.
 async def _(mo, session):
     _ = mo.md("## Works by Author Name")
 
-    _works = await session.queries.works_by_author(session, "Yann LeCun", limit=5)
+    _works = await session.queries.works_by_author("Yann LeCun", limit=5)
     _rows = []
     for _w in _works:
         _title = _w.title or "No title"
@@ -68,7 +68,7 @@ async def _(mo, session):
 async def _(mo, session):
     _ = mo.md("## Works by Institution Name")
 
-    _works = await session.queries.works_by_institution(session, "ETH Zurich", limit=5)
+    _works = await session.queries.works_by_institution("ETH Zurich", limit=5)
     _rows = []
     for _w in _works:
         _title = _w.title or "No title"
@@ -88,7 +88,6 @@ async def _(mo, session):
     _ = mo.md("## Works by DOI")
 
     _works = await session.queries.works_by_doi(
-        session,
         ["10.1038/s41586-019-1234-0", "10.1126/science.aar7186"],
     )
     _rows = []
@@ -109,7 +108,7 @@ async def _(mo, session):
 async def _(mo, session):
     _ = mo.md("## Citing Works")
 
-    citing = await session.queries.citing_works(session, "W2741809807", limit=5)
+    citing = await session.queries.citing_works("W2741809807", limit=5)
     _rows = []
     for _w in citing:
         _title = _w.title or "No title"
@@ -128,7 +127,7 @@ async def _(mo, session):
 async def _(mo, session):
     _ = mo.md("## Referenced Works")
 
-    referenced = await session.queries.referenced_works(session, "W2741809807", limit=5)
+    referenced = await session.queries.referenced_works("W2741809807", limit=5)
     _rows = []
     for _w in referenced:
         _title = _w.title or "No title"

@@ -17,7 +17,7 @@ app = marimo.App(width="medium")
 def _():
     import marimo as mo
 
-    mo.md(
+    _ = mo.md(
         """
 # Aletheca Quick Start
 
@@ -41,10 +41,10 @@ def _():
 
 @app.cell
 async def _(mo, session):
-    mo.md("## 📄 Get a Single Work by ID")
+    _ = mo.md("## 📄 Get a Single Work by ID")
 
     _work = await session.works.get("W4237179648")
-    mo.md(
+    _ = mo.md(
         f"**Title:** {_work.title or 'N/A'}\n\n"
         f"**Year:** {_work.publication_year or 'N/A'}\n\n"
         f"**DOI:** {_work.doi or 'N/A'}\n\n"
@@ -56,7 +56,7 @@ async def _(mo, session):
 
 @app.cell
 async def _(mo, session):
-    mo.md("## 📄 Get a Work by DOI")
+    _ = mo.md("## 📄 Get a Work by DOI")
 
     try:
         doi_work = await session.works.get("https://doi.org/10.1038/s41586-021-03819-2")
@@ -68,7 +68,7 @@ async def _(mo, session):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## 🔍 Search Works with Filters")
+    _ = mo.md("## 🔍 Search Works with Filters")
 
     filters = WorksFilters(
         publication_year=2024,
@@ -84,13 +84,13 @@ async def _(WorksFilters, mo, session):
         response.meta.count if response.meta else len(response.results or [])
     )
 
-    mo.md(f"Found **{total_results}** total results")
+    _ = mo.md(f"Found **{total_results}** total results")
     return filters, response, total_results
 
 
 @app.cell
 def _(mo, response):
-    mo.md("### Results Table")
+    _ = mo.md("### Results Table")
 
     rows = []
     for _work in (response.results or [])[:5]:
@@ -104,13 +104,13 @@ def _(mo, response):
             }
         )
 
-    mo.ui.table(rows, selection=None)
+    _ = mo.ui.table(rows, selection=None)
     return (rows,)
 
 
 @app.cell
 async def _(filters, mo, session):
-    mo.md("## 🔄 Iterate Through Results")
+    _ = mo.md("## 🔄 Iterate Through Results")
 
     count = 0
     async for _work in session.works.iterate(page_size=10, filters=filters):
@@ -118,7 +118,7 @@ async def _(filters, mo, session):
         if count >= 25:
             break
 
-    mo.md(f"Processed **{count}** works (capped at 25)")
+    _ = mo.md(f"Processed **{count}** works (capped at 25)")
     return (count,)
 
 

@@ -40,7 +40,7 @@ def _(AlethecaSession):
 
 @app.cell
 def _(mo):
-    mo.md("""
+    _ = mo.md("""
     # Filtering and Search
 
     Aletheca provides typed Pydantic filter models for every endpoint.
@@ -52,7 +52,7 @@ def _(mo):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## Works Filters")
+    _ = mo.md("## Works Filters")
 
     filters = WorksFilters(
         publication_year=2024,
@@ -69,7 +69,7 @@ async def _(WorksFilters, mo, session):
     )
 
     total = response.meta.count if response.meta else 0
-    mo.md(
+    _ = mo.md(
         f'**Open-access English articles from 2024** matching "machine learning": '
         f"**{total:,}** results"
     )
@@ -78,7 +78,7 @@ async def _(WorksFilters, mo, session):
 
 @app.cell
 def _(mo, response):
-    mo.md("### Top Results")
+    _ = mo.md("### Top Results")
 
     rows = []
     for work in (response.results or [])[:5]:
@@ -91,13 +91,13 @@ def _(mo, response):
                 "OA": work.open_access and work.open_access.oa_status or "N/A",
             }
         )
-    mo.ui.table(rows, selection=None)
+    _ = mo.ui.table(rows, selection=None)
     return
 
 
 @app.cell
 async def _(AuthorsFilters, mo, session):
-    mo.md("## Author Search by Name")
+    _ = mo.md("## Author Search by Name")
 
     author_filters = AuthorsFilters(display_name_search="Geoffrey Hinton")
     author_resp = await session.authors.search(
@@ -114,13 +114,13 @@ async def _(AuthorsFilters, mo, session):
                 "ORCID": author.orcid or "N/A",
             }
         )
-    mo.ui.table(author_rows, selection=None)
+    _ = mo.ui.table(author_rows, selection=None)
     return
 
 
 @app.cell
 async def _(InstitutionsFilters, mo, session):
-    mo.md("## Institutions by Country")
+    _ = mo.md("## Institutions by Country")
 
     inst_filters = InstitutionsFilters(country_code="CH", type="education")
     inst_resp = await session.institutions.search(
@@ -137,13 +137,13 @@ async def _(InstitutionsFilters, mo, session):
                 "Works": inst.works_count,
             }
         )
-    mo.ui.table(inst_rows, selection=None)
+    _ = mo.ui.table(inst_rows, selection=None)
     return
 
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## Combining Multiple Filters")
+    _ = mo.md("## Combining Multiple Filters")
 
     combined = WorksFilters(
         publication_year=2023,
@@ -160,7 +160,7 @@ async def _(WorksFilters, mo, session):
     )
 
     n = resp.meta.count if resp.meta else 0
-    mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs")
+    _ = mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs")
     return
 
 

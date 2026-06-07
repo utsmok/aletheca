@@ -47,7 +47,7 @@ for common patterns — so you don't need to manually paginate.
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## `count()` — Total Without Downloading")
+    _ = mo.md("## `count()` — Total Without Downloading")
 
     _filters = WorksFilters(publication_year=2024, is_oa=True, type="article")
     total = await session.works.count(filters=_filters)
@@ -58,10 +58,10 @@ async def _(WorksFilters, mo, session):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## `first()` — Top Result with Sort")
+    _ = mo.md("## `first()` — Top Result with Sort")
 
     _filters = WorksFilters(publication_year=2024, type="article")
-    top = await session.works.first(filters=_filters, sort="cited_by_count:desc")
+    top = await session.works.first(filters=_filters, sort_by="cited_by_count:desc")
 
     if top:
         _ = mo.md(
@@ -78,7 +78,7 @@ async def _(WorksFilters, mo, session):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## `collect()` — Gather Results Into a List")
+    _ = mo.md("## `collect()` — Gather Results Into a List")
 
     _filters = WorksFilters(
         publication_year=2024,
@@ -93,7 +93,7 @@ async def _(WorksFilters, mo, session):
 
 @app.cell
 def _(mo, works):
-    mo.md("### Collected Works")
+    _ = mo.md("### Collected Works")
 
     rows = []
     for w in works[:10]:
@@ -111,7 +111,7 @@ def _(mo, works):
 
 @app.cell
 async def _(WorksFilters, mo, session):
-    mo.md("## Manual Iteration vs. Helpers")
+    _ = mo.md("## Manual Iteration vs. Helpers")
 
     _filters = WorksFilters(publication_year=2024, is_oa=True)
 
