@@ -50,7 +50,7 @@ async def main():
 asyncio.run(main())
 ```
 
-No authentication required -- the OpenAlex API works without it. For higher rate limits, see [Authentication](#authentication).
+No authentication required -- the OpenAlex API works without it. For higher rate limits, see [Authentication](https://utsmok.github.io/aletheca/authentication/).
 
 ## Examples
 
@@ -75,6 +75,8 @@ uv run marimo edit examples/simple_example.py
 | `07_iterator_helpers.py` | `collect()`, `count()`, `first()` from bibliofabric mixins |
 | `08_safe_types_and_helpers.py` | SafeList, SafeStr, DOI normalization, abstract reconstruction |
 
+See [`examples/README.md`](examples/README.md) for details on running examples as interactive marimo notebooks.
+
 ## Authentication
 
 Aletheca auto-detects the OpenAlex API key from environment variables or `.env` files (prefixed with `ALETHECA_`). No auth is the default if nothing is configured.
@@ -91,6 +93,8 @@ async with AlethecaSession(api_key="your_api_key") as session:
 ```
 
 With an API key you get faster responses (dedicated pool). Without one, you use the polite pool (slower).
+
+→ **Full guide:** [Authentication](https://utsmok.github.io/aletheca/authentication/)
 
 ## Basic Usage
 
@@ -126,6 +130,8 @@ async for work in session.works.iterate(
 citations = await session.queries.citing_works("W2741809801")
 print(f"{len(citations)} citations")
 ```
+
+→ **Full guide:** [Usage Basics](https://utsmok.github.io/aletheca/usage_basics/) · [Works](https://utsmok.github.io/aletheca/usage/works/) · [All Entities](https://utsmok.github.io/aletheca/api_reference/)
 
 ## Known OpenAlex API Issues
 
