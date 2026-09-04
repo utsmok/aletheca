@@ -52,6 +52,9 @@ def _normalize_id(raw: str, field: str) -> str:
     return key
 
 
+_OPENALEX_ID_PREFIX = "https://openalex.org/"
+
+
 # ── Auto-generated batch method factory ────────────────────────────────────
 
 
@@ -90,6 +93,21 @@ class AlethecaResourceClient(BaseResourceClient):
     #: For example ``{"doi": "doi", "openalex_id": "openalex"}`` produces
     #: ``batch_get_by_doi()`` and ``batch_get_by_openalex_id()``.
     _batch_fields: dict[str, str] = {}
+
+    async def get(self, entity_id: str) -> Any:
+        """Retrieve one entity by ID (bare ID or full ``openalex.org`` URL).
+
+        Entity records carry full-URL ids (``https://openalex.org/W123`` or
+        slug-keyed ``https://openalex.org/keywords/photosynthesis``), but the
+        single-entity route only accepts the key after the entity path.
+        DOI/ORCID/ROR URLs are passed through untouched.
+        """
+        return await GettableMixin.get(self, self._normalize_entity_id(entity_id))
+
+    def _normalize_entity_id(self, raw: str) -> str:
+        """Reduce an entity URL to its route key."""
+        key = str(raw).strip().removeprefix(_OPENALEX_ID_PREFIX)
+        return key.removeprefix(f"{self._entity_path}/")
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -242,7 +260,7 @@ class AlethecaResourceClient(BaseResourceClient):
 
 
 class StandardResourceClient(
-    GettableMixin, SearchableMixin, CursorIterableMixin, AlethecaResourceClient
+    SearchableMixin, CursorIterableMixin, AlethecaResourceClient
 ):
     """Base for standard CRUD resource clients that only differ in class attributes.
 

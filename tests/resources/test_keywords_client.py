@@ -74,6 +74,22 @@ async def test_get_keyword(keywords_client, mock_api_client):
     assert call_args[0][1] == "keywords/K123"
 
 
+@pytest.mark.asyncio
+async def test_get_keyword_by_slug_id(keywords_client, mock_api_client):
+    """Live keyword ids are slugs (https://openalex.org/keywords/<slug>).
+
+    The single-entity route only accepts the bare slug — the full URL
+    404s because of its nested slashes.
+    """
+    mock_api_client.request.return_value = _mock_response(MINIMAL_KEYWORD)
+
+    result = await keywords_client.get("https://openalex.org/keywords/photosynthesis")
+
+    assert isinstance(result, Keyword)
+    call_args = mock_api_client.request.call_args
+    assert call_args[0][1] == "keywords/photosynthesis"
+
+
 # ---------------------------------------------------------------------------
 # search()
 # ---------------------------------------------------------------------------

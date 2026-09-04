@@ -73,6 +73,29 @@ async def test_get_work(works_client, mock_api_client):
 
 
 @pytest.mark.asyncio
+async def test_get_work_accepts_full_url_id(works_client, mock_api_client):
+    """Entity records carry full-URL ids; get() must reduce them to the route key."""
+    mock_api_client.request.return_value = _mock_response(MINIMAL_WORK)
+
+    result = await works_client.get("https://openalex.org/W123")
+
+    assert isinstance(result, Work)
+    call_args = mock_api_client.request.call_args
+    assert call_args[0][1] == "works/W123"
+
+
+@pytest.mark.asyncio
+async def test_get_work_keeps_doi_url(works_client, mock_api_client):
+    """DOI URLs are valid direct-get keys and must pass through untouched."""
+    mock_api_client.request.return_value = _mock_response(MINIMAL_WORK)
+
+    await works_client.get("https://doi.org/10.1038/nature12373")
+
+    call_args = mock_api_client.request.call_args
+    assert call_args[0][1] == "works/https://doi.org/10.1038/nature12373"
+
+
+@pytest.mark.asyncio
 async def test_get_work_wraps_unexpected_error(works_client, mock_api_client):
     """Verify that unexpected errors from request() are wrapped in BibliofabricError."""
     mock_api_client.request.side_effect = Exception("Unexpected error")

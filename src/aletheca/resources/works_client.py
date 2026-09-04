@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from bibliofabric.log_config import logger
 from bibliofabric.resources import (
     CursorIterableMixin,
-    GettableMixin,
     SearchableMixin,
 )
 
@@ -16,9 +15,7 @@ if TYPE_CHECKING:
     from ..client import AlethecaClient
 
 
-class WorksClient(
-    GettableMixin, SearchableMixin, CursorIterableMixin, AlethecaResourceClient
-):
+class WorksClient(SearchableMixin, CursorIterableMixin, AlethecaResourceClient):
     """Client for the OpenAlex Works API endpoint.
 
     Supports GET by ID (including DOI/PMID), search, cursor iteration,
