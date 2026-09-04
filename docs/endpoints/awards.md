@@ -11,7 +11,7 @@ from aletheca import AlethecaSession
 
 async with AlethecaSession() as session:
     # Fetch a single award
-    award = await session.awards.get("A12345678")
+    award = await session.awards.get("G5066037109")
     print(f"{award.display_name}: {award.funder}")
 
     # Search awards
@@ -22,7 +22,7 @@ async with AlethecaSession() as session:
     # Iterate with filters
     from aletheca.endpoints import AwardsFilters
 
-    filters = AwardsFilters(funder="F4320306100")
+    filters = AwardsFilters(funder_id="F4320306100")
     async for award in session.awards.iterate(filters=filters, per_page=50):
         print(f"{award.display_name}: {award.amount} {award.currency}")
 ```
@@ -39,34 +39,49 @@ async with AlethecaSession() as session:
 
 ### Core Metadata Filters
 
+Field names follow the live API's valid-filter list (the API enumerates it in
+the 400 error returned for invalid fields). Filters that the API rejects —
+`funder.country_code`, `lead_investigator.id`, `co_lead_investigator.id`, plain
+`funder` and `display_name`, and `from_/to_*_date` ranges — are intentionally
+not modelled.
+
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
-| `display_name` | `display_name` | `str` | Exact display name match |
-| `funder` | `funder` | `str` | Funder identifier |
+| `doi` | `doi` | `str` | Award DOI |
+| `funder_name` | `funder_name` | `str` | Funder display name |
 | `funder_award_id` | `funder_award_id` | `str` | Funder's own award identifier |
+| `funder_scheme` | `funder_scheme` | `str` | Funder's grant scheme |
+| `funding_type` | `funding_type` | `str` | Kind of funding |
+| `provenance` | `provenance` | `str` | Data source of the award |
+| `currency` | `currency` | `str` | ISO 4217 currency code |
+| `amount` | `amount` | `float` | Award amount |
+| `start_year` / `end_year` | same | `int` | Award period years |
+| `funded_outputs_count` | `funded_outputs_count` | `int` | Number of funded works |
 | `funder_id` | `funder.id` | `str` | Funder OpenAlex ID |
-| `funder_country_code` | `funder.country_code` | `str` | Funder ISO country code |
-| `lead_investigator_id` | `lead_investigator.id` | `str` | Lead investigator ID |
-| `co_lead_investigator_id` | `co_lead_investigator.id` | `str` | Co-lead investigator ID |
+| `funder_ror` | `funder.ror` | `str` | Funder ROR |
+| `funder_doi` | `funder.doi` | `str` | Funder DOI |
+| `lead_investigator_orcid` | `lead_investigator.orcid` | `str` | Lead investigator ORCID |
+| `lead_investigator_given_name` | `lead_investigator.given_name` | `str` | Lead investigator given name |
+| `lead_investigator_family_name` | `lead_investigator.family_name` | `str` | Lead investigator family name |
+| `lead_investigator_affiliation_name` | `lead_investigator.affiliation.name` | `str` | Lead investigator affiliation |
+| `lead_investigator_affiliation_country` | `lead_investigator.affiliation.country` | `str` | Lead investigator affiliation country |
 | `institution_awarded_id` | `institution_awarded.id` | `str` | Institution OpenAlex ID |
+| `institution_awarded_ror` | `institution_awarded.ror` | `str` | Institution ROR |
+| `institution_awarded_country_code` | `institution_awarded.country_code` | `str` | Institution country code |
+| `institution_awarded_type` | `institution_awarded.type` | `str` | Institution type |
+| `institution_awarded_lineage` | `institution_awarded.lineage` | `str` | Institution lineage |
+| `institution_awarded_continent` | `institution_awarded.continent` | `str` | Institution continent |
+| `primary_topic_id` etc. | `primary_topic.{id,subfield.id,field.id,domain.id}` | `str` | Primary topic filters |
+| `topics_id` etc. | `topics.{id,subfield.id,field.id,domain.id}` | `str` | Topic filters |
 
 ### Search Filters
 
 | Field Name | Alias (OpenAlex) | Type | Description |
 |-----------|-------------------|------|-------------|
 | `display_name_search` | `display_name.search` | `str` | Search within display name |
+| `description_search` | `description.search` | `str` | Search within description |
+| `text_search` | `text.search` | `str` | Full-text search |
 | `default_search` | `default.search` | `str` | Default search across multiple fields |
-
-### Date Filters
-
-| Field Name | Alias (OpenAlex) | Type | Description |
-|-----------|-------------------|------|-------------|
-| `from_awarded_date` | `from_awarded_date` | `str` | Awarded date lower bound (inclusive) |
-| `to_awarded_date` | `to_awarded_date` | `str` | Awarded date upper bound (inclusive) |
-| `from_created_date` | `from_created_date` | `str` | Created date lower bound |
-| `to_created_date` | `to_created_date` | `str` | Created date upper bound |
-| `from_updated_date` | `from_updated_date` | `str` | Updated date lower bound |
-| `to_updated_date` | `to_updated_date` | `str` | Updated date upper bound |
 
 ## Usage Examples
 

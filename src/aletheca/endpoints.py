@@ -314,25 +314,75 @@ class FundersFilters(BaseModel):
 
 
 class AwardsFilters(BaseModel):
-    """Filter model for the Awards endpoint."""
+    """Filter model for the Awards endpoint.
 
-    display_name: str | None = None
-    funder: str | None = None
-    funder_award_id: str | None = Field(None, alias="funder_award_id")
+    Aliases follow the live API's valid-filter list, which the API
+    enumerates in the 400 error returned for invalid fields.
+    ``funder.country_code``, ``lead_investigator.id``,
+    ``co_lead_investigator.id``, plain ``funder`` and ``display_name``,
+    and ``from_/to_*_date`` range filters are NOT valid on this endpoint
+    and are absent here; ``extra="allow"`` still lets callers pass
+    anything else.
+    """
+
+    id: str | None = None
+    doi: str | None = None
+    funder_name: str | None = None
+    funder_award_id: str | None = None
+    funder_scheme: str | None = None
+    funding_type: str | None = None
+    provenance: str | None = None
+    collection: str | None = None
+    currency: str | None = None
+    amount: float | None = None
+    start_year: int | None = None
+    end_year: int | None = None
+    funded_outputs: str | None = None
+    funded_outputs_count: int | None = None
+
     # Nested filter fields (dot notation via alias)
     funder_id: str | None = Field(None, alias="funder.id")
-    funder_country_code: str | None = Field(None, alias="funder.country_code")
-    lead_investigator_id: str | None = Field(None, alias="lead_investigator.id")
-    co_lead_investigator_id: str | None = Field(None, alias="co_lead_investigator.id")
+    funder_ror: str | None = Field(None, alias="funder.ror")
+    funder_doi: str | None = Field(None, alias="funder.doi")
+    lead_investigator_orcid: str | None = Field(None, alias="lead_investigator.orcid")
+    lead_investigator_given_name: str | None = Field(
+        None, alias="lead_investigator.given_name"
+    )
+    lead_investigator_family_name: str | None = Field(
+        None, alias="lead_investigator.family_name"
+    )
+    lead_investigator_affiliation_name: str | None = Field(
+        None, alias="lead_investigator.affiliation.name"
+    )
+    lead_investigator_affiliation_country: str | None = Field(
+        None, alias="lead_investigator.affiliation.country"
+    )
     institution_awarded_id: str | None = Field(None, alias="institution_awarded.id")
+    institution_awarded_ror: str | None = Field(None, alias="institution_awarded.ror")
+    institution_awarded_country_code: str | None = Field(
+        None, alias="institution_awarded.country_code"
+    )
+    institution_awarded_type: str | None = Field(None, alias="institution_awarded.type")
+    institution_awarded_lineage: str | None = Field(
+        None, alias="institution_awarded.lineage"
+    )
+    institution_awarded_continent: str | None = Field(
+        None, alias="institution_awarded.continent"
+    )
+    primary_topic_id: str | None = Field(None, alias="primary_topic.id")
+    primary_topic_subfield_id: str | None = Field(
+        None, alias="primary_topic.subfield.id"
+    )
+    primary_topic_field_id: str | None = Field(None, alias="primary_topic.field.id")
+    primary_topic_domain_id: str | None = Field(None, alias="primary_topic.domain.id")
+    topics_id: str | None = Field(None, alias="topics.id")
+    topics_subfield_id: str | None = Field(None, alias="topics.subfield.id")
+    topics_field_id: str | None = Field(None, alias="topics.field.id")
+    topics_domain_id: str | None = Field(None, alias="topics.domain.id")
+
     # Search filters
     display_name_search: str | None = Field(None, alias="display_name.search")
+    description_search: str | None = Field(None, alias="description.search")
+    text_search: str | None = Field(None, alias="text.search")
     default_search: str | None = Field(None, alias="default.search")
-    # Date filters
-    from_awarded_date: str | None = Field(None, alias="from_awarded_date")
-    to_awarded_date: str | None = Field(None, alias="to_awarded_date")
-    from_created_date: str | None = Field(None, alias="from_created_date")
-    to_created_date: str | None = Field(None, alias="to_created_date")
-    from_updated_date: str | None = Field(None, alias="from_updated_date")
-    to_updated_date: str | None = Field(None, alias="to_updated_date")
     model_config = ConfigDict(extra="allow", populate_by_name=True)
