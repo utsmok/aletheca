@@ -21,7 +21,8 @@ AlethecaSession          # User-facing async context manager (session.py)
      ├─ TopicsClient           # mixin-based (bibliofabric)
      ├─ KeywordsClient         # mixin-based (bibliofabric)
      ├─ PublishersClient       # mixin-based (bibliofabric)
-     └─ FundersClient          # mixin-based (bibliofabric)
+     ├─ FundersClient          # mixin-based (bibliofabric)
+     └─ AwardsClient           # mixin-based (bibliofabric)
 ```
 
 ### Key Layers
@@ -132,7 +133,6 @@ uv run mkdocs serve                       # Local docs
 
 ## Known Issues & Gaps
 
-- **Award resource client**: Not yet implemented — only the model exists. The `/awards` endpoint works differently (not a standard CRUD endpoint).
 - **Missing convenience filters**: The `select`, `group_by`, `sample`/`seed` parameters need resource-level methods, not framework changes.
 - **Filter model completeness**: Filter models cover the most common filters but not every possible filter. OpenAlex supports many filters; the `extra="allow"` config means users can pass any filter as a dict.
 - **Integration tests**: Resource client tests use mocked HTTP. Live API integration tests are not yet implemented.
