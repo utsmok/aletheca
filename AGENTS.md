@@ -31,7 +31,7 @@ AlethecaSession          # User-facing async context manager (session.py)
 |-------|---------|------|
 | **Session** | `session.py` | Thin async context manager wrapper around `AlethecaClient`. Entry point for users. Delegates resource access to client via `__getattr__`. |
 | **Client** | `client.py` | Extends `bibliofabric.BaseApiClient`. Resolves auth strategy (QueryParameterAuth or NoAuth), initializes resource clients lazily. |
-| **Resources** | `resources/*.py` | Per-endpoint clients. All inherit from `AlethecaResourceClient` (extends `BaseResourceClient`). Use mixins (`GettableMixin`, `SearchableMixin`, `CursorIterableMixin`). Override `_param_page_size="per_page"`, `_param_sort="sort"`, and `_serialize_filters()` for OpenAlex filter syntax. |
+| **Resources** | `resources/*.py` | Per-endpoint clients. All inherit from `AlethecaResourceClient` (extends `BaseResourceClient`), which provides `get()` (normalizing full-URL entity IDs) and delegates to `GettableMixin`; use `SearchableMixin`, `CursorIterableMixin` via bases. Override `_param_page_size="per_page"`, `_param_sort="sort"`, and `_serialize_filters()` for OpenAlex filter syntax. |
 | **Endpoints** | `endpoints.py` | Pydantic filter models per endpoint (`WorksFilters`, etc.) with `extra="allow"` and `populate_by_name=True`. Field aliases map Python names to OpenAlex dot-notation filter names (e.g., `authorships_author_id` → `authorships.author.id`). |
 | **Unwrapper** | `unwrapper.py` | Implements `bibliofabric.ResponseUnwrapper` protocol. Extracts `results`, `meta.next_cursor`, `meta.count` from OpenAlex's JSON envelope. |
 | **Config** | `config.py` | `AlethecaSettings(BaseApiSettings)` via pydantic-settings. Env prefix `ALETHECA_`. Reads `.env`. Cached via `@lru_cache`. |
@@ -127,7 +127,7 @@ uv run mkdocs serve                       # Local docs
 - **Pydantic filter models** use field aliases to map Python names to OpenAlex dot-notation: `authorships_author_id: str | None = Field(None, alias='authorships.author.id')`. Serialization via `model_dump(by_alias=True)` produces the correct filter string.
 - **`_serialize_filters()`** override on `AlethecaResourceClient` produces `filter=key:value,key:value` format.
 - **Models use `extra="allow"`** everywhere to tolerate API field additions without breaking.
-- **Resource clients** all inherit from `StandardResourceClient` which combines `GettableMixin`, `SearchableMixin`, `CursorIterableMixin`. Each sets `_entity_path`, `_entity_model`, `_search_response_model`.
+- **Resource clients** all inherit from `StandardResourceClient` (or `AlethecaResourceClient` for works), which combines `SearchableMixin` and `CursorIterableMixin` in its bases; `get()` lives on `AlethecaResourceClient` and delegates to `GettableMixin` after normalizing the entity ID. Each sets `_entity_path`, `_entity_model`, `_search_response_model`.
 - **SafeList/SafeStr** handle API's null → empty coercion pattern: `SafeList` converts `None` → `[]` and strips nulls; `SafeStr` converts `None` → `""`.
 - **Lazy imports** in `client.py`, `session.py`, `queries.py` avoid circular imports. Ruff `PLC0415` is suppressed for these files.
 
