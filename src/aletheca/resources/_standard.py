@@ -90,6 +90,8 @@ class AlethecaResourceClient(BaseResourceClient):
     _param_sort: str = "sort"
     #: API route for the entity; set by concrete subclasses (e.g. ``"works"``).
     _entity_path: str
+    _entity_model: type[BaseModel] | None = None
+    _search_response_model: type[BaseModel] | None = None
 
     #: Override in subclasses.  Maps ``method_suffix`` → ``filter_field``.
     #: For example ``{"doi": "doi", "openalex_id": "openalex"}`` produces
@@ -104,7 +106,7 @@ class AlethecaResourceClient(BaseResourceClient):
         single-entity route only accepts the key after the entity path.
         DOI/ORCID/ROR URLs are passed through untouched.
         """
-        return await GettableMixin.get(self, self._normalize_entity_id(entity_id))  # ty: ignore[invalid-argument-type]
+        return await GettableMixin.get(self, self._normalize_entity_id(entity_id))
 
     def _normalize_entity_id(self, raw: str) -> str:
         """Reduce an entity URL to its route key."""
