@@ -1,4 +1,15 @@
 # Changelog
+## v0.2.0 (2026-06-07)
+
+### Added
+- Batch retrieval (`batch_get()`) with auto-generated `batch_get_by_*()`
+  convenience methods
+- OpenAIRE vs OpenAlex cross-reference analysis report
+
+### Fixed
+- Nullable boolean fields in `Location` and `OpenAccess` made optional
+- Roborev review findings; examples README code block; mkdocs formatting
+
 ## v0.2.1 (2026-09-04)
 
 ### Fixed
