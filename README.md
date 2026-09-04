@@ -142,6 +142,8 @@ Full bug report with reproduction steps: [`OPENALEX_BUG_REPORT.md`](OPENALEX_BUG
 - **Undocumented fields** -- `institution_awarded` on Awards is not documented anywhere; 15+ nested Award filters are missing from the docs filter table
 - **Awards endpoint missing from `llms.txt`** -- the awards endpoint is not listed in the API quick reference
 - **`per_page` max is 200, not 100** -- documented as 100 but the API accepts 200
+- **Keyword IDs are slug paths, not short IDs** -- live keyword records carry ids like `https://openalex.org/keywords/photosynthesis`, and the single-record route rejects that full-URL form (nested slashes → HTML 404) even though `/works/https://openalex.org/W…` is accepted. `get()` normalizes both forms.
+- **Awards 400 body is the authoritative filter list** -- the awards endpoint rejects several filters its docs summaries suggest (`funder.country_code`, plain `display_name`, `lead_investigator.id`, `from_/to_*_date`) and its 400 error body enumerates all 40 valid filters, which is more complete than any docs table.
 
 ## Development
 
