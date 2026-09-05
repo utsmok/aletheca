@@ -1,0 +1,1811 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="S. Mok">
+      
+      
+        <link rel="canonical" href="https://utsmok.github.io/aletheca/advanced/api_verification/">
+      
+      
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../caching/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>API Verification - Aletheca Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-verification-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Aletheca Docs" class="md-header__button md-logo" aria-label="Aletheca Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aletheca Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Verification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/utsmok/aletheca/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aletheca Docs" class="md-nav__button md-logo" aria-label="Aletheca Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Aletheca Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/utsmok/aletheca/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Usage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Entities
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Entities
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/works/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Works
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/authors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authors
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/sources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/institutions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Institutions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/topics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Topics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/keywords/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Keywords
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/publishers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/funders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Funders
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/awards/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Awards
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OpenAlex Endpoints
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            OpenAlex Endpoints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/works/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Works
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/authors/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authors
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/sources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/institutions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Institutions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/topics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Topics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/keywords/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Keywords
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/publishers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/funders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Funders
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../endpoints/awards/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Awards
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Verification
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Verification
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Matters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-verification-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Verification Script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-verification-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Full Verification Procedure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full Verification Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-fetch-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Fetch samples
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-deserialize-each-sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Deserialize each sample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-compare-field-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Compare field sets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-check-live-types-match-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Check live types match annotations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-discover-valid-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Discover valid filters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-stale-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Known Stale Areas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automated Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Automated Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ci-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      CI step
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pytest-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      pytest integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../caching/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rate_limiting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rate Limiting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Request Hooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_handling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Error Handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ergonomics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Features & Ergonomics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Matters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-verification-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Verification Script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-verification-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Full Verification Procedure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full Verification Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-fetch-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Fetch samples
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-deserialize-each-sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Deserialize each sample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-compare-field-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Compare field sets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-check-live-types-match-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: Check live types match annotations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-discover-valid-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Discover valid filters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-stale-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Known Stale Areas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automated Approach
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Automated Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ci-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      CI step
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pytest-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      pytest integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="api-verification-guide">API Verification Guide</h1>
+<p>This guide explains how to verify that Aletheca's models still match the live OpenAlex API. This is critical because the OpenAlex OpenAPI spec is incomplete and stale — the live API is the ground truth.</p>
+<h2 id="why-this-matters">Why This Matters</h2>
+<p>The OpenAlex API has several known issues that make passive trust in the spec unreliable:</p>
+<ul>
+<li><strong>50+ fields</strong> returned by the live API are missing from the OpenAPI spec schemas</li>
+<li>At least <strong>3 fields</strong> in the spec don't exist in the live API (<code>longest_name</code>, <code>parsed_longest_name</code> on Author, <code>content_url</code> on Work)</li>
+<li><strong>Field renames</strong> happen silently (e.g., <code>grants_count</code> → <code>awards_count</code> on Funders)</li>
+<li><strong>Field removals</strong> are undocumented (e.g., <code>fatcat</code> ID removed from Sources)</li>
+<li>The spec has <strong>wrong types</strong> (e.g., <code>content_url</code> is <code>string</code> in spec but live API returns <code>content_urls</code> as an object)</li>
+<li>Filter tables in docs are incomplete (e.g., Awards lists ~23 filters but the API supports 38+)</li>
+<li><code>per_page</code> maximum is 100; 200 is deprecated legacy behavior, still accepted but documented for removal</li>
+</ul>
+<p>See <a href="https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md">OPENALEX_BUG_REPORT.md</a> for the full list of verified discrepancies.</p>
+<h2 id="quick-verification-script">Quick Verification Script</h2>
+<p>This script fetches one sample per entity and checks field names against model fields:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Quick verification that Aletheca models match the live OpenAlex API.
+
+Usage:
+    uv run python scripts/verify_api.py
+&quot;&quot;&quot;
+
+import httpx
+import json
+import sys
+
+from aletheca.models import (
+    Work,
+    Author,
+    Source,
+    Institution,
+    Topic,
+    Keyword,
+    Publisher,
+    Funder,
+    Award,
+)
+
+ENTITIES = {
+    &quot;works&quot;: Work,
+    &quot;authors&quot;: Author,
+    &quot;sources&quot;: Source,
+    &quot;institutions&quot;: Institution,
+    &quot;topics&quot;: Topic,
+    &quot;keywords&quot;: Keyword,
+    &quot;publishers&quot;: Publisher,
+    &quot;funders&quot;: Funder,
+    &quot;awards&quot;: Award,
+}
+
+BASE_URL = &quot;https://api.openalex.org&quot;
+
+
+def verify_entity(entity_name: str, model_class: type) -&gt; dict:
+    &quot;&quot;&quot;Fetch one sample and compare live fields against model fields.&quot;&quot;&quot;
+    resp = httpx.get(f&quot;{BASE_URL}/{entity_name}&quot;, params={&quot;per_page&quot;: 1})
+    resp.raise_for_status()
+    data = resp.json()
+    samples = data.get(&quot;results&quot;, [])
+    if not samples:
+        return {&quot;entity&quot;: entity_name, &quot;error&quot;: &quot;no results returned&quot;}
+
+    sample = samples[0]
+    live_fields = set(sample.keys())
+    model_fields = set(model_class.model_fields.keys())
+
+    # Check deserialization
+    try:
+        model_class.model_validate(sample)
+        deser_ok = True
+        deser_error = None
+    except Exception as e:
+        deser_ok = False
+        deser_error = str(e)
+
+    # Find gaps
+    missing_from_model = live_fields - model_fields
+    missing_from_api = model_fields - live_fields
+
+    return {
+        &quot;entity&quot;: entity_name,
+        &quot;deserialization&quot;: &quot;PASS&quot; if deser_ok else f&quot;FAIL: {deser_error}&quot;,
+        &quot;live_field_count&quot;: len(live_fields),
+        &quot;model_field_count&quot;: len(model_fields),
+        &quot;in_live_not_model&quot;: sorted(missing_from_model),
+        &quot;in_model_not_live&quot;: sorted(missing_from_api),
+    }
+
+
+def main():
+    print(&quot;=== OpenAlex API Verification ===\n&quot;)
+    all_ok = True
+
+    for entity_name, model_class in ENTITIES.items():
+        result = verify_entity(entity_name, model_class)
+        print(f&quot;--- {entity_name} ---&quot;)
+        print(f&quot;  Deserialization: {result.get('deserialization', 'N/A')}&quot;)
+
+        if &quot;error&quot; in result:
+            print(f&quot;  Error: {result['error']}&quot;)
+            continue
+
+        print(f&quot;  Live fields: {result['live_field_count']}&quot;)
+        print(f&quot;  Model fields: {result['model_field_count']}&quot;)
+
+        if result[&quot;in_live_not_model&quot;]:
+            # These are handled by extra=&quot;allow&quot; but should be noted
+            print(f&quot;  Live-only fields (extra='allow'): {result['in_live_not_model']}&quot;)
+
+        if result[&quot;in_model_not_live&quot;]:
+            print(f&quot;  Model-only fields (not in live): {result['in_model_not_live']}&quot;)
+            all_ok = False
+
+        print()
+
+    if all_ok:
+        print(&quot;All checks passed.&quot;)
+    else:
+        print(&quot;Some model fields are not present in live API responses.&quot;)
+        sys.exit(1)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<h2 id="full-verification-procedure">Full Verification Procedure</h2>
+<h3 id="step-1-fetch-samples">Step 1: Fetch samples</h3>
+<p>Fetch 10 samples per entity to ensure coverage of field variations:</p>
+<pre><code class="language-bash">curl -s &quot;https://api.openalex.org/works?per_page=10&quot; | python -m json.tool &gt; /tmp/works_samples.json
+curl -s &quot;https://api.openalex.org/authors?per_page=10&quot; | python -m json.tool &gt; /tmp/authors_samples.json
+curl -s &quot;https://api.openalex.org/sources?per_page=10&quot; | python -m json.tool &gt; /tmp/sources_samples.json
+curl -s &quot;https://api.openalex.org/institutions?per_page=10&quot; | python -m json.tool &gt; /tmp/institutions_samples.json
+curl -s &quot;https://api.openalex.org/topics?per_page=10&quot; | python -m json.tool &gt; /tmp/topics_samples.json
+curl -s &quot;https://api.openalex.org/keywords?per_page=10&quot; | python -m json.tool &gt; /tmp/keywords_samples.json
+curl -s &quot;https://api.openalex.org/publishers?per_page=10&quot; | python -m json.tool &gt; /tmp/publishers_samples.json
+curl -s &quot;https://api.openalex.org/funders?per_page=10&quot; | python -m json.tool &gt; /tmp/funders_samples.json
+curl -s &quot;https://api.openalex.org/awards?per_page=10&quot; | python -m json.tool &gt; /tmp/awards_samples.json
+</code></pre>
+<h3 id="step-2-deserialize-each-sample">Step 2: Deserialize each sample</h3>
+<p>For each entity, try deserializing every sample:</p>
+<pre><code class="language-python">import json
+from aletheca.models import Work
+
+with open(&quot;/tmp/works_samples.json&quot;) as f:
+    data = json.load(f)
+
+for i, sample in enumerate(data[&quot;results&quot;]):
+    try:
+        work = Work.model_validate(sample)
+        print(f&quot;Sample {i}: OK&quot;)
+    except Exception as e:
+        print(f&quot;Sample {i}: FAIL — {e}&quot;)
+</code></pre>
+<p>Deserialization must not raise on any sample. If it does, the model field types need updating.</p>
+<h3 id="step-3-compare-field-sets">Step 3: Compare field sets</h3>
+<p>For each entity, compare the live response keys against the model's declared fields:</p>
+<pre><code class="language-python">from aletheca.models import Work
+
+sample = data[&quot;results&quot;][0]
+live_fields = set(sample.keys())
+model_fields = set(Work.model_fields.keys())
+
+print(&quot;In live API but not in model:&quot;)
+for f in sorted(live_fields - model_fields):
+    print(f&quot;  {f}: {type(sample[f]).__name__} = {repr(sample[f])[:80]}&quot;)
+
+print(&quot;\nIn model but not in live API:&quot;)
+for f in sorted(model_fields - live_fields):
+    print(f&quot;  {f}&quot;)
+</code></pre>
+<p>Fields in the live API but not in the model are handled by <code>extra="allow"</code> on all Aletheca models — they're preserved but not typed. If important fields are discovered, add them to the model explicitly.</p>
+<p>Fields in the model but not in the live API indicate stale model fields that should be investigated.</p>
+<h3 id="step-4-check-live-types-match-annotations">Step 4: Check live types match annotations</h3>
+<p>For each field present in both, verify the live type is compatible with the model annotation:</p>
+<pre><code class="language-python">from aletheca.models import Work
+
+sample = data[&quot;results&quot;][0]
+model = Work.model_validate(sample)
+
+for field_name, field_info in Work.model_fields.items():
+    if field_name in sample:
+        live_value = sample[field_name]
+        live_type = type(live_value).__name__
+        annotation = field_info.annotation
+        print(f&quot;  {field_name}: live={live_type}, annotation={annotation}&quot;)
+</code></pre>
+<p>Common mismatches to watch for:</p>
+<ul>
+<li><code>null</code> vs expected <code>int</code> / <code>str</code> (should be <code>int | None</code> / <code>str | None</code>)</li>
+<li><code>list</code> vs expected single <code>dict</code> (e.g., <code>institution_awarded</code> on Awards)</li>
+<li><code>dict</code> vs expected <code>str</code> (e.g., <code>parent_publisher</code> on Publishers)</li>
+<li><code>object</code> vs expected <code>str</code> (e.g., <code>content_urls</code> vs <code>content_url</code> on Works)</li>
+</ul>
+<h3 id="step-5-discover-valid-filters">Step 5: Discover valid filters</h3>
+<p>Send an invalid filter to discover all valid filter fields for an endpoint:</p>
+<pre><code class="language-bash">curl -s &quot;https://api.openalex.org/awards?filter=nonexistent:foo&amp;per_page=1&quot;
+</code></pre>
+<p>The error message lists all valid filter names. Compare against the filter models in <code>aletheca.endpoints</code> and the docs in <code>docs/endpoints/</code>.</p>
+<h2 id="known-stale-areas">Known Stale Areas</h2>
+<p>These are areas where the OpenAlex spec or docs are known to be stale (verified 2026-06-05):</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Spec says</th>
+<th>Live API says</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Works <code>content_url</code></td>
+<td><code>string</code> field exists</td>
+<td><code>content_urls</code> as <code>object</code> with <code>pdf</code>, <code>grobid_xml</code> keys</td>
+<td>Wrong name AND type</td>
+</tr>
+<tr>
+<td>Works <code>works_api_url</code></td>
+<td>Listed in spec</td>
+<td>Not returned</td>
+<td>Stale field</td>
+</tr>
+<tr>
+<td>Funders <code>grants_count</code></td>
+<td>Listed in spec</td>
+<td>Returns <code>awards_count</code> instead</td>
+<td>Stale name</td>
+</tr>
+<tr>
+<td>Funders <code>works_api_url</code></td>
+<td>Listed in spec</td>
+<td>Not returned</td>
+<td>Stale field</td>
+</tr>
+<tr>
+<td>Publishers <code>parent_publisher</code></td>
+<td>—</td>
+<td>Object <code>{id, display_name}</code>, not string</td>
+<td>Type differs</td>
+</tr>
+<tr>
+<td>Awards <code>institution_awarded</code></td>
+<td>Not documented</td>
+<td>Always a list, never a single dict</td>
+<td>Wrong cardinality</td>
+</tr>
+<tr>
+<td>Sources <code>fatcat</code> ID</td>
+<td>—</td>
+<td>No longer returned</td>
+<td>Undocumented removal</td>
+</tr>
+<tr>
+<td>Sources <code>is_in_jstage</code></td>
+<td>Not in spec</td>
+<td>Returned by live API</td>
+<td>Missing from spec</td>
+</tr>
+<tr>
+<td><code>per_page</code> max</td>
+<td>100</td>
+<td>200 still accepted (deprecated)</td>
+<td>Resolved 2026-08</td>
+</tr>
+<tr>
+<td>Awards endpoint</td>
+<td>Not in <code>llms.txt</code></td>
+<td>Exists with 14.7M records</td>
+<td>Missing from docs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="automated-approach">Automated Approach</h2>
+<h3 id="ci-step">CI step</h3>
+<p>Add a scheduled verification test that runs weekly:</p>
+<pre><code class="language-yaml"># .github/workflows/verify-api.yml
+name: Verify API Models
+on:
+  schedule:
+    - cron: &quot;0 6 * * 1&quot;  # Weekly on Monday at 6 UTC
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: uv run python scripts/verify_api.py
+</code></pre>
+<h3 id="pytest-integration">pytest integration</h3>
+<p>Add a marks-based test suite for API verification:</p>
+<pre><code class="language-python"># tests/test_api_verification.py
+import pytest
+import httpx
+from aletheca.models import Work, Author, Source, Institution, Topic, Keyword, Publisher, Funder, Award
+
+@pytest.fixture(scope=&quot;module&quot;)
+def client():
+    return httpx.Client(base_url=&quot;https://api.openalex.org&quot;, timeout=30)
+
+@pytest.mark.parametrize(&quot;entity_name,model_class&quot;, [
+    (&quot;works&quot;, Work),
+    (&quot;authors&quot;, Author),
+    (&quot;sources&quot;, Source),
+    (&quot;institutions&quot;, Institution),
+    (&quot;topics&quot;, Topic),
+    (&quot;keywords&quot;, Keyword),
+    (&quot;publishers&quot;, Publisher),
+    (&quot;funders&quot;, Funder),
+    (&quot;awards&quot;, Award),
+])
+def test_deserialization(client, entity_name, model_class):
+    &quot;&quot;&quot;Live API samples must deserialize without error.&quot;&quot;&quot;
+    resp = client.get(f&quot;/{entity_name}&quot;, params={&quot;per_page&quot;: 5})
+    resp.raise_for_status()
+    for sample in resp.json()[&quot;results&quot;]:
+        model_class.model_validate(sample)  # Must not raise
+
+@pytest.mark.parametrize(&quot;entity_name,model_class&quot;, [
+    (&quot;works&quot;, Work),
+    (&quot;authors&quot;, Author),
+    (&quot;sources&quot;, Source),
+    (&quot;institutions&quot;, Institution),
+    (&quot;topics&quot;, Topic),
+    (&quot;keywords&quot;, Keyword),
+    (&quot;publishers&quot;, Publisher),
+    (&quot;funders&quot;, Funder),
+    (&quot;awards&quot;, Award),
+])
+def test_no_stale_model_fields(client, entity_name, model_class):
+    &quot;&quot;&quot;Model fields should all appear in live API responses.&quot;&quot;&quot;
+    resp = client.get(f&quot;/{entity_name}&quot;, params={&quot;per_page&quot;: 10})
+    resp.raise_for_status()
+    samples = resp.json()[&quot;results&quot;]
+    all_live_keys = set()
+    for sample in samples:
+        all_live_keys.update(sample.keys())
+
+    model_fields = set(model_class.model_fields.keys())
+    stale = model_fields - all_live_keys
+    assert not stale, f&quot;Model has fields not in live API: {stale}&quot;
+</code></pre>
+<h2 id="reference">Reference</h2>
+<p>For the complete list of verified OpenAlex API bugs, discrepancies, and suggestions, see:</p>
+<ul>
+<li><a href="https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md">OPENALEX_BUG_REPORT.md</a> — Full bug report verified 2026-06-05</li>
+<li><a href="https://developers.openalex.org/">OpenAlex API docs</a></li>
+<li><a href="https://developers.openalex.org/api-reference/openapi.json">OpenAlex OpenAPI spec</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
