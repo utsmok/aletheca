@@ -7,7 +7,6 @@ OPENALEX_API_BASE_URL = "https://api.openalex.org"
 DEFAULT_TIMEOUT: int = 30
 DEFAULT_RETRIES: int = 3
 DEFAULT_PAGE_SIZE: int = 25
-ITERATE_PAGE_SIZE: int = 200  # OpenAlex allows up to 200 per_page for cursor pagination
 
 try:
     __version__: str = _get_version("aletheca")
