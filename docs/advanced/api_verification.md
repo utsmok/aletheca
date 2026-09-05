@@ -12,7 +12,7 @@ The OpenAlex API has several known issues that make passive trust in the spec un
 - **Field removals** are undocumented (e.g., `fatcat` ID removed from Sources)
 - The spec has **wrong types** (e.g., `content_url` is `string` in spec but live API returns `content_urls` as an object)
 - Filter tables in docs are incomplete (e.g., Awards lists ~23 filters but the API supports 38+)
-- `per_page` maximum is documented as 100 but actually accepts 200
+- `per_page` maximum is 100; 200 is deprecated legacy behavior, still accepted but documented for removal
 
 See [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md) for the full list of verified discrepancies.
 
@@ -243,7 +243,7 @@ These are areas where the OpenAlex spec or docs are known to be stale (verified 
 | Awards `institution_awarded` | Not documented | Always a list, never a single dict | Wrong cardinality |
 | Sources `fatcat` ID | — | No longer returned | Undocumented removal |
 | Sources `is_in_jstage` | Not in spec | Returned by live API | Missing from spec |
-| `per_page` max | 100 in `llms.txt` | Actually 200 | Wrong limit |
+| `per_page` max | 100 | 200 still accepted (deprecated) | Resolved 2026-08 |
 | Awards endpoint | Not in `llms.txt` | Exists with 14.7M records | Missing from docs |
 
 ## Automated Approach

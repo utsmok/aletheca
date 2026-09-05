@@ -44,7 +44,7 @@ AlethecaSession          # User-facing async context manager (session.py)
 - **Base URL**: `https://api.openalex.org`
 - **Auth**: API key via `?api_key=...` query parameter (using `QueryParameterAuth`). No key = polite pool (slower).
 - **Pagination**: Cursor-based (`cursor=*` → `meta.next_cursor`), also supports page-based.
-- **Page size**: `per_page` (max 200, default 25).
+- **Page size**: `per_page` (max 100, default 25).
 - **Sort**: `sort=field:direction` (e.g., `sort=cited_by_count:desc`).
 - **Filters**: `filter=key:value,key:value` — dot notation for nested attributes (e.g., `authorships.author.id:A123`).
 - **Search**: `search= query` parameter for full-text search.

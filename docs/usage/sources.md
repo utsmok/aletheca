@@ -163,7 +163,7 @@ async with AlethecaSession() as session:
     )
     async for source in session.sources.iterate(
         filters=filters,
-        per_page=200,
+        per_page=100,
         sort="works_count:desc",
     ):
         print(f"{source.display_name}: {source.works_count} works")

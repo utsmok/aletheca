@@ -8,7 +8,7 @@ This directory contains example scripts demonstrating how to use the Aletheca li
 - **`02_filtering_and_search.py`** — Works, Authors, and Institutions filters; combining multiple filters; the `search` parameter.
 - **`03_institution_research.py`** — Fetch an institution by ID, retrieve its works, view associated institutions, and inspect its topic distribution.
 - **`04_author_discovery.py`** — Search for authors by name, inspect h-index / affiliations / ORCID, and use `works_by_author`.
-- **`05_advanced_queries.py`** — Cursor pagination, sorting (by citations or date), dot-notation filters (`authorships.author.id`), and `per_page=200` for maximum throughput.
+- **`05_advanced_queries.py`** — Cursor pagination, sorting (by citations or date), dot-notation filters (`authorships.author.id`), and `per_page=100` (the maximum) for throughput.
 - **`06_convenience_queries.py`** — One-call workflows: `works_by_author`, `works_by_institution`, `works_by_doi`, `citing_works`, and `referenced_works`.
 - **`07_iterator_helpers.py`** — `collect()` to gather results with a limit, `count()` for totals without downloading, `first()` for the top result with sort — compared to manual iteration.
 - **`08_safe_types_and_helpers.py`** — `SafeList` and `SafeStr` for null-safe traversal, plus helpers: `normalize_doi`, `parse_openalex_id`, `detect_id_type`, and `reconstruct_abstract`.

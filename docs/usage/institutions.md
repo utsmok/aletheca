@@ -172,7 +172,7 @@ async with AlethecaSession() as session:
     )
     async for inst in session.institutions.iterate(
         filters=filters,
-        per_page=200,
+        per_page=100,
         sort="works_count:desc",
     ):
         print(f"{inst.display_name}: {inst.works_count} works")

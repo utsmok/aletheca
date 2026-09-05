@@ -77,32 +77,15 @@ def _pub_to_row(p: Work) -> dict:
         for a in p.authorships
         if (a.author or {}).get("display_name")
     )
-    topics = "; ".join(
-        t.display_name or ""
-        for t in p.topics
-        if t.display_name
-    )
-    keywords = "; ".join(
-        k.display_name or ""
-        for k in p.keywords
-        if k.display_name
-    )
+    topics = "; ".join(t.display_name or "" for t in p.topics if t.display_name)
+    keywords = "; ".join(k.display_name or "" for k in p.keywords if k.display_name)
     # Countries from authorships
-    countries = "; ".join(
-        c
-        for a in p.authorships
-        for c in a.countries
-        if c
-    )
-    funders = "; ".join(
-        f.display_name or ""
-        for f in p.funders
-        if f.display_name
-    )
+    countries = "; ".join(c for a in p.authorships for c in a.countries if c)
+    funders = "; ".join(f.display_name or "" for f in p.funders if f.display_name)
     # Journal/source name from primary_location
     journal = ""
     if p.primary_location and p.primary_location.source:
-        journal = (p.primary_location.source.get("display_name") or "")
+        journal = p.primary_location.source.get("display_name") or ""
     elif p.locations:
         for loc in p.locations:
             if loc.source and loc.source.get("display_name"):
@@ -112,7 +95,7 @@ def _pub_to_row(p: Work) -> dict:
     # Publisher from primary_location source
     publisher = ""
     if p.primary_location and p.primary_location.source:
-        publisher = (p.primary_location.source.get("host_organization_name") or "")
+        publisher = p.primary_location.source.get("host_organization_name") or ""
 
     # OA fields
     is_oa = p.open_access.is_oa if p.open_access else False
@@ -215,7 +198,7 @@ async def fetch_data(con: duckdb.DuckDBPyConnection) -> dict:
             )
             publications = await session.works.collect(
                 filters=filters,
-                page_size=200,
+                page_size=100,
                 sort_by="publication_date:desc",
             )
             progress.update(

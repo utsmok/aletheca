@@ -107,6 +107,6 @@ settings = AlethecaSettings(enable_rate_limiting=False)
    higher throughput.
 2. **Use cursor pagination** (`iterate`) instead of page-based pagination — it's
    more efficient and reduces request count.
-3. **Set `per_page=200`** (the maximum) for iteration to minimize requests.
+3. **Set `per_page=100`** (the maximum) for iteration to minimize requests.
 4. **Increase `max_retries`** for batch jobs that may encounter transient rate limits.
 5. **Add `backoff_factor`** proportional to your concurrency level.

@@ -75,7 +75,7 @@ retry automatically.
 from bibliofabric.exceptions import RateLimitError
 
 try:
-    async for work in session.works.iterate(filters=filters, per_page=200):
+    async for work in session.works.iterate(filters=filters, per_page=100):
         process(work)
 except RateLimitError as e:
     print(f"Rate limited even after retries: {e.message}")

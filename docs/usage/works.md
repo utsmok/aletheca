@@ -159,7 +159,7 @@ async with AlethecaSession() as session:
     )
     async for work in session.works.iterate(
         filters=filters,
-        per_page=200,  # max allowed by OpenAlex
+        per_page=100,  # max allowed by OpenAlex
         sort="cited_by_count:desc",
     ):
         print(f"{work.title} — cited {work.cited_by_count} times")
@@ -298,7 +298,7 @@ The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string
 ## Notes
 
 - OpenAlex IDs for works start with `W` (e.g. `W2741809807`).
-- The maximum `per_page` value is 200. Use cursor pagination (`iterate`) for large result sets.
+- The maximum `per_page` value is 100. Use cursor pagination (`iterate`) for large result sets.
 - Abstracts are stored as inverted indexes; use `reconstruct_abstract()` to get plain text.
 - DOIs can be passed with or without the `https://doi.org/` prefix.
 - Multiple values in filters can be pipe-separated (e.g. `"A123|A456"`).

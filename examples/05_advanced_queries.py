@@ -52,14 +52,16 @@ async def _(mo, session):
 
     count = 0
     async for _work in session.works.iterate(
-        page_size=200,
+        page_size=100,
         filters=WorksFilters(publication_year=2024, type="article", is_oa=True),
     ):
         count += 1
         if count >= 500:
             break
 
-    _result = mo.md(f"Iterated through **{count}** open-access 2024 articles (capped at 500)")
+    _result = mo.md(
+        f"Iterated through **{count}** open-access 2024 articles (capped at 500)"
+    )
     mo.vstack([_heading, _result])
     return (count,)
 
@@ -148,11 +150,11 @@ async def _(mo, session):
 
 @app.cell
 async def _(mo, session):
-    _heading = mo.md("## Maximum Throughput (per_page=200)")
+    _heading = mo.md("## Maximum Throughput (per_page=100)")
 
     _resp = await session.works.search(
         page=1,
-        page_size=200,
+        page_size=100,
         filters=WorksFilters(publication_year=2024, is_oa=True),
     )
 
@@ -160,7 +162,7 @@ async def _(mo, session):
     _total = _resp.meta.count if _resp.meta else 0
     _info = mo.md(
         f"Fetched **{page_count}** results in a single request "
-        f"(per_page=200) out of **{_total:,}** total.\n\n"
+        f"(per_page=100) out of **{_total:,}** total.\n\n"
         f"Use cursor pagination (`iterate`) to retrieve all results "
         f"without hitting page limits."
     )

@@ -135,7 +135,7 @@ async with AlethecaSession() as session:
     )
     async for publisher in session.publishers.iterate(
         filters=filters,
-        per_page=200,
+        per_page=100,
         sort="works_count:desc",
     ):
         print(f"{publisher.display_name}: {publisher.works_count} works")

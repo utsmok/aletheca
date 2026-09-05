@@ -66,7 +66,7 @@ async with AlethecaSession() as session:
         print(f"{author.display_name} — {author.works_count} works")
 ```
 
-Paginate with `page` and `per_page` (max 200):
+Paginate with `page` and `per_page` (max 100):
 
 ```python
 response = await session.works.search(
@@ -135,14 +135,14 @@ async def all_oa_articles():
     async with AlethecaSession() as session:
         filters = WorksFilters(is_oa=True, type="article", publication_year=2024)
         count = 0
-        async for work in session.works.iterate(filters=filters, per_page=200):
+        async for work in session.works.iterate(filters=filters, per_page=100):
             count += 1
             if count > 500:
                 break
         print(f"Processed {count} works")
 ```
 
-The `per_page` parameter defaults to 200 (the OpenAlex maximum) for iteration.
+The `per_page` parameter defaults to 100 (the OpenAlex maximum) for iteration.
 
 ## Collecting into a list
 
