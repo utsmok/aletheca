@@ -86,8 +86,8 @@ class AlethecaResourceClient(BaseResourceClient):
     ``batch_get_by_<name>()`` convenience methods.
     """
 
-    _param_page_size: str = "per_page"
-    _param_sort: str = "sort"
+    _param_page_size: str | None = "per_page"
+    _param_sort: str | None = "sort"
     #: API route for the entity; set by concrete subclasses (e.g. ``"works"``).
     _entity_path: str
     _entity_model: type[BaseModel] | None = None
