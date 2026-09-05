@@ -1,4 +1,23 @@
 # Changelog
+
+## v0.2.2 (2026-09-05)
+
+### Fixed
+- `Institution.associated_institutions` accepts any relationship value
+  (e.g. `predecessor`), which 3,291 live records carry (#2)
+- Paging parameter annotations widened to `str | None` to satisfy
+  bibliofabric 0.5's `ResourceClientProtocol` under strict type checking
+
+### Changed
+- bibliofabric bumped to `>=0.5.1` (pluggable paging, resumable cursors,
+  strict parse modes, opt-in rate pacing)
+- Removed dead `ITERATE_PAGE_SIZE` constant, which claimed a per_page max
+  of 200 (OpenAlex's documented ceiling is 100) (#1)
+
+### Docs
+- All page-size examples and docs teach `per_page=100`
+- Dated resolution note on the DOC-1 per_page finding
+
 ## v0.2.0 (2026-06-07)
 
 ### Added
