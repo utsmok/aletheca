@@ -1,7 +1,5 @@
 """Pydantic models for dehydrated (partial) entity representations."""
 
-from typing import Literal
-
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
@@ -31,7 +29,7 @@ class DehydratedInstitution(BaseEntity):
 class RelatedInstitution(DehydratedInstitution):
     """Dehydrated institution with relationship type."""
 
-    relationship: Literal["parent", "child", "related", "successor"] | None = None
+    relationship: str | None = None
 
 
 class DehydratedInstitutionWithYear(BaseModel):

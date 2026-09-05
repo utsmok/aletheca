@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 
-from aletheca.models import ApiResponse, Author, Meta, Work
+from aletheca.models import ApiResponse, Author, Institution, Meta, Work
 from aletheca.models.common import SummaryStats
 from aletheca.models.safe_types import SafeList, SafeStr
 
@@ -111,3 +111,23 @@ def test_work_with_content_urls():
     assert work.content_urls is not None
     assert work.content_urls.pdf == "https://example.com/paper.pdf"
     assert work.content_urls.grobid_xml == "https://example.com/paper.xml"
+
+
+def test_institution_associated_institutions_relationship_vocabulary():
+    data = {
+        "id": "I123",
+        "display_name": "Test University",
+        "associated_institutions": [
+            {
+                "id": "I456",
+                "display_name": "Old College",
+                "relationship": "predecessor",
+            },
+            {"id": "I789", "display_name": "New College", "relationship": "successor"},
+        ],
+    }
+    institution = Institution.model_validate(data)
+    assert [rel.relationship for rel in institution.associated_institutions] == [
+        "predecessor",
+        "successor",
+    ]
