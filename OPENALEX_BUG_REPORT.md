@@ -235,6 +235,8 @@ GET https://api.openalex.org/works?per_page=200
 → 200 {"meta": {"per_page": 200, ...}}, 200 results returned
 ```
 
+> **Update (2026-09-05):** OpenAlex's docs (updated 2026-08) now document 100 as the supported `per_page` maximum; 200 still works but is deprecated legacy behavior slated for removal. Tracked as utsmok/aletheca#1.
+
 ---
 
 ### DOC-2: Awards endpoint not listed in `llms.txt`
