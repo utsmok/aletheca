@@ -15,7 +15,8 @@
   of 200 (OpenAlex's documented ceiling is 100) (#1)
 
 ### Docs
-- All page-size examples and docs teach `per_page=100`
+- All page-size examples and docs use `page_size=100` with the correct
+  Python kwarg names (`page_size`, `sort_by`)
 - Dated resolution note on the DOC-1 per_page finding
 
 ## v0.2.0 (2026-06-07)

@@ -63,7 +63,7 @@ async with AlethecaSession() as session:
     filters = KeywordsFilters(works_count_range="10000-1000000")
     async for kw in session.keywords.iterate(
         filters=filters,
-        sort="works_count:desc",
+        sort_by="works_count:desc",
     ):
         print(f"{kw.display_name}: {kw.works_count}")
 ```

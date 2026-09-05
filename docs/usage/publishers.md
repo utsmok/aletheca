@@ -81,7 +81,7 @@ async with AlethecaSession() as session:
     results = await session.publishers.search(
         filters=filters,
         page_size=25,
-        sort="works_count:desc",
+        sort_by="works_count:desc",
     )
 ```
 
@@ -135,8 +135,8 @@ async with AlethecaSession() as session:
     )
     async for publisher in session.publishers.iterate(
         filters=filters,
-        per_page=100,
-        sort="works_count:desc",
+        page_size=100,
+        sort_by="works_count:desc",
     ):
         print(f"{publisher.display_name}: {publisher.works_count} works")
 ```

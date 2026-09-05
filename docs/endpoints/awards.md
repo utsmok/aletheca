@@ -15,7 +15,7 @@ async with AlethecaSession() as session:
     print(f"{award.display_name}: {award.funder}")
 
     # Search awards
-    results = await session.awards.search(search="cancer", per_page=10)
+    results = await session.awards.search(search="cancer", page_size=10)
     for award in results.results:
         print(f"  {award.display_name} ({award.funding_type})")
 
@@ -23,7 +23,7 @@ async with AlethecaSession() as session:
     from aletheca.endpoints import AwardsFilters
 
     filters = AwardsFilters(funder_id="F4320306100")
-    async for award in session.awards.iterate(filters=filters, per_page=50):
+    async for award in session.awards.iterate(filters=filters, page_size=50):
         print(f"{award.display_name}: {award.amount} {award.currency}")
 ```
 
@@ -93,7 +93,7 @@ from aletheca.endpoints import AwardsFilters
 
 async with AlethecaSession() as session:
     filters = AwardsFilters(funder_id="F4320306100")
-    async for award in session.awards.iterate(filters=filters, per_page=50):
+    async for award in session.awards.iterate(filters=filters, page_size=50):
         print(f"{award.display_name}: {award.amount} {award.currency}")
 ```
 
@@ -103,7 +103,7 @@ async with AlethecaSession() as session:
 from aletheca import AlethecaSession
 
 async with AlethecaSession() as session:
-    results = await session.awards.search(search="machine learning", per_page=10)
+    results = await session.awards.search(search="machine learning", page_size=10)
     print(f"Found {results.meta.count} awards")
     for award in results.results:
         print(f"  {award.display_name} ({award.funding_type})")

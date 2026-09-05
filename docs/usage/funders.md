@@ -112,8 +112,8 @@ async with AlethecaSession() as session:
     )
     async for funder in session.funders.iterate(
         filters=filters,
-        per_page=100,
-        sort="works_count:desc",
+        page_size=100,
+        sort_by="works_count:desc",
     ):
         print(f"{funder.display_name}: {funder.works_count} works, {funder.awards_count} awards")
 ```

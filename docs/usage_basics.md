@@ -66,13 +66,13 @@ async with AlethecaSession() as session:
         print(f"{author.display_name} — {author.works_count} works")
 ```
 
-Paginate with `page` and `per_page` (max 100):
+Paginate with `page` and `page_size` (max 100):
 
 ```python
 response = await session.works.search(
     search="climate change",
     page=1,
-    per_page=50,
+    page_size=50,
 )
 ```
 
@@ -135,14 +135,14 @@ async def all_oa_articles():
     async with AlethecaSession() as session:
         filters = WorksFilters(is_oa=True, type="article", publication_year=2024)
         count = 0
-        async for work in session.works.iterate(filters=filters, per_page=100):
+        async for work in session.works.iterate(filters=filters, page_size=100):
             count += 1
             if count > 500:
                 break
         print(f"Processed {count} works")
 ```
 
-The `per_page` parameter defaults to 100 (the OpenAlex maximum) for iteration.
+The `page_size` parameter defaults to 100 (the OpenAlex maximum) for iteration.
 
 ## Collecting into a list
 
@@ -168,8 +168,8 @@ Pass `sort` as `field:direction`:
 async with AlethecaSession() as session:
     response = await session.works.search(
         search="quantum computing",
-        sort="cited_by_count:desc",
-        per_page=10,
+        sort_by="cited_by_count:desc",
+        page_size=10,
     )
 ```
 

@@ -106,7 +106,7 @@ async with AlethecaSession() as session:
         filters = WorksFilters(
             authorships_institutions_id="I31371856",
         )
-        async for work in session.works.iterate(filters=filters, per_page=50):
+        async for work in session.works.iterate(filters=filters, page_size=50):
             for grant in work.grants:
                 if grant.funder_display_name:
                     print(f"  {grant.award_id} from {grant.funder_display_name}")

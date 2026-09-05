@@ -61,7 +61,7 @@ async def search_open_access():
             publication_year=2024,
         )
 
-        async for work in session.works.iterate(filters=filters, per_page=50):
+        async for work in session.works.iterate(filters=filters, page_size=50):
             print(work.display_name)
 ```
 

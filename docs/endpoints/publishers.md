@@ -77,7 +77,7 @@ async with AlethecaSession() as session:
     )
     async for pub in session.publishers.iterate(
         filters=filters,
-        sort="works_count:desc",
+        sort_by="works_count:desc",
     ):
         print(f"{pub.display_name}: {pub.works_count}")
 ```

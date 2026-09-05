@@ -170,8 +170,8 @@ async with AlethecaSession() as session:
     )
     async for author in session.authors.iterate(
         filters=filters,
-        per_page=100,
-        sort="works_count:desc",
+        page_size=100,
+        sort_by="works_count:desc",
     ):
         print(f"{author.display_name}: {author.works_count} works")
 ```

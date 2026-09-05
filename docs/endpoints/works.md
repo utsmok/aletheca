@@ -14,7 +14,7 @@ async with AlethecaSession() as session:
     # Iterate all works matching a filter
     async for work in session.works.iterate(
         filters=WorksFilters(publication_year=2024, is_oa=True),
-        per_page=100,
+        page_size=100,
     ):
         print(work.display_name)
 ```
@@ -146,7 +146,7 @@ async with AlethecaSession() as session:
 ```python
 async with AlethecaSession() as session:
     filters = WorksFilters(topics_id="T10100")
-    async for work in session.works.iterate(filters=filters, per_page=100):
+    async for work in session.works.iterate(filters=filters, page_size=100):
         print(work.display_name)
 ```
 

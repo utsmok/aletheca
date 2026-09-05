@@ -159,8 +159,8 @@ async with AlethecaSession() as session:
     )
     async for work in session.works.iterate(
         filters=filters,
-        per_page=100,  # max allowed by OpenAlex
-        sort="cited_by_count:desc",
+        page_size=100,  # max allowed by OpenAlex
+        sort_by="cited_by_count:desc",
     ):
         print(f"{work.title} — cited {work.cited_by_count} times")
 ```

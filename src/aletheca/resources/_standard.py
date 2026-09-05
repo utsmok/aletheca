@@ -159,7 +159,7 @@ class AlethecaResourceClient(BaseResourceClient):
     ) -> int:
         """Return total number of matching entities.
 
-        Performs a minimal search (per_page=1) and reads ``meta.count``
+        Performs a minimal search (page_size=1) and reads ``meta.count``
         from the OpenAlex response envelope.
         """
         response = await self.search(  # ty: ignore[unresolved-attribute]
