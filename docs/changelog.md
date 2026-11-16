@@ -16,6 +16,14 @@
   of `filter=` keys (other endpoints keep unknown keys as filters, so a
   stray `corpus` still fails at the API rather than changing the request)
 
+### Fixed
+- CI type check green again: resource client `_entity_model`/
+  `_search_response_model` annotations widened to `type[BaseModel] | None`
+  (ty 0.0.104, what `uvx ty` resolves since September, rejects narrow
+  overrides of mutable base attributes) and two `ty: ignore` comments
+  updated to the renamed `missing-attribute` rule. Assigned values and
+  runtime behavior are unchanged.
+
 ## v0.2.2 (2026-09-05)
 
 ### Fixed

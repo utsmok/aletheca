@@ -7,6 +7,7 @@ from bibliofabric.resources import (
     CursorIterableMixin,
     SearchableMixin,
 )
+from pydantic import BaseModel
 
 from ..models import ApiResponse, Work
 from ..resources._standard import AlethecaResourceClient
@@ -23,8 +24,10 @@ class WorksClient(SearchableMixin, CursorIterableMixin, AlethecaResourceClient):
     """
 
     _entity_path: str = "works"
-    _entity_model: type[Work] = Work
-    _search_response_model: type = ApiResponse[Work]
+    # Widened annotations (ty 0.0.104+): a narrow override of a mutable base
+    # attribute is rejected, but the value stays the per-endpoint model.
+    _entity_model: type[BaseModel] | None = Work
+    _search_response_model: type[BaseModel] | None = ApiResponse[Work]
     _supports_direct_get: bool = True
     _batch_fields: dict[str, str] = {
         "doi": "doi",
