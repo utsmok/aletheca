@@ -33,6 +33,9 @@ class WorksClient(SearchableMixin, CursorIterableMixin, AlethecaResourceClient):
         "pmcid": "pmcid",
         "mag": "mag",
     }
+    #: ``include_parts`` and ``corpus`` are works query parameters, not
+    #: ``filter=`` keys; ``_serialize_filters`` emits them standalone.
+    _standalone_params: frozenset[str] = frozenset({"include_parts", "corpus"})
 
     def __init__(self, api_client: "AlethecaClient"):
         super().__init__(api_client)

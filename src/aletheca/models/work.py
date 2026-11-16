@@ -18,6 +18,7 @@ from .common import (
     OpenAccess,
     YearCountBasic,
 )
+from .dehydrated import RelatedWork
 from .ids import WorkIds
 from .safe_types import SafeList, SafeStr
 
@@ -74,6 +75,7 @@ class Work(BaseEntity):
     has_fulltext: bool | None = None
     is_paratext: bool | None = None
     is_retracted: bool | None = None
+    is_traditional: bool | None = None
 
     # Counts
     cited_by_count: int = 0
@@ -101,6 +103,8 @@ class Work(BaseEntity):
     mesh: SafeList[Mesh] = Field(default_factory=list)
     primary_location: Location | None = None
     primary_topic: DehydratedTopic | None = None
+    lineage: SafeList[str] = Field(default_factory=list)
+    parent_works: SafeList[RelatedWork] = Field(default_factory=list)
     referenced_works: SafeList[str] = Field(default_factory=list)
     related_works: SafeList[str] = Field(default_factory=list)
     sustainable_development_goals: SafeList[SDG] = Field(default_factory=list)
@@ -108,6 +112,7 @@ class Work(BaseEntity):
     has_content: HasContent | None = None
     cited_by_percentile_year: dict[str, int] | None = None
     referenced_works_count: int | None = None
+    child_works_count: int | None = None
     content_urls: ContentUrls | None = None
     # Common fields
     created_date: str | None = None

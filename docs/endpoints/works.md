@@ -54,6 +54,20 @@ Range filters accept a format like `2020-2024`.
 | `cited_by` | `cited_by` | `str` | OpenAlex ID(s) of works that cite this work |
 | `related_to` | `related_to` | `str` | OpenAlex ID of a work to find related works for |
 
+### Part-of (Parent/Child) Filters
+
+A work can be part of another work: a chapter in a book, a figure in a paper.
+Filtering on any of these also shows pieces that the default view leaves out.
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `has_parent_work` | `has_parent_work` | `bool` | Work is part of another work |
+| `parent_works_id` | `parent_works.id` | `str` | Parts of a parent work, e.g. a book's chapters (OpenAlex Work ID) |
+| `parent_works_relationship` | `parent_works.relationship` | `str` | Kind of part-of link: `volume`, `component`, `data-series`, `part` |
+| `lineage` | `lineage` | `str` | The work and everything under it, at any depth (OpenAlex Work ID) |
+| `child_works_count` | `child_works_count` | `str` | Direct child count; supports ranges (e.g. `">100"`) |
+| `is_traditional` | `is_traditional` | `bool` | Traditional scholarly types (articles, books, chapters, conference papers) |
+
 ### Authorship & Institution Filters
 
 | Field Name | Alias (OpenAlex) | Type | Description |
@@ -123,6 +137,16 @@ Range filters accept a format like `2020-2024`.
 | `best_oa_version` | `best_oa_version` | `str` | Best OA version type |
 | `version` | `version` | `str` | Work version |
 
+### Query Parameters
+
+These are standalone query parameters on the works endpoint, not `filter=` keys;
+`WorksFilters` serializes them as separate query parameters.
+
+| Field Name | Type | Description |
+|-----------|------|-------------|
+| `include_parts` | `bool` | Add pieces of other works (figures, front matter, single data records) back to the results; they are left out of the default view |
+| `corpus` | `str` | Which corpus to search: `core` (default), `expansion`, or `all` |
+
 ## Usage Examples
 
 ### Filter by author and year
@@ -173,4 +197,16 @@ async with AlethecaSession() as session:
     )
     async for work in session.works.iterate(filters=filters):
         print(work.doi)
+```
+
+### List a book's parts
+
+Filtering on `parent_works.id` shows chapters and other pieces alike; the
+pieces of expansion works (most Zenodo records) additionally need `corpus="all"`.
+
+```python
+async with AlethecaSession() as session:
+    filters = WorksFilters(parent_works_id="W3109397498")
+    async for part in session.works.iterate(filters=filters):
+        print(part.display_name, part.parent_works[0].relationship)
 ```

@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 
-from aletheca.models import ApiResponse, Author, Institution, Meta, Work
+from aletheca.models import ApiResponse, Author, Institution, Meta, RelatedWork, Work
 from aletheca.models.common import SummaryStats
 from aletheca.models.safe_types import SafeList, SafeStr
 
@@ -131,3 +131,49 @@ def test_institution_associated_institutions_relationship_vocabulary():
         "predecessor",
         "successor",
     ]
+
+
+def test_work_parent_works_lineage_and_child_count():
+    """A book chapter carries its parent work, lineage and is_traditional."""
+    data = {
+        "id": "https://openalex.org/W2104898223",
+        "display_name": "Against crisis epistemology",
+        "parent_works": [
+            {
+                "id": "https://openalex.org/W3109397498",
+                "display_name": "Routledge Handbook of Critical Indigenous Studies",
+                "relationship": "volume",
+            }
+        ],
+        "lineage": [
+            "https://openalex.org/W2104898223",
+            "https://openalex.org/W3109397498",
+        ],
+        "child_works_count": 0,
+        "is_traditional": True,
+    }
+    work = Work.model_validate(data)
+
+    assert len(work.parent_works) == 1
+    parent = work.parent_works[0]
+    assert isinstance(parent, RelatedWork)
+    assert parent.id == "https://openalex.org/W3109397498"
+    assert parent.display_name == "Routledge Handbook of Critical Indigenous Studies"
+    assert parent.relationship == "volume"
+    # lineage starts with the work itself, then ancestors nearest first
+    assert work.lineage == [
+        "https://openalex.org/W2104898223",
+        "https://openalex.org/W3109397498",
+    ]
+    assert work.child_works_count == 0
+    assert work.is_traditional is True
+
+
+def test_work_defaults_without_part_of_data():
+    """Older payloads without part-of fields parse with safe defaults."""
+    work = Work.model_validate({"id": "https://openalex.org/W1"})
+
+    assert work.parent_works == []
+    assert work.lineage == []
+    assert work.child_works_count is None
+    assert work.is_traditional is None

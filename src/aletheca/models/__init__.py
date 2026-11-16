@@ -37,6 +37,7 @@ from .dehydrated import (
     DehydratedInstitution,
     DehydratedInstitutionWithYear,
     RelatedInstitution,
+    RelatedWork,
     SimpleDehydratedConcept,
 )
 from .funder import Funder
@@ -100,6 +101,7 @@ __all__ = [
     "DehydratedInstitution",
     "DehydratedInstitutionWithYear",
     "RelatedInstitution",
+    "RelatedWork",
     "SimpleDehydratedConcept",
     # IDs
     "AuthorIds",
