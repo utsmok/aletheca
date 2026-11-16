@@ -285,11 +285,40 @@ async with AlethecaSession() as session:
 | `authorships` | `list[Authorship]` | Author and affiliation data |
 | `locations` | `list[Location]` | Places the work can be found |
 | `primary_location` | `Location \| None` | Best available location |
+| `parent_works` | `list[RelatedWork]` | Works this work is part of, each with its `relationship` (`volume`, `component`, `data-series`, `part`) |
+| `lineage` | `list[str]` | The work's own OpenAlex ID first, then every ancestor's, nearest first |
+| `child_works_count` | `int \| None` | How many works name this work as a parent |
+| `is_traditional` | `bool \| None` | True for traditional scholarly types (articles, books, chapters, conference papers) |
 | `referenced_works` | `list[str]` | OpenAlex IDs of cited works |
 | `topics` | `list[DehydratedTopic]` | Associated topics |
 | `keywords` | `list[DehydratedKeyword]` | Associated keywords |
 | `content_urls` | `ContentUrls \| None` | Content URLs as a dict with `pdf` and `grobid_xml` keys (not `content_url` as in the spec) |
 | `abstract_inverted_index` | `dict \| None` | Inverted index for abstract reconstruction |
+
+## Parent and child works
+
+A work can be part of another work: a chapter in a book, a figure in a paper,
+one record of a data series. The child names the whole in `parent_works`.
+
+```python
+async with AlethecaSession() as session:
+    work = await session.works.get("W3109397498")
+    print(work.child_works_count)  # direct parts, e.g. a book's chapters
+    print(work.lineage)            # [own id, parent ids nearest first]
+```
+
+Pieces that are not scholarly works on their own (figures, front matter,
+single data records) are left out of list results by default. Pass
+`include_parts=True` to bring them back:
+
+```python
+from aletheca.endpoints import WorksFilters
+
+async with AlethecaSession() as session:
+    filters = WorksFilters(parent_works_id="W3109397498", include_parts=True)
+    async for part in session.works.iterate(filters=filters):
+        print(part.display_name)
+```
 
 ## Live API Notes
 

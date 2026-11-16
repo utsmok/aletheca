@@ -1,10 +1,13 @@
 """Tests for WorksClient."""
 
+from unittest.mock import MagicMock
+
 import pytest
 from bibliofabric.exceptions import BibliofabricError
 
 from aletheca.endpoints import WorksFilters
 from aletheca.models import ApiResponse, Work
+from aletheca.resources.funders_client import FundersClient
 from aletheca.resources.works_client import WorksClient
 
 from .conftest import _mock_response
@@ -207,3 +210,86 @@ async def test_iterate_api_error_during_iteration(works_client, mock_api_client)
 
     # Two requests attempted: first page succeeded, second raised
     assert mock_api_client.request.await_count == 2
+
+
+# ---------------------------------------------------------------------------
+# part-of filters and works query parameters
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_search_part_of_filters_serialize(works_client, mock_api_client):
+    mock_api_client.request.return_value = _mock_response(SEARCH_RESPONSE)
+
+    filters = WorksFilters(
+        has_parent_work=True,
+        parent_works_id="W3109397498",
+        parent_works_relationship="volume",
+        lineage="W7233530818",
+        child_works_count=">100",
+        is_traditional=False,
+    )
+    await works_client.search(filters=filters)
+
+    call_args = mock_api_client.request.call_args
+    params = call_args.kwargs.get("params") or call_args[1].get("params")
+    filter_str = params["filter"]
+    assert "has_parent_work:True" in filter_str
+    assert "parent_works.id:W3109397498" in filter_str
+    assert "parent_works.relationship:volume" in filter_str
+    assert "lineage:W7233530818" in filter_str
+    assert "child_works_count:>100" in filter_str
+    assert "is_traditional:False" in filter_str
+
+
+@pytest.mark.asyncio
+async def test_search_include_parts_and_corpus_standalone(
+    works_client, mock_api_client
+):
+    """include_parts and corpus are query parameters, not filter= keys."""
+    mock_api_client.request.return_value = _mock_response(SEARCH_RESPONSE)
+
+    filters = WorksFilters(
+        publication_year=2024,
+        include_parts=True,
+        corpus="all",
+    )
+    await works_client.search(filters=filters)
+
+    call_args = mock_api_client.request.call_args
+    params = call_args.kwargs.get("params") or call_args[1].get("params")
+    assert params["include_parts"] == "true"
+    assert params["corpus"] == "all"
+    assert params["filter"] == "publication_year:2024"
+
+
+@pytest.mark.asyncio
+async def test_iterate_include_parts_passed_on_every_page(
+    works_client, mock_api_client
+):
+    mock_api_client.request.side_effect = [
+        _mock_response(PAGE1),
+        _mock_response(PAGE2),
+    ]
+
+    filters = WorksFilters(include_parts=True)
+    results = [work async for work in works_client.iterate(filters=filters)]
+
+    assert len(results) == 2
+    assert mock_api_client.request.await_count == 2
+    for call in mock_api_client.request.await_args_list:
+        params = call.kwargs.get("params") or call[1].get("params")
+        assert params["include_parts"] == "true"
+        assert "filter" not in params
+
+
+def test_standalone_params_absent_from_filters_when_unset(works_client):
+    params = works_client._serialize_filters(WorksFilters(publication_year=2024))
+    assert params == {"filter": "publication_year:2024"}
+
+
+def test_non_works_client_keeps_unknown_keys_as_filters():
+    """Corpus is works-only; other endpoints must not emit it as a query param."""
+    client = FundersClient(MagicMock())
+    params = client._serialize_filters({"corpus": "all", "country_code": "NL"})
+    assert params == {"filter": "corpus:all,country_code:NL"}

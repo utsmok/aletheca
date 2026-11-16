@@ -104,6 +104,21 @@ class WorksFilters(BaseModel):
         None, alias="locations.source.has_issn"
     )
 
+    # Part-of (parent/child works) filters
+    has_parent_work: bool | None = Field(None, alias="has_parent_work")
+    parent_works_id: str | None = Field(None, alias="parent_works.id")
+    parent_works_relationship: str | None = Field(
+        None, alias="parent_works.relationship"
+    )
+    lineage: str | None = Field(None, alias="lineage")
+    child_works_count: str | None = None
+    is_traditional: bool | None = Field(None, alias="is_traditional")
+
+    # Works query parameters, not filter= keys; the works client emits them
+    # as standalone query parameters (see AlethecaResourceClient).
+    include_parts: bool | None = None
+    corpus: str | None = None
+
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 

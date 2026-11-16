@@ -32,6 +32,16 @@ class RelatedInstitution(DehydratedInstitution):
     relationship: str | None = None
 
 
+class RelatedWork(BaseEntity):
+    """Dehydrated work with relationship type (an entry of ``Work.parent_works``).
+
+    ``relationship`` is one of the part-of kinds OpenAlex defines:
+    ``volume``, ``component``, ``data-series`` or ``part``.
+    """
+
+    relationship: SafeStr | None = None
+
+
 class DehydratedInstitutionWithYear(BaseModel):
     """Institution with years of affiliation."""
 

@@ -98,6 +98,12 @@ class AlethecaResourceClient(BaseResourceClient):
     #: ``batch_get_by_doi()`` and ``batch_get_by_openalex_id()``.
     _batch_fields: dict[str, str] = {}
 
+    #: Filter-model keys emitted as standalone query parameters instead of
+    #: joining the ``filter=`` string.  Works-only parameters such as
+    #: ``include_parts`` and ``corpus``; other endpoints keep them out, so a
+    #: stray key stays a (API-rejected) filter rather than a wrong query param.
+    _standalone_params: frozenset[str] = frozenset()
+
     async def get(self, entity_id: str) -> Any:
         """Retrieve one entity by ID (bare ID or full ``openalex.org`` URL).
 
@@ -131,8 +137,12 @@ class AlethecaResourceClient(BaseResourceClient):
             filter=publication_year:2024,is_oa:true
             filter=authorships.author.id:A123|A456
 
-        Returns a dict with a single ``filter`` key containing the
-        comma-joined filter string.
+        Keys whitelisted in ``_standalone_params`` are returned as separate
+        query parameters instead of joining the filter string; boolean
+        values serialize lowercase (``include_parts=true``).
+
+        Returns a dict whose ``filter`` key holds the comma-joined filter
+        string, alongside any standalone query parameters.
         """
         if filters is None:
             return {}
@@ -146,10 +156,16 @@ class AlethecaResourceClient(BaseResourceClient):
             )
         if not filter_dict:
             return {}
+        params: dict[str, Any] = {}
         parts = []
         for key, value in filter_dict.items():
-            parts.append(f"{key}:{value}")
-        return {"filter": ",".join(parts)}
+            if key in self._standalone_params:
+                params[key] = str(value).lower() if isinstance(value, bool) else value
+            else:
+                parts.append(f"{key}:{value}")
+        if parts:
+            params["filter"] = ",".join(parts)
+        return params
 
     async def count(
         self,

@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.0 (2026-11-16)
+
+### Added
+- Work part-of fields: `parent_works` (dehydrated parent + `relationship`:
+  `volume`, `component`, `data-series`, `part`), `lineage` (own ID first,
+  then ancestors nearest first), `child_works_count`, and `is_traditional`
+  (OpenAlex's 2026-11-15 "works can now have parts" release)
+- `WorksFilters` part-of filters: `has_parent_work`, `parent_works_id`
+  (`parent_works.id`), `parent_works_relationship`
+  (`parent_works.relationship`), `lineage`, `child_works_count`,
+  `is_traditional`
+- `WorksFilters` supports the works query parameters `include_parts` and
+  `corpus`; `WorksClient` emits them as standalone query parameters instead
+  of `filter=` keys (other endpoints keep unknown keys as filters, so a
+  stray `corpus` still fails at the API rather than changing the request)
+
 ## v0.2.2 (2026-09-05)
 
 ### Fixed
