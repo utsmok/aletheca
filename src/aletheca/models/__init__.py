@@ -1,15 +1,28 @@
 """Pydantic models for OpenAlex entities."""
 
+from bibliofabric import SafeList, SafeStr
+
 from .author import Author
-from .award import Award
-from .base import ApiResponse, BaseEntity, EntityType, Meta
+from .award import (
+    Award,
+    AwardFunder,
+    AwardInvestigator,
+    InvestigatorAffiliation,
+    LinkedAward,
+    Recipient,
+    RecipientCountry,
+    ResearchScope,
+)
+from .base import ApiResponse, BaseEntity, Meta
 from .common import (
     SDG,
     Affiliation,
     APCData,
     APCEntry,
+    APCYear,
     Biblio,
     CitationNormalizedPercentile,
+    CitedByPercentileYear,
     DehydratedFunder,
     DehydratedKeyword,
     DehydratedTopic,
@@ -36,6 +49,7 @@ from .dehydrated import (
     DehydratedConcept,
     DehydratedInstitution,
     DehydratedInstitutionWithYear,
+    DehydratedSource,
     RelatedInstitution,
     RelatedWork,
     SimpleDehydratedConcept,
@@ -46,6 +60,7 @@ from .ids import (
     ConceptIds,
     FunderIds,
     InstitutionIds,
+    KeywordIds,
     PublisherIds,
     SourceIds,
     TopicIds,
@@ -54,16 +69,14 @@ from .ids import (
 from .institution import Institution
 from .keyword import Keyword
 from .publisher import ParentPublisher, Publisher
-from .safe_types import SafeList, SafeStr
 from .source import Source
 from .topic import Topic
-from .work import Authorship, ContentUrls, DehydratedSource, Work
+from .work import Authorship, ContentUrls, StudyDesign, Work, WorkAward
 
 __all__ = [
     # Base
     "ApiResponse",
     "BaseEntity",
-    "EntityType",
     "Meta",
     # Safe types
     "SafeList",
@@ -71,8 +84,10 @@ __all__ = [
     # Common nested
     "APCData",
     "APCEntry",
+    "APCYear",
     "Affiliation",
     "Biblio",
+    "CitedByPercentileYear",
     "CitationNormalizedPercentile",
     "DehydratedFunder",
     "DehydratedKeyword",
@@ -100,6 +115,7 @@ __all__ = [
     "DehydratedConcept",
     "DehydratedInstitution",
     "DehydratedInstitutionWithYear",
+    "DehydratedSource",
     "RelatedInstitution",
     "RelatedWork",
     "SimpleDehydratedConcept",
@@ -108,6 +124,7 @@ __all__ = [
     "ConceptIds",
     "FunderIds",
     "InstitutionIds",
+    "KeywordIds",
     "PublisherIds",
     "SourceIds",
     "TopicIds",
@@ -116,14 +133,22 @@ __all__ = [
     "Author",
     "Authorship",
     "Award",
+    "AwardFunder",
+    "AwardInvestigator",
     "ContentUrls",
-    "DehydratedSource",
     "Funder",
     "Institution",
+    "InvestigatorAffiliation",
     "Keyword",
+    "LinkedAward",
     "ParentPublisher",
     "Publisher",
+    "Recipient",
+    "RecipientCountry",
+    "ResearchScope",
     "Source",
+    "StudyDesign",
     "Topic",
     "Work",
+    "WorkAward",
 ]

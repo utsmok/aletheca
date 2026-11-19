@@ -1,12 +1,12 @@
 """Pydantic models for the Topic entity and hierarchy."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
-from .common import Domain, FieldEntity, Subfield, TopicMinimal
+from .common import DehydratedKeyword, Domain, FieldEntity, Subfield, TopicMinimal
 from .ids import TopicIds
-from .safe_types import SafeList, SafeStr
 
 
 class Topic(BaseEntity):
@@ -14,7 +14,8 @@ class Topic(BaseEntity):
 
     description: SafeStr | None = None
     ids: TopicIds | None = None
-    keywords: SafeList[str] = Field(default_factory=list)
+    keywords: SafeList[DehydratedKeyword] = Field(default_factory=list)
+    legacy_keywords: SafeList[str] = Field(default_factory=list)
     subfield: Subfield | None = None
     field: FieldEntity | None = None
     domain: Domain | None = None

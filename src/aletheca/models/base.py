@@ -1,11 +1,7 @@
 """Base Pydantic models for OpenAlex API entities and responses."""
 
-from typing import TypeVar
-
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
-
-EntityType = TypeVar("EntityType", bound="BaseEntity")
 
 
 class Meta(BaseModel):
@@ -32,7 +28,7 @@ class BaseEntity(BaseModel):
     id: str | None = None
     display_name: str | None = None
 
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
 
 
 class ApiResponse[EntityType: "BaseEntity"](BaseModel):

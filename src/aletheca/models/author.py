@@ -1,13 +1,17 @@
 """Pydantic models for the Author entity."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import SummaryStats, TopicCount, TopicShare, YearCount
-from .dehydrated import DehydratedInstitution, DehydratedInstitutionWithYear
+from .dehydrated import (
+    DehydratedConcept,
+    DehydratedInstitution,
+    DehydratedInstitutionWithYear,
+)
 from .ids import AuthorIds
-from .safe_types import SafeList, SafeStr
 
 
 class Author(BaseEntity):
@@ -27,6 +31,9 @@ class Author(BaseEntity):
     created_date: str | None = None
     updated_date: str | None = None
     works_api_url: str | None = None
+    awards_api_url: SafeStr | None = None
+    awards_count: int | None = None
+    observed_orcids: SafeList[str] = Field(default_factory=list)
     summary_stats: SummaryStats | None = None
     # Additional fields
     block_key: SafeStr | None = None
@@ -34,7 +41,10 @@ class Author(BaseEntity):
     raw_author_names: SafeList[str] = Field(default_factory=list)
 
     # Deprecated: x_concepts → use topics
-    x_concepts: SafeList[dict] = Field(default_factory=list)
+    x_concepts: SafeList[DehydratedConcept] = Field(
+        default_factory=list,
+        description="Deprecated upstream: replaced by topics, but still returned.",
+    )
 
     # Topics
     topics: SafeList[TopicCount] = Field(default_factory=list)

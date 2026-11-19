@@ -1,16 +1,17 @@
 """Pydantic models for dehydrated (partial) entity representations."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
-from .safe_types import SafeList, SafeStr
 
 
 class DehydratedAuthor(BaseEntity):
     """Minimal author info embedded in authorships."""
 
     orcid: SafeStr | None = None
+    observed_orcids: SafeList[str] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")
 
@@ -64,5 +65,23 @@ class DehydratedConcept(SimpleDehydratedConcept):
     """Concept with relevance score (deprecated entity)."""
 
     score: float = 0.0
+
+    model_config = ConfigDict(extra="allow")
+
+
+class DehydratedSource(BaseEntity):
+    """Minimal source info embedded in locations."""
+
+    is_core: bool | None = None
+    is_oa: bool | None = None
+    is_in_doaj: bool | None = None
+    issn: SafeList[str] = Field(default_factory=list)
+    issn_l: SafeStr | None = None
+    listed_in: SafeList[str] = Field(default_factory=list)
+    type: str | None = None
+    host_organization: SafeStr | None = None
+    host_organization_name: SafeStr | None = None
+    host_organization_lineage: SafeList[str] = Field(default_factory=list)
+    host_organization_lineage_names: SafeList[str] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")

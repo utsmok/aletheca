@@ -2,11 +2,12 @@
 
 from typing import Literal
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
-from .safe_types import SafeList, SafeStr
+from .dehydrated import DehydratedSource
 
 # --- APC (Article Processing Charge) ---
 
@@ -27,6 +28,15 @@ class APCData(BaseModel):
     currency: SafeStr | None = None
     value_usd: int | None = None
     provenance: SafeStr | None = None
+
+    model_config = ConfigDict(extra="allow")
+
+
+class APCYear(BaseModel):
+    """A per-year APC price entry (``Source.apc_usd_by_year``)."""
+
+    year: int | None = None
+    price: int | None = None
 
     model_config = ConfigDict(extra="allow")
 
@@ -68,13 +78,15 @@ class Location(BaseModel):
     is_published: bool | None = None
     landing_page_url: SafeStr | None = None
     pdf_url: SafeStr | None = None
+    doi: SafeStr | None = None
     license: SafeStr | None = None
     license_id: SafeStr | None = None
-    source: dict | None = None  # DehydratedSource — set in work.py
+    source: DehydratedSource | None = None
     version: (
         Literal["publishedVersion", "acceptedVersion", "submittedVersion"] | None
     ) = None
     raw_source_name: SafeStr | None = None
+    raw_type: SafeStr | None = None
     id: SafeStr | None = None
 
     model_config = ConfigDict(extra="allow")
@@ -195,6 +207,15 @@ class DehydratedKeyword(BaseEntity):
 # --- Citation metrics ---
 
 
+class CitedByPercentileYear(BaseModel):
+    """Cited-by percentile range for a work."""
+
+    min: int | None = None
+    max: int | None = None
+
+    model_config = ConfigDict(extra="allow")
+
+
 class CitationNormalizedPercentile(BaseModel):
     """Citation normalized percentile."""
 
@@ -305,57 +326,3 @@ class Affiliation(BaseModel):
     institution_ids: SafeList[str] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")
-
-
-# --- Type aliases (re-exported) ---
-
-from typing import Literal as _L  # noqa: E402
-
-WorkType = _L[
-    "article",
-    "book-chapter",
-    "book-section",
-    "book",
-    "dataset",
-    "database",
-    "dissertation",
-    "editorial",
-    "erratum",
-    "grant",
-    "letter",
-    "libguides",
-    "other",
-    "paratext",
-    "peer-review",
-    "preprint",
-    "reference-entry",
-    "report",
-    "report-component",
-    "retraction",
-    "review",
-    "software",
-    "standard",
-    "supplementary-materials",
-]
-
-SourceType = _L[
-    "journal",
-    "repository",
-    "conference",
-    "ebook platform",
-    "book series",
-    "metadata",
-    "other",
-]
-
-InstitutionType = _L[
-    "education",
-    "healthcare",
-    "company",
-    "archive",
-    "nonprofit",
-    "government",
-    "facility",
-    "other",
-    "funder",
-]
