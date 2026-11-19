@@ -145,7 +145,9 @@ async def _(mo, session):
     _heading = mo.md("## Convenience: `works_by_author`")
 
     works = await session.queries.works_by_author("Yann LeCun", limit=5)
-    _body = mo.md(f"Retrieved **{len(works)}** works via `session.queries.works_by_author`")
+    _body = mo.md(
+        f"Retrieved **{len(works)}** works via `session.queries.works_by_author`"
+    )
     mo.vstack([_heading, _body])
     return (works,)
 

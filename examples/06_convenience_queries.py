@@ -122,7 +122,9 @@ async def _(mo, session):
                 "Citations": _w.cited_by_count,
             }
         )
-    _count_md = mo.md(f"**{len(citing)}** works that cite W2741809807 (capped at 5 for display)\n")
+    _count_md = mo.md(
+        f"**{len(citing)}** works that cite W2741809807 (capped at 5 for display)\n"
+    )
     _table = mo.ui.table(_rows, selection=None)
     mo.vstack([_, _count_md, _table])
 

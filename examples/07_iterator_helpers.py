@@ -36,7 +36,7 @@ def _():
 @app.cell
 async def _(mo):
     mo.md(
-"""
+        """
 # Iterator Helpers
 
 Aletheca provides `collect`, `count`, and `first` helpers
@@ -52,10 +52,12 @@ async def _(WorksFilters, mo, session):
     _filters = WorksFilters(publication_year=2024, is_oa=True, type="article")
     total = await session.works.count(filters=_filters)
 
-    mo.vstack([
-        _heading,
-        mo.md(f"**{total:,}** open-access articles published in 2024"),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.md(f"**{total:,}** open-access articles published in 2024"),
+        ]
+    )
     return _filters, total
 
 
@@ -76,10 +78,12 @@ async def _(WorksFilters, mo, session):
         )
     else:
         _body = mo.md("No result found.")
-    mo.vstack([
-        _heading,
-        _body,
-    ])
+    mo.vstack(
+        [
+            _heading,
+            _body,
+        ]
+    )
     return (top,)
 
 
@@ -94,10 +98,12 @@ async def _(WorksFilters, mo, session):
     )
     works = await session.works.collect(filters=_filters, limit=20)
 
-    mo.vstack([
-        _heading,
-        mo.md(f"Collected **{len(works)}** works into a list (limit=20)"),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.md(f"Collected **{len(works)}** works into a list (limit=20)"),
+        ]
+    )
     return _filters, works
 
 
@@ -115,10 +121,12 @@ def _(mo, works):
                 "Citations": w.cited_by_count,
             }
         )
-    mo.vstack([
-        _heading,
-        mo.ui.table(rows, selection=None),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.ui.table(rows, selection=None),
+        ]
+    )
     return (rows,)
 
 
@@ -128,24 +136,26 @@ async def _(WorksFilters, mo, session):
 
     _filters = WorksFilters(publication_year=2024, is_oa=True)
 
-    mo.vstack([
-        _heading,
-        mo.md(
-            "**Manual iteration:**\n\n"
-            "```python\n"
-            "count = 0\n"
-            "async for work in session.works.iterate(filters=filters, page_size=50):\n"
-            "    count += 1\n"
-            "    if count >= 100:\n"
-            "        break\n"
-            "```\n\n"
-            "**Using `collect()`:**\n\n"
-            "```python\n"
-            "works = await session.works.collect(filters=filters, limit=100)\n"
-            "```\n\n"
-            "The helper is shorter and handles cursor pagination internally."
-        ),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.md(
+                "**Manual iteration:**\n\n"
+                "```python\n"
+                "count = 0\n"
+                "async for work in session.works.iterate(filters=filters, page_size=50):\n"
+                "    count += 1\n"
+                "    if count >= 100:\n"
+                "        break\n"
+                "```\n\n"
+                "**Using `collect()`:**\n\n"
+                "```python\n"
+                "works = await session.works.collect(filters=filters, limit=100)\n"
+                "```\n\n"
+                "The helper is shorter and handles cursor pagination internally."
+            ),
+        ]
+    )
 
 
 @app.cell

@@ -68,13 +68,15 @@ async def _(WorksFilters, mo, session):
     )
 
     total = response.meta.count if response.meta else 0
-    mo.vstack([
-        _heading,
-        mo.md(
-            f'**Open-access English articles from 2024** matching "machine learning": '
-            f"**{total:,}** results"
-        ),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.md(
+                f'**Open-access English articles from 2024** matching "machine learning": '
+                f"**{total:,}** results"
+            ),
+        ]
+    )
     return (response,)
 
 
@@ -93,10 +95,12 @@ def _(mo, response):
                 "OA": work.open_access and work.open_access.oa_status or "N/A",
             }
         )
-    mo.vstack([
-        _heading,
-        mo.ui.table(rows, selection=None),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.ui.table(rows, selection=None),
+        ]
+    )
 
 
 @app.cell
@@ -118,10 +122,12 @@ async def _(AuthorsFilters, mo, session):
                 "ORCID": author.orcid or "N/A",
             }
         )
-    mo.vstack([
-        _heading,
-        mo.ui.table(author_rows, selection=None),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.ui.table(author_rows, selection=None),
+        ]
+    )
 
 
 @app.cell
@@ -143,10 +149,12 @@ async def _(InstitutionsFilters, mo, session):
                 "Works": inst.works_count,
             }
         )
-    mo.vstack([
-        _heading,
-        mo.ui.table(inst_rows, selection=None),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.ui.table(inst_rows, selection=None),
+        ]
+    )
 
 
 @app.cell
@@ -168,10 +176,14 @@ async def _(WorksFilters, mo, session):
     )
 
     n = resp.meta.count if resp.meta else 0
-    mo.vstack([
-        _heading,
-        mo.md(f"**{n:,}** open-access articles from 2023 with abstracts about LLMs"),
-    ])
+    mo.vstack(
+        [
+            _heading,
+            mo.md(
+                f"**{n:,}** open-access articles from 2023 with abstracts about LLMs"
+            ),
+        ]
+    )
 
 
 @app.cell

@@ -187,7 +187,9 @@ async def _(mo, reconstruct_abstract, session):
         _items.append(mo.md("No abstract available for this work."))
 
     # Or use the convenience property:
-    _items.append(mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut."))
+    _items.append(
+        mo.md("\n\nYou can also use `work.reconstructed_abstract` as a shortcut.")
+    )
     mo.vstack(_items)
     return (abstract,)
 
