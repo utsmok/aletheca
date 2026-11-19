@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "count": 3005221,
+    "db_response_time_ms": 75,
+    "page": 1,
+    "per_page": 2,
+    "groups_count": null,
+    "reranked": true,
+    "x_query": {
+      "oql": "get works with (open peer review) in the title, abstract, or full text",
+      "x_new_oql": "get works with (open peer review) in the title, abstract, or full text",
+      "oqo": {
+        "get_rows": "works",
+        "filter_rows": [
+          {
+            "column_id": "fulltext.search",
+            "value": "open peer review",
+            "operator": "has"
+          }
+        ]
+      },
+      "url": "/works?filter=fulltext.search:open peer review&per_page=2",
+      "order": "best matches first",
+      "order_default": true
+    },
+    "cost_usd": 0.002
+  },
+  "results": [
+    {
+      "id": "https://openalex.org/W2609499779",
+      "display_name": "What is open peer review? A systematic review",
+      "title": "What is open peer review? A systematic review",
+      "doi": "https://doi.org/10.12688/f1000research.11369.2",
+      "publication_year": 2017,
+      "cited_by_count": 520
+    }
+  ],
+  "group_by": []
+}

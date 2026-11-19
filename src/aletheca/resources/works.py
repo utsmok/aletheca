@@ -46,6 +46,7 @@ class WorksClient(OpenAlexResourceClient[Work]):
         corpus: Literal["core", "expansion", "all"] | None = None,
         include_parts: bool | None = None,
         include_pulled: bool | None = None,
+        rerank: bool = False,
     ) -> Page[Work]:
         """Search works; accepts the works-only corpus controls.
 
@@ -54,6 +55,10 @@ class WorksClient(OpenAlexResourceClient[Work]):
         ``all`` is everything. ``include_parts``/``include_pulled`` re-add
         those subsets to ``core``. Note that a ``is_pulled``/``is_retracted``
         filter re-includes pulled works on its own.
+
+        ``rerank=True`` reorders the top 100 of a relevance-sorted search
+        (costs 10 extra credits and requires the relevance sort a ``query``
+        gives you); ``page.meta["reranked"]`` reports whether it applied.
         """
         extra = dict(params or {})
         if corpus is not None:
@@ -66,6 +71,8 @@ class WorksClient(OpenAlexResourceClient[Work]):
             extra["include_parts"] = str(include_parts).lower()
         if include_pulled is not None:
             extra["include_pulled"] = str(include_pulled).lower()
+        if rerank:
+            extra["rerank"] = "true"
         return await super().search(
             filters,
             query=query,
@@ -197,6 +204,26 @@ class WorksClient(OpenAlexResourceClient[Work]):
     ) -> dict[str, Work]:
         """Fetch works by OpenAlex id (bare ``W...`` or full URL)."""
         return await self.batch_get(ids, field="openalex", batch_size=batch_size)
+
+    async def oa_pdf_urls(self, doi_or_id: str) -> list[str]:
+        """Return downloadable PDF URLs for a work, best OA copy first.
+
+        Reads ``pdf_url`` from ``best_oa_location``, then
+        ``primary_location``, then the remaining ``locations``; duplicates
+        keep their first position. Returns ``[]`` when no location carries a
+        PDF. OpenAlex's own paid PDF copies (``content_urls.pdf``) are not
+        included.
+        """
+        work = await self.get(doi_or_id)
+        urls: list[str] = []
+        seen: set[str] = set()
+        for location in (work.best_oa_location, work.primary_location, *work.locations):
+            pdf = location.pdf_url if location is not None else None
+            if pdf is None or pdf in seen:
+                continue
+            seen.add(pdf)
+            urls.append(str(pdf))
+        return urls
 
     async def citing(
         self,

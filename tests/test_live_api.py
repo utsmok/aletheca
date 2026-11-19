@@ -51,6 +51,36 @@ async def test_search_smoke(live_client):
     assert page.results[0].id
 
 
+async def test_locations_smoke(live_client):
+    record_id = load_fixture("location.json")["id"]
+    record = await live_client.locations.get(record_id)
+    assert record.id == record_id
+    assert record.work_id
+    page = await live_client.locations.search({"doi": "10.7717/peerj.4375"})
+    assert page.total is not None and page.total > 0
+
+
+async def test_links_smoke(live_client):
+    edges = await live_client.links.origin("W2741809807", limit=10)
+    assert edges
+    assert edges[0].origin.endswith("W2741809807")
+    assert edges[0].relationship.startswith("https://openalex.org/relationships/")
+
+
+async def test_rerank_smoke(live_client):
+    page = await live_client.works.search(
+        query="open peer review", rerank=True, select=["id"]
+    )
+    assert page.meta.get("reranked") is True
+
+
+async def test_oa_pdf_urls_smoke(live_client):
+    work_id = load_fixture("work_multi_oa.json")["id"].rsplit("/", 1)[-1]
+    urls = await live_client.works.oa_pdf_urls(work_id)
+    assert urls
+    assert all(url.startswith("http") for url in urls)
+
+
 async def test_count_smoke(live_client):
     assert await live_client.works.count({"is_oa": True}) > 0
 

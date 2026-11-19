@@ -72,6 +72,10 @@ from .publisher import ParentPublisher, Publisher
 from .query import (
     AutocompleteResult,
     GroupByBucket,
+    Link,
+    LocationRecord,
+    LocationRecordId,
+    LocationRecordUrl,
     PerSecondLimits,
     RateLimitInfo,
     RateLimitStatus,
@@ -89,6 +93,10 @@ __all__ = [
     # Query / status shapes
     "AutocompleteResult",
     "GroupByBucket",
+    "Link",
+    "LocationRecord",
+    "LocationRecordId",
+    "LocationRecordUrl",
     "PerSecondLimits",
     "RateLimitInfo",
     "RateLimitStatus",

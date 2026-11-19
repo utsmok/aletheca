@@ -35,6 +35,13 @@ page = await client.works.search(filters, include_parts=True, include_pulled=Tru
 
 Valid `corpus` values are `core` (default upstream), `expansion`, and `all`; anything else raises `ConfigurationError` before a request is sent.
 
+Pass `rerank=True` to reorder the top 100 of a relevance-sorted search (it costs 10 extra credits and needs the relevance sort a `query` gives you). The response reports whether reranking applied:
+
+```python
+page = await client.works.search(query="photosynthesis", rerank=True)
+page.meta["reranked"]  # True when OpenAlex reranked the results
+```
+
 ## Iterating over all matches
 
 ```python
@@ -62,6 +69,14 @@ works = await client.works.batch_get_by_openalex_id(["W2741809807", "W2100837269
 ```
 
 Both return `dict[normalized id, Work]`. Ids are deduplicated, split into chunks of 100 (OpenAlex's pipe-joined OR cap), and fetched concurrently. DOIs are normalized: URL prefixes are stripped and the value lowercased. Missing records are absent from the result; works without the requested field fall back to their OpenAlex id as key. `batch_get(ids, field=..., batch_size=...)` is the generic form; passing more than 100 OR values in one filter raises `ConfigurationError`.
+
+## PDF links
+
+```python
+urls = await client.works.oa_pdf_urls("10.7717/peerj.4375")
+```
+
+`oa_pdf_urls()` fetches the work once and returns its downloadable PDF URLs (`list[str]`): the copy in `best_oa_location` first, then `primary_location`, then the remaining `locations`, with duplicates dropped. It returns `[]` when no location carries a PDF. OpenAlex's own paid PDF copies (`work.content_urls.pdf`, 100 credits each) are not included.
 
 ## Citation graph
 

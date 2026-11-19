@@ -31,6 +31,8 @@ from .resources import (
     FundersClient,
     InstitutionsClient,
     KeywordsClient,
+    LinksClient,
+    LocationsClient,
     PublishersClient,
     SourcesClient,
     TopicsClient,
@@ -238,3 +240,13 @@ class AlethecaClient(BaseApiClient):
     def awards(self) -> AwardsClient:
         """The awards resource client."""
         return AwardsClient(self)
+
+    @cached_property
+    def locations(self) -> LocationsClient:
+        """The locations resource client (the per-copy index)."""
+        return LocationsClient(self)
+
+    @cached_property
+    def links(self) -> LinksClient:
+        """The links resource client (typed one-hop work edges)."""
+        return LinksClient(self)

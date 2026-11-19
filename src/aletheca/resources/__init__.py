@@ -5,6 +5,8 @@ from .awards import AwardsClient
 from .funders import FundersClient
 from .institutions import InstitutionsClient
 from .keywords import KeywordsClient
+from .links import LinksClient
+from .locations import LocationsClient
 from .publishers import PublishersClient
 from .sources import SourcesClient
 from .topics import TopicsClient
@@ -16,6 +18,8 @@ __all__ = [
     "FundersClient",
     "InstitutionsClient",
     "KeywordsClient",
+    "LinksClient",
+    "LocationsClient",
     "PublishersClient",
     "SourcesClient",
     "TopicsClient",

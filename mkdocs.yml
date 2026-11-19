@@ -33,6 +33,8 @@ nav:
       - Publishers: usage/publishers.md
       - Funders: usage/funders.md
       - Awards: usage/awards.md
+      - Locations: usage/locations.md
+      - Links: usage/links.md
   - Errors, retries, and rate limits: errors.md
   - Upstream quirks: upstream-quirks.md
   - API reference: reference.md

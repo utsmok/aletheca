@@ -18,6 +18,8 @@ Generated from the source with mkdocstrings.
         - publishers
         - funders
         - awards
+        - locations
+        - links
         - autocomplete
         - rate_limit
         - request
@@ -51,6 +53,7 @@ shown here.
         - batch_get_by_openalex_id
         - citing
         - referenced
+        - oa_pdf_urls
 
 ::: aletheca.resources.authors.AuthorsClient
     options:
@@ -58,6 +61,21 @@ shown here.
       show_source: false
       members:
         - batch_get_by_openalex_id
+
+::: aletheca.resources.locations.LocationsClient
+    options:
+      heading_level: 3
+      show_source: false
+      members:
+        - normalize_id
+
+::: aletheca.resources.links.LinksClient
+    options:
+      heading_level: 3
+      show_source: false
+      members:
+        - origin
+        - target
 
 ## Filter models
 

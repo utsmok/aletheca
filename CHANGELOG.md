@@ -70,6 +70,17 @@ changes are listed under each heading.
   typeahead, typed `AutocompleteResult`) and `client.rate_limit()` (typed
   `RateLimitStatus` with remaining budget; the echoed key is never stored).
 - `select=` on searches cuts payload size.
+- `client.locations` (`/locations` per-copy index, typed `LocationRecord`;
+  `get`/`search`/`iterate`; namespaced ids such as `doi:...` stay intact
+  because the single route 404s on bare DOIs).
+- `client.links` (`/links` citation-graph edges, typed `Link` with
+  `relationship` labels) with `origin(work_id)` and `target(work_id)`
+  helpers.
+- `works.search(rerank=True)` sends `rerank=true` (top-100 reranking for
+  relevance-sorted searches, +10 credits); whether it applied is readable
+  from `page.meta["reranked"]`.
+- `works.oa_pdf_urls(doi_or_id)` returns the work's downloadable PDF URLs,
+  best OA copy first (`[]` when none).
 
 ### Deprecated filters removed (OX-14)
 

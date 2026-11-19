@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "count": 47,
+    "db_response_time_ms": 135,
+    "page": 1,
+    "per_page": 5,
+    "next_cursor": null,
+    "cost_usd": 0.0001
+  },
+  "results": [
+    {
+      "origin": "https://openalex.org/W2741809807",
+      "target": "https://openalex.org/W1560783210",
+      "relationship": "https://openalex.org/relationships/citation"
+    },
+    {
+      "origin": "https://openalex.org/W2741809807",
+      "target": "https://openalex.org/W1724212071",
+      "relationship": "https://openalex.org/relationships/citation"
+    }
+  ]
+}
