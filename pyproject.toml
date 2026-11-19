@@ -1,6 +1,6 @@
 [project]
 name = "aletheca"
-version = "0.5.0"
+version = "0.4.0"
 description = "Python interface for the OpenAlex API, built on top of the bibliofabric framework."
 authors = [
     {name = "Samuel Mok", email = "s.mok@utwente.nl"}
@@ -51,7 +51,7 @@ generate-hashes = true
 
 [tool.ruff]
 line-length = 88
-extend-exclude = ["archive", "tests/_legacy"]
+extend-exclude = ["archive"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -91,8 +91,7 @@ combine-as-imports = true
 # magic values.
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
-"scripts/verify.py" = ["PLR0911", "PLR2004"]
-"examples/**/*.py" = ["PLC0415", "F821", "PERF401", "B007", "F841", "PLR2004"]
+"tests/**/*.py" = ["PLR2004"]
 
 [tool.pytest.ini_options]
 pythonpath = [
@@ -106,4 +105,4 @@ asyncio_default_fixture_loop_scope = "function"
 markers = [
     "live_api: marks tests that hit the live OpenAlex API (requires API key, skipped in CI)",
 ]
-addopts = "-m 'not live_api' --ignore=tests/_legacy"
+addopts = "-m 'not live_api'"

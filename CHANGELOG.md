@@ -4,11 +4,11 @@ All notable changes to Aletheca are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 0.5.0
+## [Unreleased] - 0.4.0
 
 Rewritten onto bibliofabric 0.6 (one generic `ResourceClient` + `QueryDialect`
 per API, `Page[E]` results, stdlib logging, no loguru, no sessions). Breaking
-changes are listed under each heading; the 0.4.0 overhaul note is superseded.
+changes are listed under each heading.
 
 ### Removed
 
@@ -82,9 +82,9 @@ changes are listed under each heading; the 0.4.0 overhaul note is superseded.
   `from/to_updated_date`): paid (Member+/Partner; free accounts get 403).
 - `SourcesFilters.is_in_jstage*`: no longer returned or documented upstream.
 
-### Migration from 0.4
+### Migration from 0.3
 
-| 0.4 call | 0.5 call |
+| 0.3 call | 0.4 call |
 |---|---|
 | `AlethecaSession()` / `session.works` | `AlethecaClient()` / `client.works` |
 | `session.queries.works_by_doi(dois)` | `client.works.batch_get_by_doi(dois)` → `dict[doi, Work]` |
