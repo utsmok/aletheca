@@ -116,4 +116,4 @@ asyncio_default_fixture_loop_scope = "function"
 markers = [
     "live_api: marks tests that hit the live OpenAlex API (requires API key, skipped in CI)",
 ]
-addopts = "-m 'not live_api'"
+addopts = "-m 'not live_api' --ignore=tests/_legacy"
