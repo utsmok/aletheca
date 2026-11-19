@@ -17,6 +17,8 @@ async with AlethecaSession() as session:
     print(institution.works_count)
 ```
 
+The `get` method also accepts ROR URLs (e.g. `https://ror.org/0130frc33`).
+
 ### Search for institutions
 
 ```python
@@ -177,6 +179,30 @@ async with AlethecaSession() as session:
     ):
         print(f"{inst.display_name}: {inst.works_count} works")
 ```
+
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `country_code` | `country_code` | `str` | ISO 3166-1 alpha-2 country code (e.g., `"US"`, `"DE"`, `"JP"`) |
+| `type` | `type` | `str` | Institution type: `education`, `facility`, `healthcare`, `company`, `archive`, `nonprofit`, `government`, `other` |
+| `ror` | `ror` | `str` | ROR (Research Organization Registry) ID |
+| `works_count` | `works_count` | `int` | Exact number of works |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"1000-10000"`) |
+| `cited_by_count` | `cited_by_count` | `int` | Exact citation count |
+| `cited_by_count_range` | `cited_by_count_range` | `str` | Citation count range |
+
+### Search & Geographic Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within display names |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
+| `continent` | `continent` | `str` | Continent name |
+| `is_global_south` | `is_global_south` | `bool` | Whether the institution is in the Global South |
 
 ## Key Fields
 

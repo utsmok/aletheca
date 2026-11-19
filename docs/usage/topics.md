@@ -149,6 +149,27 @@ async with AlethecaSession() as session:
         print(f"{topic.display_name}: {topic.works_count} works")
 ```
 
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `id` | `id` | `str` | OpenAlex Topic ID |
+| `subfield_id` | `subfield_id` | `str` | Subfield ID to filter topics belonging to a specific subfield |
+| `field_id` | `field_id` | `str` | Field ID to filter topics belonging to a specific field |
+| `domain_id` | `domain_id` | `str` | Domain ID to filter topics belonging to a specific domain |
+| `works_count` | `works_count` | `int` | Exact number of works tagged with this topic |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"1000-10000"`) |
+
+### Search Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within topic display names |
+| `keywords_keyword` | `keywords.keyword` | `str` | Filter by a keyword associated with the topic |
+
 ## Key Fields
 
 | Field | Type | Description |

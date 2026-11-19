@@ -90,6 +90,23 @@ async with AlethecaSession() as session:
         print(f"{keyword.display_name}: {keyword.works_count} works")
 ```
 
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `works_count` | `works_count` | `int` | Exact number of works associated with this keyword |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"100-1000"`) |
+
+### Search Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within keyword display names |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
+
 ## Key Fields
 
 | Field | Type | Description |

@@ -17,6 +17,8 @@ async with AlethecaSession() as session:
     print(funder.awards_count)
 ```
 
+The `get` method also accepts ROR URLs (e.g. `https://ror.org/012tx4f57`).
+
 ### Search for funders
 
 ```python
@@ -117,6 +119,26 @@ async with AlethecaSession() as session:
     ):
         print(f"{funder.display_name}: {funder.works_count} works, {funder.awards_count} awards")
 ```
+
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `country_code` | `country_code` | `str` | ISO 3166-1 alpha-2 country code (e.g., `"US"`, `"GB"`) |
+| `ror` | `ror` | `str` | ROR (Research Organization Registry) ID |
+| `works_count` | `works_count` | `int` | Exact number of works funded |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"1000-100000"`) |
+| `awards_count` | `awards_count` | `int` | Exact number of awards granted |
+
+### Search Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within funder display names |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
 
 ## Key Fields
 

@@ -2,7 +2,7 @@
 
 **Python interface for the OpenAlex API**, built on [bibliofabric](https://github.com/utsmok/bibliofabric).
 
-Aletheca provides a fully-typed, async-first Python client for [OpenAlex](https://openalex.org) — the open catalog of the global research system. It wraps all eight entity endpoints (Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders) with Pydantic models, structured filters, and cursor-based pagination.
+Aletheca provides a fully-typed, async-first Python client for [OpenAlex](https://openalex.org) — the open catalog of the global research system. It wraps all nine entity endpoints (Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders, Awards) with Pydantic models, structured filters, and cursor-based pagination.
 
 ## Why aletheca?
 

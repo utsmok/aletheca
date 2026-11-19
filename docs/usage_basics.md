@@ -26,7 +26,7 @@ async with AlethecaSession(api_key="your-key") as session:
 
 ## Resource clients
 
-The session exposes eight entity endpoints as attributes:
+The session exposes nine entity endpoints as attributes:
 
 | Attribute | Entity | Client class |
 |---|---|---|
@@ -38,6 +38,7 @@ The session exposes eight entity endpoints as attributes:
 | `session.keywords` | Keywords | `KeywordsClient` |
 | `session.publishers` | Publishers | `PublishersClient` |
 | `session.funders` | Funders | `FundersClient` |
+| `session.awards` | Awards | `AwardsClient` |
 
 ## Getting a single entity
 

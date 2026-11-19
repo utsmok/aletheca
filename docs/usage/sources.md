@@ -169,6 +169,35 @@ async with AlethecaSession() as session:
         print(f"{source.display_name}: {source.works_count} works")
 ```
 
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `type` | `type` | `str` | Source type: `journal`, `repository`, `conference`, `ebook platform`, `book series` |
+| `is_oa` | `is_oa` | `bool` | Whether the source is Open Access |
+| `host_organization` | `host_organization` | `str` | OpenAlex ID of the host organization (publisher) |
+| `issn` | `issn` | `str` | ISSN (any ISSN associated with the source) |
+| `issn_l` | `issn_l` | `str` | Linking ISSN |
+| `has_apc` | `has_apc` | `bool` | Whether the source has article processing charges |
+| `works_count` | `works_count` | `int` | Exact number of works in this source |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"1000-10000"`) |
+| `cited_by_count` | `cited_by_count` | `int` | Exact citation count |
+| `cited_by_count_range` | `cited_by_count_range` | `str` | Citation count range (e.g., `"100000-1000000"`) |
+
+### Search & Geographic Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within display names |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
+| `continent` | `continent` | `str` | Continent of the source's publisher |
+| `has_issn` | `has_issn` | `bool` | Whether the source has an ISSN |
+| `is_global_south` | `is_global_south` | `bool` | Whether the source is in the Global South |
+| `x_concepts_id` | `x_concepts.id` | `str` | Concept ID (deprecated; prefer topics) |
+
 ## Key Fields
 
 | Field | Type | Description |

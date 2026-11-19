@@ -1,13 +1,34 @@
 # Awards
 
-The Awards endpoint represents individual research grants and funding awards — the specific financial instruments through which funders support scholarly work. Each award links to its funder, investigators, funded outputs (works), and award metadata like amount, dates, and topics.
+The Awards endpoint represents individual research grants and funding awards — the specific financial instruments through which funders support scholarly work. Each award links to its funder, investigators, funded outputs (works), and award metadata like amount, dates, and topics. Access it through `session.awards`.
 
-!!! warning "Not yet available as a resource client"
-    The `Award` model exists but there is no dedicated `session.awards` resource client yet. Awards currently appear as nested data on works (via the `grants` field) and on funders. The examples below show the intended API once the Awards client is implemented.
+## Quick Start
+
+### Get an award by OpenAlex ID
+
+```python
+from aletheca import AlethecaSession
+
+async with AlethecaSession() as session:
+    award = await session.awards.get("G5066037109")
+    print(f"{award.display_name}: {award.funder}")
+```
+
+### Search awards
+
+```python
+from aletheca import AlethecaSession
+
+async with AlethecaSession() as session:
+    results = await session.awards.search(search="machine learning", page_size=10)
+    print(f"Found {results.meta.count} awards")
+    for award in results.results:
+        print(f"  {award.display_name} ({award.funding_type})")
+```
 
 ## Award Data on Works
 
-Awards are currently accessible through works. Each work has a `grants` field and an `awards` field:
+Each work carries award data in a `grants` field and an `awards` field:
 
 ```python
 from aletheca import AlethecaSession
@@ -27,6 +48,19 @@ async with AlethecaSession() as session:
     # Funder information
     for funder in work.funders:
         print(f"Funder: {funder.display_name}")
+```
+
+To fetch full award details for the IDs on a work:
+
+```python
+from aletheca import AlethecaSession
+
+async with AlethecaSession() as session:
+    work = await session.works.get("W2741809807")
+
+    for award_id in work.awards:
+        award = await session.awards.get(award_id.split("/")[-1])
+        print(f"{award.display_name} from {award.funder}")
 ```
 
 ## Award Model Fields
@@ -112,6 +146,68 @@ async with AlethecaSession() as session:
                     print(f"  {grant.award_id} from {grant.funder_display_name}")
 ```
 
+## Filtering
+
+Use `AwardsFilters` to construct structured filter queries:
+
+```python
+from aletheca import AlethecaSession
+from aletheca.endpoints import AwardsFilters
+
+async with AlethecaSession() as session:
+    filters = AwardsFilters(funder_id="F4320306100")
+    async for award in session.awards.iterate(filters=filters, page_size=50):
+        print(f"{award.display_name}: {award.amount} {award.currency}")
+```
+
+## Filter reference
+
+Field names follow the live API's valid-filter list (the API enumerates it in
+the 400 error returned for invalid fields). Filters that the API rejects —
+`funder.country_code`, `lead_investigator.id`, `co_lead_investigator.id`, plain
+`funder` and `display_name`, and `from_/to_*_date` ranges — are intentionally
+not modelled.
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `doi` | `doi` | `str` | Award DOI |
+| `funder_name` | `funder_name` | `str` | Funder display name |
+| `funder_award_id` | `funder_award_id` | `str` | Funder's own award identifier |
+| `funder_scheme` | `funder_scheme` | `str` | Funder's grant scheme |
+| `funding_type` | `funding_type` | `str` | Kind of funding |
+| `provenance` | `provenance` | `str` | Data source of the award |
+| `currency` | `currency` | `str` | ISO 4217 currency code |
+| `amount` | `amount` | `float` | Award amount |
+| `start_year` / `end_year` | same | `int` | Award period years |
+| `funded_outputs_count` | `funded_outputs_count` | `int` | Number of funded works |
+| `funder_id` | `funder.id` | `str` | Funder OpenAlex ID |
+| `funder_ror` | `funder.ror` | `str` | Funder ROR |
+| `funder_doi` | `funder.doi` | `str` | Funder DOI |
+| `lead_investigator_orcid` | `lead_investigator.orcid` | `str` | Lead investigator ORCID |
+| `lead_investigator_given_name` | `lead_investigator.given_name` | `str` | Lead investigator given name |
+| `lead_investigator_family_name` | `lead_investigator.family_name` | `str` | Lead investigator family name |
+| `lead_investigator_affiliation_name` | `lead_investigator.affiliation.name` | `str` | Lead investigator affiliation |
+| `lead_investigator_affiliation_country` | `lead_investigator.affiliation.country` | `str` | Lead investigator affiliation country |
+| `institution_awarded_id` | `institution_awarded.id` | `str` | Institution OpenAlex ID |
+| `institution_awarded_ror` | `institution_awarded.ror` | `str` | Institution ROR |
+| `institution_awarded_country_code` | `institution_awarded.country_code` | `str` | Institution country code |
+| `institution_awarded_type` | `institution_awarded.type` | `str` | Institution type |
+| `institution_awarded_lineage` | `institution_awarded.lineage` | `str` | Institution lineage |
+| `institution_awarded_continent` | `institution_awarded.continent` | `str` | Institution continent |
+| `primary_topic_id` etc. | `primary_topic.{id,subfield.id,field.id,domain.id}` | `str` | Primary topic filters |
+| `topics_id` etc. | `topics.{id,subfield.id,field.id,domain.id}` | `str` | Topic filters |
+
+### Search Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within display name |
+| `description_search` | `description.search` | `str` | Search within description |
+| `text_search` | `text.search` | `str` | Full-text search |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
+
 ## Notes
 
 - OpenAlex IDs for awards start with `A` (e.g. `A123456`). Note this shares the `A` prefix with Authors — use context to distinguish.
@@ -120,3 +216,5 @@ async with AlethecaSession() as session:
 - Award amounts may be in various currencies; check the `currency` field before comparing amounts.
 - The `funding_type` field describes the instrument (grant, contract, fellowship, etc.).
 - Use the Funders endpoint to explore funding organizations, then discover awards through works' `grants` field.
+- The OpenAlex docs filter table lists ~23 filters, but the live API supports 38+ filter fields. Send `?filter=nonexistent:foo` to discover all valid filters from the error message.
+- The API returns more filters than are modeled here. Use `extra="allow"` to pass additional filters via keyword arguments.

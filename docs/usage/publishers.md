@@ -141,6 +141,25 @@ async with AlethecaSession() as session:
         print(f"{publisher.display_name}: {publisher.works_count} works")
 ```
 
+## Filter reference
+
+### Core Metadata Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name` | `display_name` | `str` | Exact display name match |
+| `country_codes` | `country_codes` | `str` | Country code(s) where the publisher operates. Pipe-delimited for multiple. |
+| `hierarchy_level` | `hierarchy_level` | `int` | Level in the publisher hierarchy (0 = top-level) |
+| `works_count` | `works_count` | `int` | Exact number of works published |
+| `works_count_range` | `works_count_range` | `str` | Works count range (e.g., `"1000-100000"`) |
+
+### Search Filters
+
+| Field Name | Alias (OpenAlex) | Type | Description |
+|-----------|-------------------|------|-------------|
+| `display_name_search` | `display_name.search` | `str` | Search within publisher display names |
+| `default_search` | `default.search` | `str` | Default search across multiple fields |
+
 ## Key Fields
 
 | Field | Type | Description |
