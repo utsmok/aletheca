@@ -1,9 +1,8 @@
 """Pydantic models for OpenAlex entity ID objects."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
-
-from .safe_types import SafeList, SafeStr
 
 
 class WorkIds(BaseModel):
@@ -23,9 +22,16 @@ class AuthorIds(BaseModel):
 
     openalex: SafeStr = ""
     orcid: SafeStr | None = None
-    scopus: SafeStr | None = None
-    twitter: SafeStr | None = None
-    wikipedia: SafeStr | None = None
+    observed_orcids: SafeList[str] = Field(default_factory=list)
+
+    model_config = ConfigDict(extra="allow")
+
+
+class KeywordIds(BaseModel):
+    """IDs for a Keyword entity (keyword IDs are slug URLs)."""
+
+    openalex: SafeStr = ""
+    wikidata: SafeStr | None = None
 
     model_config = ConfigDict(extra="allow")
 

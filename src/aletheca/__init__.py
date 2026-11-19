@@ -7,6 +7,7 @@ try:
 except PackageNotFoundError:
     __version__ = "0.0.0"
 
+from bibliofabric import Page
 from bibliofabric.exceptions import (
     APIError,
     AuthError,
@@ -20,45 +21,72 @@ from bibliofabric.exceptions import (
 )
 
 from .client import AlethecaClient
+from .config import AlethecaSettings
+from .filters import (
+    AuthorsFilters,
+    AwardsFilters,
+    FundersFilters,
+    InstitutionsFilters,
+    KeywordsFilters,
+    PublishersFilters,
+    SourcesFilters,
+    TopicsFilters,
+    WorksFilters,
+)
 from .models import (
-    ApiResponse,
     Author,
+    AutocompleteResult,
     Award,
     BaseEntity,
     Funder,
+    GroupByBucket,
     Institution,
     Keyword,
-    Meta,
+    Link,
+    LocationRecord,
     Publisher,
+    RateLimitStatus,
     Source,
     Topic,
     Work,
 )
-from .session import AlethecaSession
 
 __all__ = [
     "__version__",
     "APIError",
-    "ApiResponse",
     "AuthError",
-    "Award",
     "Author",
+    "AuthorsFilters",
+    "AutocompleteResult",
+    "Award",
+    "AwardsFilters",
+    "AlethecaClient",
+    "AlethecaSettings",
     "BaseEntity",
     "BibliofabricError",
     "ConfigurationError",
     "Funder",
+    "FundersFilters",
+    "GroupByBucket",
     "Institution",
+    "InstitutionsFilters",
     "Keyword",
-    "Meta",
+    "KeywordsFilters",
+    "Link",
+    "LocationRecord",
     "NetworkError",
     "NotFoundError",
+    "Page",
     "Publisher",
+    "PublishersFilters",
     "RateLimitError",
+    "RateLimitStatus",
     "Source",
-    "AlethecaClient",
-    "AlethecaSession",
+    "SourcesFilters",
     "TimeoutError",
     "Topic",
+    "TopicsFilters",
     "ValidationError",
     "Work",
+    "WorksFilters",
 ]

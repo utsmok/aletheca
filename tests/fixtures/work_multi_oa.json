@@ -1,0 +1,222 @@
+{
+  "id": "https://openalex.org/W2626778328",
+  "display_name": "Attention Is All You Need",
+  "title": "Attention Is All You Need",
+  "doi": "https://doi.org/10.48550/arxiv.1706.03762",
+  "open_access": {
+    "is_oa": true,
+    "oa_status": "green",
+    "oa_url": "https://arxiv.org/pdf/1706.03762",
+    "any_repository_has_fulltext": true
+  },
+  "best_oa_location": {
+    "id": "pmh:oai:arXiv.org:1706.03762",
+    "doi": null,
+    "is_oa": true,
+    "landing_page_url": "http://arxiv.org/abs/1706.03762",
+    "pdf_url": "https://arxiv.org/pdf/1706.03762",
+    "source": {
+      "id": "https://openalex.org/S4306400194",
+      "display_name": "arXiv (Cornell University)",
+      "issn_l": "2331-8422",
+      "issn": [
+        "2331-8422"
+      ],
+      "is_oa": true,
+      "is_in_doaj": false,
+      "is_core": false,
+      "listed_in": [],
+      "host_organization": "https://openalex.org/I205783295",
+      "host_organization_name": "Cornell University",
+      "host_organization_lineage": [
+        "https://openalex.org/I205783295"
+      ],
+      "host_organization_lineage_names": [],
+      "type": "repository"
+    },
+    "license": null,
+    "license_id": null,
+    "version": "submittedVersion",
+    "is_accepted": false,
+    "is_published": false,
+    "raw_source_name": null,
+    "raw_type": "text"
+  },
+  "primary_location": {
+    "id": "pmh:oai:arXiv.org:1706.03762",
+    "doi": null,
+    "is_oa": true,
+    "landing_page_url": "http://arxiv.org/abs/1706.03762",
+    "pdf_url": "https://arxiv.org/pdf/1706.03762",
+    "source": {
+      "id": "https://openalex.org/S4306400194",
+      "display_name": "arXiv (Cornell University)",
+      "issn_l": "2331-8422",
+      "issn": [
+        "2331-8422"
+      ],
+      "is_oa": true,
+      "is_in_doaj": false,
+      "is_core": false,
+      "listed_in": [],
+      "host_organization": "https://openalex.org/I205783295",
+      "host_organization_name": "Cornell University",
+      "host_organization_lineage": [
+        "https://openalex.org/I205783295"
+      ],
+      "host_organization_lineage_names": [],
+      "type": "repository"
+    },
+    "license": null,
+    "license_id": null,
+    "version": "submittedVersion",
+    "is_accepted": false,
+    "is_published": false,
+    "raw_source_name": null,
+    "raw_type": "text"
+  },
+  "locations_count": 11,
+  "locations": [
+    {
+      "id": "pmh:oai:arXiv.org:1706.03762",
+      "doi": null,
+      "is_oa": true,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "http://arxiv.org/abs/1706.03762",
+      "pdf_url": "https://arxiv.org/pdf/1706.03762",
+      "version": "submittedVersion",
+      "license": null,
+      "source": {
+        "id": "https://openalex.org/S4306400194",
+        "display_name": "arXiv (Cornell University)"
+      }
+    },
+    {
+      "id": "doi:10.48550/arxiv.1706.03762",
+      "doi": "https://doi.org/10.48550/arxiv.1706.03762",
+      "is_oa": true,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.48550/arxiv.1706.03762",
+      "pdf_url": null,
+      "version": null,
+      "license": null,
+      "source": {
+        "id": "https://openalex.org/S4306400194",
+        "display_name": "arXiv (Cornell University)"
+      }
+    },
+    {
+      "id": "mag:2963403868",
+      "doi": null,
+      "is_oa": true,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://arxiv.org/pdf/1706.03762v5",
+      "pdf_url": null,
+      "version": null,
+      "license": null,
+      "source": {
+        "id": "https://openalex.org/S4306400194",
+        "display_name": "arXiv (Cornell University)"
+      }
+    },
+    {
+      "id": "doi:10.65215/r5bs2d54",
+      "doi": "https://doi.org/10.65215/r5bs2d54",
+      "is_oa": true,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/r5bs2d54",
+      "pdf_url": "https://langtaosha.org.cn/index.php/lts/preprint/download/10/108",
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/2q58a426",
+      "doi": "https://doi.org/10.65215/2q58a426",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/2q58a426",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/ctdc8e75",
+      "doi": "https://doi.org/10.65215/ctdc8e75",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/ctdc8e75",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/mdcm8z23",
+      "doi": "https://doi.org/10.65215/mdcm8z23",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/mdcm8z23",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/ne77pf66",
+      "doi": "https://doi.org/10.65215/ne77pf66",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/ne77pf66",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/nxvz2v36",
+      "doi": "https://doi.org/10.65215/nxvz2v36",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/nxvz2v36",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/pc26a033",
+      "doi": "https://doi.org/10.65215/pc26a033",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/pc26a033",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    },
+    {
+      "id": "doi:10.65215/ysbyhc05",
+      "doi": "https://doi.org/10.65215/ysbyhc05",
+      "is_oa": false,
+      "is_accepted": false,
+      "is_published": false,
+      "landing_page_url": "https://doi.org/10.65215/ysbyhc05",
+      "pdf_url": null,
+      "version": "submittedVersion",
+      "license": null,
+      "source": null
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 """Pydantic models for the Funder entity."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import Role, SummaryStats, YearCount
 from .ids import FunderIds
-from .safe_types import SafeList, SafeStr
 
 
 class Funder(BaseEntity):
@@ -28,6 +28,9 @@ class Funder(BaseEntity):
     # Common fields
     created_date: str | None = None
     updated_date: str | None = None
+    works_api_url: SafeStr | None = None
+    awards_api_url: SafeStr | None = None
+    is_global_south: bool | None = None
     summary_stats: SummaryStats | None = None
 
     model_config = ConfigDict(extra="allow")

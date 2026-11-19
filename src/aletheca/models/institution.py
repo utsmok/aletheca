@@ -1,5 +1,6 @@
 """Pydantic models for the Institution entity."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import Field
 from pydantic.config import ConfigDict
 
@@ -13,9 +14,8 @@ from .common import (
     TopicShare,
     YearCount,
 )
-from .dehydrated import RelatedInstitution
+from .dehydrated import DehydratedConcept, RelatedInstitution
 from .ids import InstitutionIds
-from .safe_types import SafeList, SafeStr
 
 
 class Repository(BaseEntity):
@@ -55,11 +55,18 @@ class Institution(BaseEntity):
     created_date: str | None = None
     updated_date: str | None = None
     works_api_url: str | None = None
+    awards_api_url: SafeStr | None = None
+    awards_count: int | None = None
+    works_count_with_children: int | None = None
+    works_count_with_children_and_predecessors: int | None = None
     summary_stats: SummaryStats | None = None
     status: SafeStr | None = None
 
-    # Deprecated
-    x_concepts: SafeList[dict] = Field(default_factory=list)
+    # Deprecated: x_concepts → use topics
+    x_concepts: SafeList[DehydratedConcept] = Field(
+        default_factory=list,
+        description="Deprecated upstream: replaced by topics, but still returned.",
+    )
 
     # Topics
     topics: SafeList[TopicCount] = Field(default_factory=list)

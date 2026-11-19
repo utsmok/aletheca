@@ -1,14 +1,18 @@
 """Pydantic models for the Work entity and its nested types."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
+from .._helpers import reconstruct_abstract
 from .base import BaseEntity
 from .common import (
     SDG,
+    Affiliation,
     APCData,
     Biblio,
     CitationNormalizedPercentile,
+    CitedByPercentileYear,
     DehydratedFunder,
     DehydratedKeyword,
     DehydratedTopic,
@@ -18,9 +22,13 @@ from .common import (
     OpenAccess,
     YearCountBasic,
 )
-from .dehydrated import RelatedWork
+from .dehydrated import (
+    DehydratedAuthor,
+    DehydratedConcept,
+    DehydratedInstitution,
+    RelatedWork,
+)
 from .ids import WorkIds
-from .safe_types import SafeList, SafeStr
 
 
 class ContentUrls(BaseModel):
@@ -32,16 +40,20 @@ class ContentUrls(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
-class DehydratedSource(BaseEntity):
-    """Minimal source info embedded in locations."""
+class StudyDesign(BaseEntity):
+    """A controlled study-design classification on a work."""
 
-    is_core: bool | None = None
-    issn: SafeList[str] = Field(default_factory=list)
-    issn_l: SafeStr | None = None
-    type: str | None = None
-    host_organization: SafeStr | None = None
-    host_organization_name: SafeStr | None = None
-    host_organization_lineage: SafeList[str] = Field(default_factory=list)
+    model_config = ConfigDict(extra="allow")
+
+
+class WorkAward(BaseModel):
+    """Award reference embedded in a work."""
+
+    id: SafeStr | None = None
+    display_name: SafeStr | None = None
+    funder_award_id: SafeStr | None = None
+    funder_id: SafeStr | None = None
+    funder_display_name: SafeStr | None = None
 
     model_config = ConfigDict(extra="allow")
 
@@ -50,11 +62,14 @@ class Authorship(BaseModel):
     """Authorship info on a work."""
 
     author_position: SafeStr | None = None
-    author: dict | None = None
-    institutions: SafeList[dict] = Field(default_factory=list)
+    author: DehydratedAuthor | None = None
+    institutions: SafeList[DehydratedInstitution] = Field(default_factory=list)
     countries: SafeList[str] = Field(default_factory=list)
     is_corresponding: bool | None = None
     raw_affiliation_strings: SafeList[str] = Field(default_factory=list)
+    raw_author_name: SafeStr | None = None
+    raw_orcid: SafeStr | None = None
+    affiliations: SafeList[Affiliation] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")
 
@@ -76,6 +91,11 @@ class Work(BaseEntity):
     is_paratext: bool | None = None
     is_retracted: bool | None = None
     is_traditional: bool | None = None
+    is_pulled: bool | None = None
+    is_authors_truncated: bool | None = Field(
+        default=None,
+        description="Present in list responses when authorships were truncated to 100.",
+    )
 
     # Counts
     cited_by_count: int = 0
@@ -91,12 +111,15 @@ class Work(BaseEntity):
     best_oa_location: Location | None = None
     biblio: Biblio | None = None
     citation_normalized_percentile: CitationNormalizedPercentile | None = None
-    concepts: SafeList[dict] = Field(default_factory=list)
+    alternate_titles: SafeList[str] = Field(default_factory=list)
+    concepts: SafeList[DehydratedConcept] = Field(default_factory=list)
     corresponding_author_ids: SafeList[str] = Field(default_factory=list)
     corresponding_institution_ids: SafeList[str] = Field(default_factory=list)
     counts_by_year: SafeList[YearCountBasic] = Field(default_factory=list)
     fwci: float | None = None
     indexed_in: SafeList[str] = Field(default_factory=list)
+    study_designs: SafeList[StudyDesign] = Field(default_factory=list)
+    cited_by_api_url: SafeStr | None = None
     keywords: SafeList[DehydratedKeyword] = Field(default_factory=list)
     language: SafeStr | None = None
     locations: SafeList[Location] = Field(default_factory=list)
@@ -110,7 +133,7 @@ class Work(BaseEntity):
     sustainable_development_goals: SafeList[SDG] = Field(default_factory=list)
     topics: SafeList[DehydratedTopic] = Field(default_factory=list)
     has_content: HasContent | None = None
-    cited_by_percentile_year: dict[str, int] | None = None
+    cited_by_percentile_year: CitedByPercentileYear | None = None
     referenced_works_count: int | None = None
     child_works_count: int | None = None
     content_urls: ContentUrls | None = None
@@ -120,15 +143,17 @@ class Work(BaseEntity):
 
     # Undocumented
     funders: SafeList[DehydratedFunder] = Field(default_factory=list)
-    institutions: SafeList[dict] = Field(default_factory=list)
+    relevance_score: float | None = None  # Search responses only
+    institutions: SafeList[DehydratedInstitution] = Field(
+        default_factory=list,
+        description="Reserved upstream; currently always empty.",
+    )
     is_xpac: bool | None = None
-    awards: SafeList[dict] = Field(default_factory=list)
+    awards: SafeList[WorkAward] = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow")
 
     @property
     def reconstructed_abstract(self) -> str | None:
         """Reconstruct the full abstract text from the inverted index."""
-        from .._helpers import reconstruct_abstract  # noqa: PLC0415
-
         return reconstruct_abstract(self.abstract_inverted_index)

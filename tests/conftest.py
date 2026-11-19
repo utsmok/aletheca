@@ -1,63 +1,52 @@
-"""Shared test fixtures for aletheca tests."""
+"""Shared fixtures: an AlethecaClient wired through pytest-httpx.
+
+Settings are built with every relevant field explicit (and ``_env_file=None``)
+so the suite never depends on the developer's shell or ``.env``.
+"""
+
+import json
+from pathlib import Path
 
 import pytest
 
-from aletheca.unwrapper import OpenAlexUnwrapper
+from aletheca import AlethecaClient, AlethecaSettings
+
+BASE_URL = "https://api.openalex.org"
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def load_fixture(name: str) -> dict:
+    """Load a trimmed real-API payload from ``tests/fixtures``."""
+    return json.loads((FIXTURES / name).read_text())
 
 
 @pytest.fixture
-def unwrapper():
-    return OpenAlexUnwrapper()
+def settings():
+    """Fast, deterministic settings: no throttle, no retries."""
+    return AlethecaSettings(
+        _env_file=None,
+        api_key="test-key",
+        max_requests_per_second=1_000_000.0,
+        max_concurrency=5,
+        max_retries=0,
+        max_retry_wait=0.05,
+        timeout=5.0,
+    )
 
 
 @pytest.fixture
-def sample_work_json():
-    return {
-        "id": "https://openalex.org/W1234567890",
-        "display_name": "Test Work",
-        "title": "A Test Paper",
-        "publication_year": 2024,
-        "publication_date": "2024-01-15",
-        "doi": "https://doi.org/10.1234/test",
-        "type": "article",
-        "cited_by_count": 42,
-        "ids": {"openalex": "W1234567890", "doi": "10.1234/test"},
-        "open_access": {
-            "is_oa": True,
-            "oa_status": "gold",
-            "oa_url": "https://example.com/paper",
-            "any_repository_has_fulltext": True,
-        },
-    }
+def client(settings):
+    return AlethecaClient(settings=settings)
 
 
-@pytest.fixture
-def sample_works_response():
-    return {
-        "meta": {
-            "count": 1,
-            "db_response_time_ms": 12.3,
-            "page": 1,
-            "per_page": 25,
-            "next_cursor": "cursor123",
-        },
-        "results": [
-            {
-                "id": "https://openalex.org/W1234567890",
-                "display_name": "Test Work",
-                "title": "A Test Paper",
-                "publication_year": 2024,
-                "publication_date": "2024-01-15",
-                "doi": "https://doi.org/10.1234/test",
-                "type": "article",
-                "cited_by_count": 42,
-                "ids": {"openalex": "W1234567890", "doi": "10.1234/test"},
-                "open_access": {
-                    "is_oa": True,
-                    "oa_status": "gold",
-                    "oa_url": "https://example.com/paper",
-                    "any_repository_has_fulltext": True,
-                },
-            }
-        ],
-    }
+def envelope(results: list, *, count: int = 1, next_cursor: str | None = None) -> dict:
+    """Build an OpenAlex list/search envelope."""
+    meta: dict = {"count": count}
+    if next_cursor is not None:
+        meta["next_cursor"] = next_cursor
+    return {"meta": meta, "results": results}
+
+
+def entity(record_id: str) -> dict:
+    """Minimal entity record that validates against every entity model."""
+    return {"id": f"https://openalex.org/{record_id}", "display_name": record_id}

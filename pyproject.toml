@@ -1,6 +1,6 @@
 [project]
 name = "aletheca"
-version = "0.3.0"
+version = "0.4.0"
 description = "Python interface for the OpenAlex API, built on top of the bibliofabric framework."
 authors = [
     {name = "Samuel Mok", email = "s.mok@utwente.nl"}
@@ -9,7 +9,7 @@ readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.12"
 dependencies = [
-    "bibliofabric>=0.5.1,<0.6.0",
+    "bibliofabric>=0.6,<0.7",
 ]
 
 classifiers = [
@@ -21,38 +21,29 @@ classifiers = [
     "Typing :: Typed",
 ]
 
+[project.urls]
+"Homepage" = "https://github.com/utsmok/aletheca"
+
+# Temporary while bibliofabric 0.6.0 is unreleased; remove before release.
+[tool.uv.sources]
+bibliofabric = { git = "https://github.com/utsmok/bibliofabric", branch = "overhaul-2026-11" }
+
 [dependency-groups]
 dev = [
     "pytest>=8.3.4",
     "pytest-asyncio>=0.26.0",
-    "pytest-cov>=6.1.1",
     "pytest-httpx>=0.35.0",
-    "python-dotenv>=1.0.0",
+    "ruff==0.17.6",
+    "ty==0.0.107",
 ]
 docs = [
     "mkdocs~=1.6.0",
     "mkdocs-material~=9.5.0",
     "mkdocstrings[python]",
 ]
-lint = ["ruff>=0.8.0"]
-test = ["pytest", "pytest-randomly"]
-
-[project.optional-dependencies]
-analysis = [
-    "polars",
-    "duckdb>=1.3.0",
-    "matplotlib>=3.8.0",
-    "rich>=13.0.0",
-    "pandas>=2.1.0",
-    "numpy>=1.26.0",
-    "pyarrow>=14.0.0",
-]
-
-[project.urls]
-"Homepage" = "https://github.com/utsmok/aletheca"
 
 [build-system]
-requires = ["uv_build>=0.11.19,<0.12"]
+requires = ["uv_build>=0.9.22,<0.12"]
 build-backend = "uv_build"
 
 [tool.uv.pip]
@@ -60,6 +51,7 @@ generate-hashes = true
 
 [tool.ruff]
 line-length = 88
+extend-exclude = ["archive"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -71,38 +63,35 @@ select = [
     "E7",
     "E9",
     "F",
-    "I", # isort
-    "B", # bugbear -- flake8 bugfinder
-    "Q", # correct quotes usage
-    "PTH",  # Replace os functions with pathlib functions
-    "SIM", # Simplify statements
-    "RET", # Return value related rules
-    "PIE", # misc flake8 rules
-    "FBT", # boolean traps
-    "PERF", # performance optimization
-    "PL", # pylint
-    "UP", # check for deprecated ways of coding
+    "I",     # isort
+    "B",     # bugbear -- flake8 bugfinder
+    "Q",     # correct quotes usage
+    "PTH",   # Replace os functions with pathlib functions
+    "SIM",   # Simplify statements
+    "RET",   # Return value related rules
+    "PIE",   # misc flake8 rules
+    "FBT",   # boolean traps
+    "PERF",  # performance optimization
+    "PL",    # pylint
+    "UP",    # check for deprecated ways of coding
     "FURB",
 ]
-ignore = ["PLR2004"]
+
+[tool.ruff.lint.pylint]
+max-args = 12
+max-branches = 25
+max-statements = 75
+max-returns = 10
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
 
+# Aletheca-specific additions on top of the shared ruff config: examples and
+# the verify script use notebook-style deferred imports and illustrative
+# magic values.
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
-"**/client.py" = ["PLR0913", "PLR0912", "PLR0915", "PLC0415"]
-"**/session.py" = ["PLC0415"]
-"**/queries.py" = ["PLC0415"]
-"**/endpoints.py" = ["PLR0913"]
-"examples/**/*.py" = ["PLC0415", "F821", "PERF401", "B007", "F841"]
-"marimo_checks/**/*.py" = ["PLC0415", "F821", "F841", "B905", "PLW2901", "I001", "PLR1711", "F404", "UP037"]
-
-[tool.ruff.lint.pylint]
-max-args = 10
-max-branches = 25
-max-statements = 75
-max-returns = 10
+"tests/**/*.py" = ["PLR2004"]
 
 [tool.pytest.ini_options]
 pythonpath = [

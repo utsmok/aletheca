@@ -1,0 +1,55 @@
+{
+  "id": "doi:10.7717/peerj.4375",
+  "work_id": "https://openalex.org/W2741809807",
+  "native_id": "10.7717/peerj.4375",
+  "native_id_namespace": "doi",
+  "provenance": "crossref",
+  "doi": "https://doi.org/10.7717/peerj.4375",
+  "endpoint_id": null,
+  "title": "The state of OA: a large-scale analysis of the prevalence and impact of Open Access articles",
+  "type": "article",
+  "raw_type": "journal-article",
+  "source_name": "PeerJ",
+  "publisher": "PeerJ",
+  "source_id": "https://openalex.org/S1983995261",
+  "is_oa": true,
+  "version": "publishedVersion",
+  "license": "cc-by",
+  "language": "en",
+  "is_retracted": false,
+  "landing_page_url": "https://doi.org/10.7717/peerj.4375",
+  "pdf_url": null,
+  "ids": [
+    {
+      "id": "2167-8359",
+      "namespace": "eissn",
+      "relationship": null
+    },
+    {
+      "id": "10.7717/peerj.4375",
+      "namespace": "doi",
+      "relationship": "self"
+    }
+  ],
+  "urls": [
+    {
+      "url": "https://doi.org/10.7717/peerj.4375",
+      "content_type": "html"
+    },
+    {
+      "url": "https://peerj.com/articles/4375.pdf",
+      "content_type": "pdf"
+    },
+    {
+      "url": "https://peerj.com/articles/4375.html",
+      "content_type": "html"
+    }
+  ],
+  "merge_key": {
+    "doi": "10.7717/peerj.4375",
+    "arxiv": null,
+    "pmid": null,
+    "title_author": "stateoalargescaleanalysisprevalenceandimpactopenaccessarticles_piwowar;h"
+  },
+  "ingested_at": "2026-11-18 05:02:30.234"
+}

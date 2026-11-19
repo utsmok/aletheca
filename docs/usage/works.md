@@ -1,334 +1,121 @@
 # Works
 
-The Works endpoint is the core of the OpenAlex API. A Work represents any scholarly output — journal articles, books, datasets, theses, conference papers, and more. Each work links to authors, institutions, sources, topics, and other entities.
-
-## Quick Start
-
-### Get a work by OpenAlex ID
+`client.works` talks to the `/works` endpoint and returns `Work` models. It supports the shared operations (`get`, `search`, `iterate`, `collect`, `first`, `count`) plus the works-only features described below.
 
 ```python
-from aletheca import AlethecaSession
+work = await client.works.get("W2741809807")
+```
 
-async with AlethecaSession() as session:
-    work = await session.works.get("W2741809807")
+IDs may be bare (`W2741809807`) or full URLs (`https://openalex.org/W2741809807`); both normalize to the same path and dictionary key.
+
+## Search
+
+```python
+from aletheca import WorksFilters
+
+page = await client.works.search(
+    WorksFilters(publication_year=2024, is_oa=True),
+    query="photosynthesis",
+    sort="cited_by_count:desc",
+    select=["id", "title", "doi"],
+    page_size=100,
+)
+for work in page.results:
     print(work.title)
-    print(work.publication_year)
-    print(work.doi)
 ```
 
-### Get a work by DOI
+`search()` returns one `Page[Work]`: `page.results`, `page.total` (`meta.count`), `page.next_cursor`, and `page.meta` (remaining envelope fields such as `cost_usd` or `group_by` buckets). The default page size is 25; OpenAlex accepts at most 100.
+
+Corpus controls travel as separate query parameters, not filters:
 
 ```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    work = await session.works.get("https://doi.org/10.1038/nature12373")
-    print(work.id)  # OpenAlex ID (e.g. W2741809807)
-    print(work.cited_by_count)
+page = await client.works.search(filters, corpus="expansion")
+page = await client.works.search(filters, include_parts=True, include_pulled=True)
 ```
 
-The `get` method accepts OpenAlex IDs (`W1234567890`), full URLs, or DOIs (with or without the `https://doi.org/` prefix).
+Valid `corpus` values are `core` (default upstream), `expansion`, and `all`; anything else raises `ConfigurationError` before a request is sent.
 
-### Search for works
+Pass `rerank=True` to reorder the top 100 of a relevance-sorted search (it costs 10 extra credits and needs the relevance sort a `query` gives you). The response reports whether reranking applied:
 
 ```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    results = await session.works.search(
-        search="climate change adaptation",
-        page_size=25,
-    )
-    for work in results.results:
-        print(f"{work.title} ({work.publication_year})")
+page = await client.works.search(query="photosynthesis", rerank=True)
+page.meta["reranked"]  # True when OpenAlex reranked the results
 ```
 
-## Filtering
-
-Use `WorksFilters` to construct structured filter queries. Nested OpenAlex filter fields (e.g. `authorships.author.id`) are mapped to Python-safe attribute names using Pydantic aliases.
+## Iterating over all matches
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    filters = WorksFilters(
-        publication_year=2024,
-        is_oa=True,
-        language="en",
-    )
-    results = await session.works.search(
-        search="machine learning",
-        filters=filters,
-        page_size=50,
-    )
+async for work in client.works.iterate({"authorships.author.id": "A5089275346"}):
+    ...
 ```
 
-### Filter by author
+`iterate()` pages with cursors at `per-page=100` and yields `Work` objects. It accepts `limit`, an `on_page(page_number, next_cursor)` callback for checkpointing, and `on_error="skip"` to drop records that fail validation. Keyless access can fetch only the first cursor page; the follow-up 401 raises `AuthError` with a message that names `ALETHECA_API_KEY`.
+
+## Counting at minimal cost
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    # By OpenAlex author ID
-    filters = WorksFilters(authorships_author_id="A5023888391")
-    results = await session.works.search(filters=filters, page_size=25)
-
-    # Multiple authors (pipe-separated)
-    filters = WorksFilters(authorships_author_id="A5023888391|A5084217198")
+n = await client.works.count({"is_oa": True})
 ```
 
-### Filter by institution
+`count()` sends `per-page=1` with `select=id`, so the request carries no entity payloads.
+
+## Batch retrieval
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    filters = WorksFilters(
-        authorships_institutions_id="I31371856",  # Stanford University
-        from_publication_date="2020-01-01",
-    )
-    results = await session.works.search(filters=filters, page_size=50)
+works = await client.works.batch_get_by_doi(
+    ["10.7717/peerj.4375", "https://doi.org/10.1038/nature12373"]
+)
+works = await client.works.batch_get_by_openalex_id(["W2741809807", "W2100837269"])
 ```
 
-### Filter by year and date
+Both return `dict[normalized id, Work]`. Ids are deduplicated, split into chunks of 100 (OpenAlex's pipe-joined OR cap), and fetched concurrently. DOIs are normalized: URL prefixes are stripped and the value lowercased. Missing records are absent from the result; works without the requested field fall back to their OpenAlex id as key. `batch_get(ids, field=..., batch_size=...)` is the generic form; passing more than 100 OR values in one filter raises `ConfigurationError`.
+
+## PDF links
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    # Exact year
-    filters = WorksFilters(publication_year=2024)
-
-    # Year range
-    filters = WorksFilters(publication_year=2024)  # Use from_publication_date/to_publication_date for ranges
-
-    # Date range (YYYY-MM-DD)
-    filters = WorksFilters(
-        from_publication_date="2023-01-01",
-        to_publication_date="2023-12-31",
-    )
+urls = await client.works.oa_pdf_urls("10.7717/peerj.4375")
 ```
 
-### Filter by source (journal/conference)
+`oa_pdf_urls()` fetches the work once and returns its downloadable PDF URLs (`list[str]`): the copy in `best_oa_location` first, then `primary_location`, then the remaining `locations`, with duplicates dropped. It returns `[]` when no location carries a PDF. OpenAlex's own paid PDF copies (`work.content_urls.pdf`, 100 credits each) are not included.
+
+## Citation graph
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    # Works published in a specific journal
-    filters = WorksFilters(
-        primary_location_source_id="S137030756",  # Nature
-    )
-
-    # Works from any source type
-    filters = WorksFilters(primary_location_source_type="journal")
+citing = await client.works.citing("W2741809807", limit=100)
+refs = await client.works.referenced("W2741809807", limit=100)
 ```
 
-### Presence and boolean filters
+`citing()` runs a cursor query with `filter=cites:<id>` and collects up to `limit` works. `referenced()` fetches the work once, reads its `referenced_works` list, and batch-fetches up to `limit` targets.
+
+## Random samples
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    filters = WorksFilters(
-        has_abstract=True,
-        has_doi=True,
-        is_oa=True,
-        type="article",
-    )
+page = await client.works.sample(1_000, seed=42)
 ```
 
-## Iteration (Cursor Pagination)
+`sample(n)` sends `sample=n` (maximum 10,000) and optionally `seed` for reproducible draws. `page.total` reports the sample size, not the corpus size.
 
-For large result sets, use `iterate` to automatically handle cursor-based pagination:
+## Group by
 
 ```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    filters = WorksFilters(
-        authorships_author_id="A5023888391",
-        from_publication_date="2020-01-01",
-    )
-    async for work in session.works.iterate(
-        filters=filters,
-        page_size=100,  # max allowed by OpenAlex
-        sort_by="cited_by_count:desc",
-    ):
-        print(f"{work.title} — cited {work.cited_by_count} times")
+buckets = await client.works.group_by("type")
+multi = await client.works.group_by("type,publication_year")
 ```
 
-Sorting uses the format `field:direction` (e.g. `"publication_date:desc"`, `"cited_by_count:asc"`).
+Returns typed `GroupByBucket` objects. Multi-field group-by nests deeper dimensions in `bucket.groups`. Responses page at 200 buckets with a cursor; pass `cursor=<next cursor>` (from the last request's `meta.next_cursor`) to continue.
 
-## Citing and Referenced Works
+## Scoped search
 
-### Get works that cite a given work
+Only one search parameter is allowed per request, so the `search.*` fields have their own entry point:
 
 ```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    work = await session.works.get("W2741809807")
-
-    # Using the convenience query
-    citing = await session.queries.citing_works(work.id, limit=100)
-    print(f"Found {len(citing)} citing works")
+page = await client.works.search_scoped("machine learning", scope="title_and_abstract")
 ```
 
-### Get works referenced by a given work
+Scopes: `title`, `title_and_abstract`, `title_abstract_keywords`, `exact` (wildcards and proximity operators), and `semantic` (embedding search; at most 50 results, 1 request per second). A search costs more credits than a plain list request; see [errors, retries, and rate limits](../errors.md).
 
-```python
-from aletheca import AlethecaSession
+## Filters
 
-async with AlethecaSession() as session:
-    work = await session.works.get("W2741809807")
+`WorksFilters` covers the common filters, including `publication_year`, `is_oa`, `doi`, `cites:W...`, `cited_by:W...`, `related_to:W...`, dot-notation fields such as `authorships.author.id`, `primary_location.source.id`, `topics.id`, and the part-of filters `has_parent_work`, `parent_works.id`, `parent_works.relationship`, `lineage`, and `child_works_count`. Every model allows extra fields, so filters that are missing here still work as dicts: `client.works.search({"some.new.filter": "x"})`.
 
-    # Using the convenience query
-    refs = await session.queries.referenced_works(work.id, limit=50)
-    for ref in refs:
-        print(ref.title)
-
-    # Or access the raw reference IDs directly
-    for ref_id in work.referenced_works:
-        print(ref_id)
-```
-
-### Using filters directly
-
-```python
-from aletheca import AlethecaSession
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    # Works that cite a specific work
-    filters = WorksFilters(cites="W2741809807")
-
-    # Works cited by a specific work
-    filters = WorksFilters(cited_by="W2741809807")
-```
-
-## Abstract Reconstruction
-
-OpenAlex stores abstracts as an inverted index to comply with publisher agreements. Use `reconstruct_abstract` to convert it back to plain text:
-
-```python
-from aletheca import AlethecaSession
-# Note: _helpers is a private module; it may be relocated in a future release.
-from aletheca._helpers import reconstruct_abstract
-
-async with AlethecaSession() as session:
-    work = await session.works.get("W2741809807")
-
-    if work.abstract_inverted_index:
-        abstract = reconstruct_abstract(work.abstract_inverted_index)
-        print(abstract)
-    else:
-        print("No abstract available")
-```
-
-## Convenience Queries
-
-The `session.queries` accessor provides higher-level helpers that compose multiple API calls:
-
-### Fetch works by DOI
-
-```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    works = await session.queries.works_by_doi([
-        "10.1038/nature12373",
-        "10.1126/science.1248506",
-    ])
-    for work in works:
-        print(f"{work.doi}: {work.title}")
-```
-
-### Fetch works by author name
-
-```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    works = await session.queries.works_by_author("John Smith", limit=50)
-    for work in works:
-        print(f"{work.publication_year}: {work.title}")
-```
-
-### Fetch works by institution name
-
-```python
-from aletheca import AlethecaSession
-
-async with AlethecaSession() as session:
-    works = await session.queries.works_by_institution("Stanford University", limit=100)
-```
-
-## Key Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `title` | `str \| None` | Work title |
-| `publication_year` | `int \| None` | Year of publication |
-| `publication_date` | `str \| None` | Full date (YYYY-MM-DD) |
-| `doi` | `str \| None` | DOI identifier |
-| `type` | `str \| None` | Work type (article, book, dataset, etc.) |
-| `open_access.is_oa` | `bool \| None` | Whether the work is open access (nested in `open_access`) |
-| `cited_by_count` | `int` | Number of citations |
-| `authorships` | `list[Authorship]` | Author and affiliation data |
-| `locations` | `list[Location]` | Places the work can be found |
-| `primary_location` | `Location \| None` | Best available location |
-| `parent_works` | `list[RelatedWork]` | Works this work is part of, each with its `relationship` (`volume`, `component`, `data-series`, `part`) |
-| `lineage` | `list[str]` | The work's own OpenAlex ID first, then every ancestor's, nearest first |
-| `child_works_count` | `int \| None` | How many works name this work as a parent |
-| `is_traditional` | `bool \| None` | True for traditional scholarly types (articles, books, chapters, conference papers) |
-| `referenced_works` | `list[str]` | OpenAlex IDs of cited works |
-| `topics` | `list[DehydratedTopic]` | Associated topics |
-| `keywords` | `list[DehydratedKeyword]` | Associated keywords |
-| `content_urls` | `ContentUrls \| None` | Content URLs as a dict with `pdf` and `grobid_xml` keys (not `content_url` as in the spec) |
-| `abstract_inverted_index` | `dict \| None` | Inverted index for abstract reconstruction |
-
-## Parent and child works
-
-A work can be part of another work: a chapter in a book, a figure in a paper,
-one record of a data series. The child names the whole in `parent_works`.
-
-```python
-async with AlethecaSession() as session:
-    work = await session.works.get("W3109397498")
-    print(work.child_works_count)  # direct parts, e.g. a book's chapters
-    print(work.lineage)            # [own id, parent ids nearest first]
-```
-
-Pieces that are not scholarly works on their own (figures, front matter,
-single data records) are left out of list results by default. Pass
-`include_parts=True` to bring them back:
-
-```python
-from aletheca.endpoints import WorksFilters
-
-async with AlethecaSession() as session:
-    filters = WorksFilters(parent_works_id="W3109397498", include_parts=True)
-    async for part in session.works.iterate(filters=filters):
-        print(part.display_name)
-```
-
-## Live API Notes
-
-The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string`), but the live API returns `content_urls` (plural, type `object` with `pdf` and `grobid_xml` keys). Aletheca follows the live API. Additionally, the spec lists `works_api_url` on Work objects, but the live API does not return this field on works.
-
-## Notes
-
-- OpenAlex IDs for works start with `W` (e.g. `W2741809807`).
-- The maximum `per_page` value is 100. Use cursor pagination (`iterate`) for large result sets.
-- Abstracts are stored as inverted indexes; use `reconstruct_abstract()` to get plain text.
-- DOIs can be passed with or without the `https://doi.org/` prefix.
-- Multiple values in filters can be pipe-separated (e.g. `"A123|A456"`).
-- Set the `ALETHECA_OPENALEX_API_KEY` environment variable or pass `api_key` to `AlethecaSession` for faster access via the polite pool.
+Booleans serialize lowercase (`is_oa:true`), list values join into `|` OR groups, and DOI-valued filters are normalized before serialization.

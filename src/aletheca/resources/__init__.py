@@ -1,14 +1,16 @@
-"""Resource clients for OpenAlex API endpoints."""
+"""Resource clients for the OpenAlex entity endpoints."""
 
-from .authors_client import AuthorsClient
-from .awards_client import AwardsClient
-from .funders_client import FundersClient
-from .institutions_client import InstitutionsClient
-from .keywords_client import KeywordsClient
-from .publishers_client import PublishersClient
-from .sources_client import SourcesClient
-from .topics_client import TopicsClient
-from .works_client import WorksClient
+from .authors import AuthorsClient
+from .awards import AwardsClient
+from .funders import FundersClient
+from .institutions import InstitutionsClient
+from .keywords import KeywordsClient
+from .links import LinksClient
+from .locations import LocationsClient
+from .publishers import PublishersClient
+from .sources import SourcesClient
+from .topics import TopicsClient
+from .works import WorksClient
 
 __all__ = [
     "AuthorsClient",
@@ -16,6 +18,8 @@ __all__ = [
     "FundersClient",
     "InstitutionsClient",
     "KeywordsClient",
+    "LinksClient",
+    "LocationsClient",
     "PublishersClient",
     "SourcesClient",
     "TopicsClient",

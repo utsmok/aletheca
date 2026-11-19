@@ -1,46 +1,62 @@
 # Aletheca
 
-**Python interface for the OpenAlex API**, built on [bibliofabric](https://github.com/utsmok/bibliofabric).
+Aletheca is an async Python client for the [OpenAlex API](https://docs.openalex.org/), built on [bibliofabric](https://github.com/utsmok/bibliofabric). It types all nine entity endpoints (works, authors, sources, institutions, topics, keywords, publishers, funders, awards) with Pydantic models and serializes OpenAlex filter syntax for you.
 
-Aletheca provides a fully-typed, async-first Python client for [OpenAlex](https://openalex.org) — the open catalog of the global research system. It wraps all eight entity endpoints (Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders) with Pydantic models, structured filters, and cursor-based pagination.
+## Install
 
-## Why aletheca?
+```bash
+uv add aletheca
+```
 
-- **Async-native** — every operation is `async`, designed for modern Python (3.12+).
-- **Typed end-to-end** — Pydantic v2 models for all entities and filter parameters, with full IDE autocomplete.
-- **Ergonomic API** — `async with AlethecaSession() as session:` gives you access to every endpoint through attribute access.
-- **Built on bibliofabric** — inherits robust HTTP handling, retry logic, and response unwrapping from a shared framework.
+Requires Python 3.12 or newer.
 
-## Quick peek
+## Authentication
+
+OpenAlex works without a key, but unkeyed traffic shares a $0.10/day per-IP budget and cannot use cursor paging past the first page. A free key raises the budget to $1/day. Request one at [openalex.org/settings/api](https://openalex.org/settings/api), then export it:
+
+```bash
+export ALETHECA_API_KEY="your-key"
+```
+
+By default the key travels as the `api_key` query parameter. Set `ALETHECA_AUTH_SCHEME=bearer` to send it as an `Authorization: Bearer` header instead. See [errors, retries, and rate limits](errors.md) for budgets and pacing.
+
+## Quick start
 
 ```python
 import asyncio
-from aletheca import AlethecaSession
+from aletheca import AlethecaClient
+
 
 async def main():
-    async with AlethecaSession() as session:
-        work = await session.works.get("W2741809807")
-        print(work.display_name)
+    async with AlethecaClient() as client:
+        work = await client.works.get("W2741809807")
+        print(work.title, work.publication_year)
+
+        page = await client.works.search(
+            {"is_oa": True, "publication_year": 2024},
+            query="photosynthesis",
+            select=["id", "title"],
+        )
+        print(page.total, len(page.results))
+
+        async for author in client.authors.iterate(
+            {"last_known_institutions.id": "I1290904741"}
+        ):
+            print(author.display_name)
+
 
 asyncio.run(main())
 ```
 
-## Features
+Every resource client exposes `get()`, `search()`, `iterate()`, `collect()`, `first()`, and `count()`. The works client adds OpenAlex-specific helpers: `batch_get_by_doi()`, `citing()`, `referenced()`, `group_by()`, `sample()`, and `search_scoped()`. The client itself offers free `autocomplete()` and `rate_limit()` endpoints.
 
-| Feature | Description |
-|---|---|
-| Entity clients | Works, Authors, Sources, Institutions, Topics, Keywords, Publishers, Funders |
-| Pydantic filter models | `WorksFilters(authorships_author_id="A123")` → `authorships.author.id:A123` |
-| Cursor pagination | `async for work in session.works.iterate(...):` |
-| Convenience queries | `session.queries.works_by_author("...")`, `citing_works(...)`, etc. |
-| Helper utilities | DOI normalization, OpenAlex ID parsing, abstract reconstruction |
-| API key support | Env var `ALETHECA_OPENALEX_API_KEY` or explicit `api_key=` parameter |
+## Settings
 
-## Next steps
+`AlethecaSettings` loads from environment variables prefixed with `ALETHECA_`: `ALETHECA_API_KEY`, `ALETHECA_AUTH_SCHEME`, `ALETHECA_MAX_REQUESTS_PER_SECOND`, `ALETHECA_MAX_CONCURRENCY`, `ALETHECA_TIMEOUT`, `ALETHECA_MAX_RETRIES`, `ALETHECA_MAX_RETRY_WAIT`, `ALETHECA_USER_AGENT`. The legacy `ALETHECA_OPENALEX_API_KEY` name still works.
 
-- [Getting Started](getting_started.md) — install, authenticate, run your first query
-- [Installation](installation.md) — detailed install instructions and Python version requirements
-- [Usage Basics](usage_basics.md) — sessions, searching, iterating, collecting
-- [Authentication](authentication.md) — API keys and the polite pool
-- [API Reference](api_reference.md) — auto-generated module docs
-- [Contributing](contributing.md) — development setup, testing, linting
+## Where to go next
+
+- One usage page per resource family: start with [works](usage/works.md).
+- [Errors, retries, and rate limits](errors.md).
+- [Upstream quirks](upstream-quirks.md) observed in the live OpenAlex API.
+- The [API reference](reference.md) is generated from the source.

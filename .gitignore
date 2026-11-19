@@ -85,3 +85,6 @@ dmypy.json
 # roborev snapshots
 /.roborev/
 output/
+
+# local agent skills
+/.agents/

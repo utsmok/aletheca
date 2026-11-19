@@ -1,12 +1,12 @@
 """Pydantic models for the Publisher entity."""
 
+from bibliofabric import SafeList, SafeStr
 from pydantic import BaseModel, Field
 from pydantic.config import ConfigDict
 
 from .base import BaseEntity
 from .common import Role, SummaryStats, YearCount
 from .ids import PublisherIds
-from .safe_types import SafeList, SafeStr
 
 
 class ParentPublisher(BaseModel):
