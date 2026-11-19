@@ -23,10 +23,7 @@ plugins:
 
 nav:
   - Home: index.md
-  - Getting Started: getting_started.md
-  - Installation: installation.md
-  - Basic Usage: usage_basics.md
-  - Entities:
+  - Usage:
       - Works: usage/works.md
       - Authors: usage/authors.md
       - Sources: usage/sources.md
@@ -36,17 +33,9 @@ nav:
       - Publishers: usage/publishers.md
       - Funders: usage/funders.md
       - Awards: usage/awards.md
-  - Advanced:
-      - Configuration: advanced/configuration.md
-      - API Verification: advanced/api_verification.md
-      - Upstream API Quirks: upstream-quirks.md
-      - Caching: advanced/caching.md
-      - Rate Limiting: advanced/rate_limiting.md
-      - Request Hooks: advanced/hooks.md
-      - Error Handling: advanced/error_handling.md
-  - Features & Ergonomics: ergonomics.md
-  - API Reference: api_reference.md
-  - Authentication: authentication.md
+  - Errors, retries, and rate limits: errors.md
+  - Upstream quirks: upstream-quirks.md
+  - API reference: reference.md
   - Contributing: contributing.md
   - Changelog: changelog.md
 watch:

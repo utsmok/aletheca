@@ -57,24 +57,16 @@ All examples in [`examples/`](examples/) are dual-purpose -- run as scripts or a
 
 ```bash
 # As a script
-uv run examples/simple_example.py
-
-# As an interactive notebook
-uv run marimo edit examples/simple_example.py
+uv run examples/quickstart.py
 ```
 
 | Script | Description |
 |--------|-------------|
-| `simple_example.py` | Search, iterate, get works |
-| `02_filtering_and_search.py` | WorksFilters, AuthorsFilters, and other filter models |
-| `03_institution_research.py` | Works by institution, topic analysis |
-| `04_author_discovery.py` | Find authors, retrieve their works |
-| `05_advanced_queries.py` | Cursor pagination, select fields, sort |
-| `06_convenience_queries.py` | `session.queries.*` convenience functions |
-| `07_iterator_helpers.py` | `collect()`, `count()`, `first()` from bibliofabric mixins |
-| `08_safe_types_and_helpers.py` | SafeList, SafeStr, DOI normalization, abstract reconstruction |
+| `quickstart.py` | Get, count, and search works |
+| `search_and_iterate.py` | Filter models, scoped search, cursor iteration |
+| `batch_and_citations.py` | `batch_get_by_doi()`, `citing()`, `referenced()`, `rate_limit()` |
 
-See [`examples/README.md`](examples/README.md) for details on running examples as interactive marimo notebooks. (Examples predate the 0.5.0 client rewrite and still use `AlethecaSession`/`session.queries`; consult this Quick Start for the current API.)
+See [`examples/README.md`](examples/README.md) for run instructions.
 
 ## Authentication
 
@@ -95,31 +87,30 @@ async with AlethecaClient(api_key="your_api_key") as client:
 
 The key is sent as the `api_key` query parameter by default; pass `auth_scheme="bearer"` (or set `ALETHECA_AUTH_SCHEME=bearer`) to send it as an `Authorization: Bearer` header instead.
 
-→ **Full guide:** [Authentication](https://utsmok.github.io/aletheca/authentication/)
+→ **Full guide:** [docs index](https://utsmok.github.io/aletheca/) and [errors, retries, and rate limits](https://utsmok.github.io/aletheca/errors/)
 
 ## Basic Usage
 
 ### Get a single entity
 
 ```python
-work = await session.works.get("W2741809801")
+work = await client.works.get("W2741809801")
 print(work.title, work.doi, work.publication_year)
 ```
 
 ### Search
 
 ```python
-results = await session.works.search(search="machine learning", page_size=5)
-for work in results.results:
+page = await client.works.search(query="machine learning", page_size=5)
+for work in page.results:
     print(work.title)
 ```
 
 ### Iterate all results
 
 ```python
-async for work in session.works.iterate(
+async for work in client.works.iterate(
     filters={"publication_year": 2024, "is_oa": True},
-    page_size=100,
 ):
     print(work.title)
     break  # stop when you want
@@ -133,11 +124,11 @@ refs = await client.works.referenced("W2741809801", limit=100)
 print(f"{len(citations)} citing works, {len(refs)} references fetched")
 ```
 
-→ **Full guide:** [Usage Basics](https://utsmok.github.io/aletheca/usage_basics/) · [Works](https://utsmok.github.io/aletheca/usage/works/) · [All Entities](https://utsmok.github.io/aletheca/api_reference/)
+→ **Full guide:** [Works](https://utsmok.github.io/aletheca/usage/works/) · [all entity pages](https://utsmok.github.io/aletheca/) · [API reference](https://utsmok.github.io/aletheca/reference/)
 
 ## Known OpenAlex API Issues
 
-Full bug report with reproduction steps: [`docs/upstream-quirks.md`](docs/upstream-quirks.md).
+Verified findings: [`docs/upstream-quirks.md`](docs/upstream-quirks.md).
 
 - **OpenAPI spec is substantially incomplete** -- 50+ fields returned by the live API are missing from the spec schemas across all entity types. Several spec fields don't exist in the live API.
 - **Wrong field names in spec** -- `content_url` (spec) vs `content_urls` (live), `grants_count` (spec) vs `awards_count` (live)
@@ -150,14 +141,13 @@ Full bug report with reproduction steps: [`docs/upstream-quirks.md`](docs/upstre
 ## Development
 
 ```bash
-uv sync --all-groups --all-extras         # install everything
-uv run ruff check src/ --fix              # lint
-uv run ruff format src/                   # format
-uvx ty check src/                         # type check
-uv run pytest tests/                      # run tests
-uv run pytest --cov=aletheca tests/       # coverage (CI threshold: 95%)
-uv build                                  # build package
-uv run mkdocs serve                       # local docs
+uv sync --all-groups     # install everything
+uv run ruff check --fix  # lint
+uv run ruff format       # format
+uv run ty check src      # type check
+uv run pytest            # offline tests; add -m live_api for live smoke tests
+uv build                 # build package
+uv run mkdocs serve      # local docs
 ```
 
 Contributions welcome -- see [Contributing](https://utsmok.github.io/aletheca/contributing/).
