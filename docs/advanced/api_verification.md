@@ -14,7 +14,7 @@ The OpenAlex API has several known issues that make passive trust in the spec un
 - Filter tables in docs are incomplete (e.g., Awards lists ~23 filters but the API supports 38+)
 - `per_page` maximum is 100; 200 is deprecated legacy behavior, still accepted but documented for removal
 
-See [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md) for the full list of verified discrepancies.
+See [the upstream quirks page](../upstream-quirks.md) for the full list of verified discrepancies.
 
 ## Quick Verification Script
 
@@ -331,6 +331,6 @@ def test_no_stale_model_fields(client, entity_name, model_class):
 
 For the complete list of verified OpenAlex API bugs, discrepancies, and suggestions, see:
 
-- [OPENALEX_BUG_REPORT.md](https://github.com/utsmok/aletheca/blob/main/OPENALEX_BUG_REPORT.md) — Full bug report verified 2026-06-05
+- [Upstream API quirks](../upstream-quirks.md) — Full bug report verified 2026-06-05
 - [OpenAlex API docs](https://developers.openalex.org/)
 - [OpenAlex OpenAPI spec](https://developers.openalex.org/api-reference/openapi.json)

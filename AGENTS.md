@@ -98,27 +98,30 @@ src/aletheca/
     keywords_client.py  # KeywordsClient
     publishers_client.py    # PublishersClient
     funders_client.py   # FundersClient
+    awards_client.py    # AwardsClient
 tests/
-  conftest.py           # Test fixtures
-  test_models.py        # Model validation tests
-  test_unwrapper.py     # Response unwrapper tests
-  test_helpers.py       # Helper function tests
-  resources/            # Per-resource client tests
+  _legacy/              # Pre-overhaul suite, excluded from collection (deleted in phase 2)
+    conftest.py         # Test fixtures
+    test_models.py      # Model validation tests
+    test_unwrapper.py   # Response unwrapper tests
+    test_helpers.py     # Helper function tests
+    resources/          # Per-resource client tests
+    test_live_api.py    # Live API smoke tests (live_api marker)
 docs/                   # MkDocs documentation
 examples/               # Marimo notebook examples
+archive/                # Stale plans, reports, one-off analysis (unmaintained)
 ```
 
 ## Development Commands
 
 ```bash
-uv sync --all-groups --all-extras         # Install everything
-uv run ruff check src/ --fix              # Lint
-uv run ruff format src/                   # Format
-uvx ty check src/                         # Type check
-uv run pytest tests/                      # Run tests
-uv run pytest --cov=aletheca tests/       # Coverage (CI threshold: 95%)
-uv build                                  # Build package
-uv run mkdocs serve                       # Local docs
+uv sync --all-groups                     # Install everything
+uv run ruff check --fix                  # Lint
+uv run ruff format                       # Format
+uv run ty check src                      # Type check
+uv run pytest                            # Run tests (legacy suite in tests/_legacy is excluded)
+uv build                                 # Build package
+uv run mkdocs serve                      # Local docs
 ```
 
 ## Key Patterns & Conventions
@@ -135,6 +138,4 @@ uv run mkdocs serve                       # Local docs
 
 - **Missing convenience filters**: The `select`, `group_by`, `sample`/`seed` parameters need resource-level methods, not framework changes.
 - **Filter model completeness**: Filter models cover the most common filters but not every possible filter. OpenAlex supports many filters; the `extra="allow"` config means users can pass any filter as a dict.
-- **Integration tests**: Resource client tests use mocked HTTP. Live API integration tests are not yet implemented.
-- **Docs**: Documentation is not yet built.
-- **Examples**: Example notebooks are not yet created.
+- **Test suite**: The pre-overhaul suite sits in `tests/_legacy`, excluded from collection; phase 2 replaces it with a new suite. Live API smoke tests (`test_live_api.py`) carry the `live_api` marker and are deselected by default.

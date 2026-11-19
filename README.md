@@ -135,7 +135,7 @@ print(f"{len(citations)} citations")
 
 ## Known OpenAlex API Issues
 
-Full bug report with reproduction steps: [`OPENALEX_BUG_REPORT.md`](OPENALEX_BUG_REPORT.md).
+Full bug report with reproduction steps: [`docs/upstream-quirks.md`](docs/upstream-quirks.md).
 
 - **OpenAPI spec is substantially incomplete** -- 50+ fields returned by the live API are missing from the spec schemas across all entity types. Several spec fields don't exist in the live API.
 - **Wrong field names in spec** -- `content_url` (spec) vs `content_urls` (live), `grants_count` (spec) vs `awards_count` (live)
