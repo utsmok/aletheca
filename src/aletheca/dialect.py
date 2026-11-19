@@ -120,12 +120,14 @@ class OpenAlexResourceClient[E: BaseModel](ResourceClient[E]):
         """Build one ``batch_get`` chunk as a pipe-joined OR filter.
 
         DOI fields are normalized first (AT-03): URL forms would inject
-        colons into the ``filter=`` value.
+        colons into the ``filter=`` value. The default ``field="id"`` maps to
+        the ``openalex`` filter, because OpenAlex has no ``id`` filter.
         """
         chunk = list(values)
         if field in DOI_FIELDS:
             chunk = [normalize_doi(value) for value in chunk]
-        return {"filter": f"{field}:{'|'.join(chunk)}"}
+        filter_key = "openalex" if field == "id" else field
+        return {"filter": f"{filter_key}:{'|'.join(chunk)}"}
 
     # --- operations ----------------------------------------------------
 

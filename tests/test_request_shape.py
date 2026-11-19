@@ -192,6 +192,14 @@ async def test_batch_get_splits_at_100_and_keys_results(client, httpx_mock):
     assert dict(requests[1].url.params)["per-page"] == "3"
 
 
+async def test_batch_get_default_field_uses_openalex_filter(client, httpx_mock):
+    # OpenAlex has no `id` filter; `filter=id:...` returns 400.
+    httpx_mock.add_response(json=envelope([entity("W1")], count=1))
+    result = await client.works.batch_get(["https://openalex.org/W1"])
+    assert "W1" in result
+    assert last_params(httpx_mock)["filter"] == "openalex:W1"
+
+
 async def test_batch_get_by_doi_normalizes_keys(client, httpx_mock):
     records = [
         {"id": "https://openalex.org/W1", "doi": "https://doi.org/10.1234/abc"},

@@ -83,7 +83,7 @@ wheels = [
 [[package]]
 name = "bibliofabric"
 version = "0.6.0"
-source = { git = "https://github.com/utsmok/bibliofabric?branch=overhaul-2026-11#cc0b15c1b127de6f17f9bda6fb6cc3553e211f99" }
+source = { git = "https://github.com/utsmok/bibliofabric?branch=overhaul-2026-11#4dd0cdc16bc7dd3821c31308b11f384610cf613a" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
