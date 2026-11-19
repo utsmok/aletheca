@@ -466,4 +466,4 @@ The OpenAlex OpenAPI spec declares a `content_url` field (singular, type `string
 - Abstracts are stored as inverted indexes; use `reconstruct_abstract()` to get plain text.
 - DOIs can be passed with or without the `https://doi.org/` prefix.
 - Multiple values in filters can be pipe-separated (e.g. `"A123|A456"`).
-- Set the `ALETHECA_OPENALEX_API_KEY` environment variable or pass `api_key` to `AlethecaSession` for faster access via the polite pool.
+- Set the `ALETHECA_API_KEY` environment variable or pass `api_key` to `AlethecaClient` for the $1/day budget and full cursor paging.

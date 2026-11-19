@@ -20,7 +20,7 @@ OpenAlex-specific options.
 | `backoff_factor` | `float` | `0.5` | `ALETHECA_BACKOFF_FACTOR` | Exponential backoff multiplier (seconds) |
 | `user_agent` | `str` | `aletheca/<version>` | `ALETHECA_USER_AGENT` | User-Agent header for HTTP requests |
 | **OpenAlex-Specific** | | | | |
-| `openalex_api_key` | `str \| None` | `None` | `ALETHECA_OPENALEX_API_KEY` | OpenAlex API key for the polite pool |
+| `api_key` | `str \| None` | `None` | `ALETHECA_API_KEY` (or the legacy `ALETHECA_OPENALEX_API_KEY`) | OpenAlex API key: $1/day budget and cursor paging |
 | **Rate Limiting** | | | | |
 | `enable_rate_limiting` | `bool` | `True` | `ALETHECA_ENABLE_RATE_LIMITING` | Enable/disable automatic rate limit handling |
 | `rate_limit_buffer_percentage` | `float` | `0.1` | `ALETHECA_RATE_LIMIT_BUFFER_PERCENTAGE` | Buffer threshold (0.1 = 10%) before proactive throttling |

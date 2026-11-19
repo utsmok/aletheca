@@ -41,6 +41,6 @@ asyncio.run(main())
 - [Getting Started](getting_started.md) — install, authenticate, run your first query
 - [Installation](installation.md) — detailed install instructions and Python version requirements
 - [Usage Basics](usage_basics.md) — sessions, searching, iterating, collecting
-- [Authentication](authentication.md) — API keys and the polite pool
+- [Authentication](authentication.md) — API keys and budgets
 - [API Reference](api_reference.md) — auto-generated module docs
 - [Contributing](contributing.md) — development setup, testing, linting

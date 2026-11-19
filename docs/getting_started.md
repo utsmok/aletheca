@@ -18,7 +18,7 @@ See [Installation](installation.md) for Python version requirements and optional
 
 ## 2. Authenticate (optional)
 
-The OpenAlex API works without an API key, but you'll be in the "polite pool" (slower). For faster responses, set your API key as an environment variable:
+The OpenAlex API works without an API key, but unkeyed requests share a small $0.10/day per-IP budget and cannot cursor-past the first page. A free key (https://openalex.org/settings/api) raises the budget to $1/day; set it as an environment variable:
 
 ```bash
 export ALETHECA_OPENALEX_API_KEY="your-key-here"

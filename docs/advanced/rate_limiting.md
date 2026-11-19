@@ -6,20 +6,21 @@ handling through bibliofabric's built-in rate limiting, including proactive thro
 
 ## OpenAlex Rate Limits
 
-| Tier | Rate Limit | Notes |
+| Tier | Daily budget | Notes |
 |------|-----------|-------|
-| **No key (polite pool)** | ~10 requests/second | Requires `mailto` parameter or User-Agent with contact info |
-| **API key** | Higher throughput | Request at [openalex.org](https://openalex.org) |
+| **No key** | $0.10/day per IP | Cursor paging past the first page returns 401 |
+| **Free API key** | $1/day | 30 req/s; request at [openalex.org/settings/api](https://openalex.org/settings/api) |
 
-Without an API key, you are in the "polite pool." The polite pool provides lower
-priority and slower response times. Adding an API key moves you to a faster pool.
+There is no polite pool anymore (`mailto` is ignored). Costs are per request
+type (list 1 credit, search 10, semantic 10, PDF content 100); `client.rate_limit()`
+returns the key's remaining budget for free.
 
 ## Configuring Your API Key
 
 ### Environment Variable (Recommended)
 
 ```bash
-export ALETHECA_OPENALEX_API_KEY="your-api-key-here"
+export ALETHECA_API_KEY="your-api-key-here"
 ```
 
 ### `.env` File

@@ -21,36 +21,35 @@ Aletheca is an async Python client for the [OpenAlex API](https://docs.openalex.
 uv add aletheca
 ```
 
-Or with pip: `pip install aletheca`. Requires Python >=3.12.
+Requires Python >=3.12.
 
 ## Quick Start
 
 ```python
 import asyncio
-from aletheca import AlethecaSession
+from aletheca import AlethecaClient
 
 async def main():
-    async with AlethecaSession() as session:
-        # Get a work by OpenAlex ID
-        work = await session.works.get("W1234567890")
+    async with AlethecaClient() as client:
+        # Get a work by OpenAlex ID (URL forms like https://doi.org/... also work)
+        work = await client.works.get("W1234567890")
         print(work.title)
 
-        # Search works
-        results = await session.works.search(search="machine learning", page_size=10)
-        for work in results.results:
+        # Search works (one page)
+        page = await client.works.search(query="machine learning", page_size=10)
+        for work in page.results:
             print(f"{work.title} ({work.publication_year})")
 
-        # Iterate all works by an author (cursor-based auto-pagination)
-        async for work in session.works.iterate(
+        # Iterate over matches with cursor auto-pagination (per-page=100 default)
+        async for work in client.works.iterate(
             filters={"authorships.author.id": "A1234567890"},
-            page_size=100,
         ):
             print(work.title)
 
 asyncio.run(main())
 ```
 
-No authentication required -- the OpenAlex API works without it. For higher rate limits, see [Authentication](https://utsmok.github.io/aletheca/authentication/).
+Other resource methods: `count()` (minimal-cost `select=id` request), `batch_get(ids, field=..., batch_size=...)`, `batch_get_by_doi(dois)`, `group_by(...)`, `sample(n, seed=...)`, `search_scoped(...)` (`search.title_and_abstract`, `search.exact`, `search.semantic`), and the `corpus=`/`include_pulled=` parameters on `client.works.search(...)`. The client also exposes `client.autocomplete(query)` (free) and `client.rate_limit()` (free budget check).
 
 ## Examples
 
@@ -75,24 +74,26 @@ uv run marimo edit examples/simple_example.py
 | `07_iterator_helpers.py` | `collect()`, `count()`, `first()` from bibliofabric mixins |
 | `08_safe_types_and_helpers.py` | SafeList, SafeStr, DOI normalization, abstract reconstruction |
 
-See [`examples/README.md`](examples/README.md) for details on running examples as interactive marimo notebooks.
+See [`examples/README.md`](examples/README.md) for details on running examples as interactive marimo notebooks. (Examples predate the 0.5.0 client rewrite and still use `AlethecaSession`/`session.queries`; consult this Quick Start for the current API.)
 
 ## Authentication
 
-Aletheca auto-detects the OpenAlex API key from environment variables or `.env` files (prefixed with `ALETHECA_`). No auth is the default if nothing is configured.
+OpenAlex has no polite pool: since February 2026 the API ignores `mailto` and meters unkeyed traffic at $0.10/day per IP address. A free API key raises the budget to $1/day and is required for cursor paging beyond the first page. Get one at [openalex.org/settings/api](https://openalex.org/settings/api).
+
+Aletheca reads the key from the environment or `.env` (prefix `ALETHECA_`):
 
 ```dotenv
-ALETHECA_OPENALEX_API_KEY=your_api_key
+ALETHECA_API_KEY=your_api_key          # ALETHECA_OPENALEX_API_KEY also accepted
 ```
 
-Or pass explicitly:
+Or pass it explicitly:
 
 ```python
-async with AlethecaSession(api_key="your_api_key") as session:
+async with AlethecaClient(api_key="your_api_key") as client:
     ...
 ```
 
-With an API key you get faster responses (dedicated pool). Without one, you use the polite pool (slower).
+The key is sent as the `api_key` query parameter by default; pass `auth_scheme="bearer"` (or set `ALETHECA_AUTH_SCHEME=bearer`) to send it as an `Authorization: Bearer` header instead.
 
 → **Full guide:** [Authentication](https://utsmok.github.io/aletheca/authentication/)
 
@@ -124,11 +125,12 @@ async for work in session.works.iterate(
     break  # stop when you want
 ```
 
-### Convenience queries
+### Citations and references
 
 ```python
-citations = await session.queries.citing_works("W2741809801")
-print(f"{len(citations)} citations")
+citations = await client.works.citing("W2741809801", limit=100)
+refs = await client.works.referenced("W2741809801", limit=100)
+print(f"{len(citations)} citing works, {len(refs)} references fetched")
 ```
 
 → **Full guide:** [Usage Basics](https://utsmok.github.io/aletheca/usage_basics/) · [Works](https://utsmok.github.io/aletheca/usage/works/) · [All Entities](https://utsmok.github.io/aletheca/api_reference/)

@@ -2,17 +2,13 @@
 
 The OpenAlex API is free and open. Authentication is optional but recommended for better performance.
 
-## Polite pool vs API key
+## API keys
 
-OpenAlex operates two request pools:
-
-| Pool | Speed | Requirements |
-|---|---|---|
-| **Polite pool** | Slower | No authentication needed |
-| **API key pool** | Faster | Free API key from OpenAlex |
-
-!!! tip
-    The polite pool is rate-limited. For batch processing or scripts that make many requests, use an API key. You can request one at [https://openalex.org/signup](https://openalex.org/signup).
+The polite pool no longer exists: since February 2026 OpenAlex ignores `mailto`
+and meters unkeyed traffic at $0.10/day per IP address. A free API key raises
+the budget to $1/day, enables cursor paging past the first page, and is
+required for deep iteration. Request one at
+[https://openalex.org/settings/api](https://openalex.org/settings/api).
 
 ## Using an API key
 
@@ -21,7 +17,7 @@ OpenAlex operates two request pools:
 Set the `ALETHECA_OPENALEX_API_KEY` environment variable. Aletheca reads it automatically via its settings system:
 
 ```bash
-export ALETHECA_OPENALEX_API_KEY="your-api-key-here"
+export ALETHECA_API_KEY="your-api-key-here"
 ```
 
 Then create a session as usual — no extra code needed:
@@ -77,7 +73,7 @@ When an API key is provided, aletheca appends it as the `api_key` query paramete
 https://api.openalex.org/works?filter=...&api_key=your-key
 ```
 
-When no key is set, requests are made without authentication and go through the polite pool.
+When no key is set, requests share OpenAlex's small unkeyed budget ($0.10/day per IP address) and cursor paging stops after the first page with a 401; set a free API key for real harvesting.
 
 ??? note "Custom base URL"
     If you override `base_url`, the API key parameter is still appended to all requests. This is useful for testing against a proxy or mock server.
