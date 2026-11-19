@@ -1,40 +1,52 @@
-"""OpenAlex-specific response unwrapper implementation.
+"""OpenAlex implementation of bibliofabric's ``ResponseUnwrapper`` protocol.
 
-Handles the OpenAlex JSON response structure:
-{
-    "meta": {"count": 1000, "next_cursor": "abc123", ...},
-    "results": [{...}, {...}]
-}
+OpenAlex envelopes look like ``{"meta": {...}, "results": [...]}``; the
+``group_by`` endpoint puts typed buckets under a top-level ``group_by`` key
+instead of ``results``.
 """
 
 from typing import Any
 
-from bibliofabric.models import ResponseUnwrapper
 
+class OpenAlexUnwrapper:
+    """Extracts results, totals, cursors, and metadata from OpenAlex JSON."""
 
-class OpenAlexUnwrapper(ResponseUnwrapper):
-    """OpenAlex implementation of the ResponseUnwrapper protocol."""
+    def results(self, body: Any) -> list[dict[str, Any]]:
+        """Return the list of result records in a list/search response."""
+        if not isinstance(body, dict):
+            return []
+        return body.get("results") or []
 
-    def unwrap_results(self, response_json: dict[str, Any]) -> list[dict[str, Any]]:
-        """Extract the list of results from an OpenAlex API response."""
-        return response_json.get("results", [])
+    def item(self, body: Any) -> dict[str, Any]:
+        """Return the record itself; OpenAlex single routes are unwrapped."""
+        return body
 
-    def unwrap_single_item(self, response_json: dict[str, Any]) -> dict[str, Any]:
-        """Extract a single item. OpenAlex GET /{entity}/{id} returns the entity directly."""
-        return response_json
+    def total(self, body: Any) -> int | None:
+        """Return ``meta.count``, or ``None`` when absent."""
+        count = self._meta(body).get("count")
+        return None if count is None else int(count)
 
-    def get_next_page_token(self, response_json: dict[str, Any]) -> str | None:
-        """Extract the next cursor from meta.next_cursor."""
-        meta = response_json.get("meta", {})
-        if isinstance(meta, dict):
-            return meta.get("next_cursor")
-        return None
+    def next_cursor(self, body: Any) -> str | None:
+        """Return ``meta.next_cursor``, or ``None`` on the last page."""
+        cursor = self._meta(body).get("next_cursor")
+        return None if cursor is None else str(cursor)
 
-    def get_total_results(self, response_json: dict[str, Any]) -> int | None:
-        """Extract the total count from meta.count."""
-        meta = response_json.get("meta", {})
-        if isinstance(meta, dict):
-            count = meta.get("count")
-            if count is not None:
-                return int(count)
-        return None
+    def meta(self, body: Any) -> dict[str, Any]:
+        """Return the envelope minus ``results`` for :attr:`Page.meta`.
+
+        The ``meta`` dict is flattened to the top level (so ``count``,
+        ``cost_usd``, ``x_query``, and ``notice`` read directly), and other
+        envelope keys such as ``group_by`` buckets are preserved.
+        """
+        if not isinstance(body, dict):
+            return {}
+        merged = {
+            key: value for key, value in body.items() if key not in ("meta", "results")
+        }
+        merged.update(self._meta(body))
+        return merged
+
+    @staticmethod
+    def _meta(body: Any) -> dict[str, Any]:
+        meta = body.get("meta") if isinstance(body, dict) else None
+        return meta if isinstance(meta, dict) else {}

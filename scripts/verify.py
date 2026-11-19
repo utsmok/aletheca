@@ -32,16 +32,7 @@ from typing import Annotated, Any, Union, get_args, get_origin
 import httpx
 from pydantic import BaseModel
 
-from aletheca.endpoints import (
-    AUTHORS,
-    AWARDS,
-    FUNDERS,
-    INSTITUTIONS,
-    KEYWORDS,
-    PUBLISHERS,
-    SOURCES,
-    TOPICS,
-    WORKS,
+from aletheca.filters import (
     AuthorsFilters,
     AwardsFilters,
     FundersFilters,
@@ -152,18 +143,6 @@ CONDITIONAL_FIELDS: dict[str, set[str]] = {
     "publishers": {"relevance_score"},
     "funders": {"relevance_score"},
     "authors": {"relevance_score", "x_concepts"},
-}
-
-ENDPOINT_CONSTANTS = {
-    "works": WORKS,
-    "authors": AUTHORS,
-    "sources": SOURCES,
-    "institutions": INSTITUTIONS,
-    "topics": TOPICS,
-    "keywords": KEYWORDS,
-    "publishers": PUBLISHERS,
-    "funders": FUNDERS,
-    "awards": AWARDS,
 }
 
 
@@ -616,15 +595,6 @@ def test_search(client: httpx.Client, v: Verdict) -> None:
     v.ok(f"search='machine learning' → {count} results")
 
 
-def test_endpoint_constants(v: Verdict) -> None:
-    """Endpoint constants match entity names."""
-    for name, const in ENDPOINT_CONSTANTS.items():
-        if const != name:
-            v.fail(f"ENDPOINT {name} = '{const}' (mismatch)")
-        else:
-            v.ok(f"{name} = '{const}' ✓")
-
-
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -647,7 +617,6 @@ def main() -> None:
 
     # Static checks
     print("\n=== Endpoint Constants ===")
-    test_endpoint_constants(v)
 
     configs = ENTITY_CONFIG
     if args.entity:

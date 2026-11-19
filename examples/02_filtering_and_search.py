@@ -22,12 +22,13 @@ def _():
 
 @app.cell
 def _():
-    from aletheca import AlethecaSession
     from aletheca.endpoints import (
         AuthorsFilters,
         InstitutionsFilters,
         WorksFilters,
     )
+
+    from aletheca import AlethecaSession
 
     return AlethecaSession, AuthorsFilters, InstitutionsFilters, WorksFilters
 

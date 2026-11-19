@@ -13,7 +13,7 @@ from .award import (
     RecipientCountry,
     ResearchScope,
 )
-from .base import ApiResponse, BaseEntity, Meta
+from .base import BaseEntity
 from .common import (
     SDG,
     Affiliation,
@@ -69,18 +69,29 @@ from .ids import (
 from .institution import Institution
 from .keyword import Keyword
 from .publisher import ParentPublisher, Publisher
+from .query import (
+    AutocompleteResult,
+    GroupByBucket,
+    PerSecondLimits,
+    RateLimitInfo,
+    RateLimitStatus,
+)
 from .source import Source
 from .topic import Topic
 from .work import Authorship, ContentUrls, StudyDesign, Work, WorkAward
 
 __all__ = [
     # Base
-    "ApiResponse",
     "BaseEntity",
-    "Meta",
     # Safe types
     "SafeList",
     "SafeStr",
+    # Query / status shapes
+    "AutocompleteResult",
+    "GroupByBucket",
+    "PerSecondLimits",
+    "RateLimitInfo",
+    "RateLimitStatus",
     # Common nested
     "APCData",
     "APCEntry",

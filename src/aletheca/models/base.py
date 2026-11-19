@@ -1,21 +1,6 @@
-"""Base Pydantic models for OpenAlex API entities and responses."""
+"""Base Pydantic models for OpenAlex API entities."""
 
-from pydantic import BaseModel, Field
-from pydantic.config import ConfigDict
-
-
-class Meta(BaseModel):
-    """OpenAlex response metadata envelope."""
-
-    count: int | None = None
-    db_response_time_ms: float | None = None
-    page: int | None = None
-    per_page: int | None = None
-    next_cursor: str | None = None
-    groups_count: int | None = None
-    cost_usd: float | None = None
-
-    model_config = ConfigDict(extra="allow")
+from pydantic import BaseModel, ConfigDict
 
 
 class BaseEntity(BaseModel):
@@ -29,13 +14,3 @@ class BaseEntity(BaseModel):
     display_name: str | None = None
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
-
-
-class ApiResponse[EntityType: "BaseEntity"](BaseModel):
-    """Generic envelope for OpenAlex list/search responses."""
-
-    meta: Meta = Field(default_factory=Meta)
-    results: list[EntityType] = Field(default_factory=list)
-    group_by: list[dict] | None = None
-
-    model_config = ConfigDict(extra="allow")

@@ -32,8 +32,9 @@ and searching OpenAlex scholarly data.
 
 @app.cell
 def _():
-    from aletheca import AlethecaSession
     from aletheca.endpoints import WorksFilters
+
+    from aletheca import AlethecaSession
 
     session = AlethecaSession()
     return WorksFilters, session

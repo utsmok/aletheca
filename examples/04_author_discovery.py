@@ -21,8 +21,9 @@ def _():
 
 @app.cell
 def _():
-    from aletheca import AlethecaSession
     from aletheca.endpoints import AuthorsFilters, WorksFilters
+
+    from aletheca import AlethecaSession
 
     return AuthorsFilters, AlethecaSession, WorksFilters
 
