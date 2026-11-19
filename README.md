@@ -29,6 +29,7 @@ Requires Python >=3.12.
 import asyncio
 from aletheca import AlethecaClient
 
+
 async def main():
     async with AlethecaClient() as client:
         # Get a work by OpenAlex ID (URL forms like https://doi.org/... also work)
@@ -45,6 +46,7 @@ async def main():
             filters={"authorships.author.id": "A1234567890"},
         ):
             print(work.title)
+
 
 asyncio.run(main())
 ```

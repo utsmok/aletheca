@@ -38,9 +38,7 @@ Valid `corpus` values are `core` (default upstream), `expansion`, and `all`; any
 ## Iterating over all matches
 
 ```python
-async for work in client.works.iterate(
-    {"authorships.author.id": "A5089275346"}
-):
+async for work in client.works.iterate({"authorships.author.id": "A5089275346"}):
     ...
 ```
 

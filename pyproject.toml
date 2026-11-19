@@ -33,7 +33,7 @@ dev = [
     "pytest>=8.3.4",
     "pytest-asyncio>=0.26.0",
     "pytest-httpx>=0.35.0",
-    "ruff>=0.8.0",
+    "ruff==0.17.6",
     "ty==0.0.107",
 ]
 docs = [
@@ -43,7 +43,7 @@ docs = [
 ]
 
 [build-system]
-requires = ["uv_build>=0.11.19,<0.12"]
+requires = ["uv_build>=0.9.22,<0.12"]
 build-backend = "uv_build"
 
 [tool.uv.pip]
